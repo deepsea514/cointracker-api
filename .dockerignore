@@ -1,0 +1,10 @@
+node_modules
+specs
+cache_data
+db_data
+candlestick-reference
+.env
+.env.example
+.gitignore
+Readme.md
+.logs
