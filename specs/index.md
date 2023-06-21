@@ -1,4 +1,4 @@
-## API Specs
+## Diablo API Specs
 
 An index of specs for routes and models
 

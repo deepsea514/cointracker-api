@@ -15,6 +15,7 @@ Used to fetch the latest [Swaps](../models/swap.md) by chain and exchange.
     - 1: ETH
     - 56: BSC
     - 250: FTM
+    - 3699: PLS
   - `exchange`: string
     - `paint`: PaintSwap
     - `spirit`: SpiritSwap
@@ -28,4 +29,4 @@ Used to fetch the latest [Swaps](../models/swap.md) by chain and exchange.
 - Data: `{ swaps: Swap[] }`
 - Examples:
   - `http://localhost:3000/api/v1/swaps?limit=15&exchange=paint&chainId=250&secret=<your_secret>&key=<your_key>`
-  - `https://api.casperdefi.com/v1/swaps?limit=15&exchange=paint&chainId=250&secret=<your_secret>&key=<your_key>`
+  - `https://api.diablodex.io:3000/v1/swaps?limit=15&exchange=paint&chainId=250&secret=<your_secret>&key=<your_key>`

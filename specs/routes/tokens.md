@@ -17,6 +17,7 @@ Used to fetch the most traded tokens per exchange. Returns a list of [Token](../
     - 1: ETH
     - 56: BSC
     - 250: FTM
+    - 369: PLS
   - `exchange`: string
     - `paint`: PaintSwap
     - `spirit`: SpiritSwap
@@ -28,7 +29,7 @@ Used to fetch the most traded tokens per exchange. Returns a list of [Token](../
 - Data: `{ tokens: Token[] }`
 - Examples:
   - `http://localhost:3000/api/v1/tokens?exchange=spirit&chainId=250&secret=<your_secret>&key=<your_key>`
-  - `https://api.casperdefi.com/v1/tokens?exchange=spirit&chainId=250&secret=<your_secret>&key=<your_key>`
+  - `https://api.diablodex.io:3000/v1/tokens?exchange=spirit&chainId=250&secret=<your_secret>&key=<your_key>`
 
 ## /tokens/:token
 
@@ -44,6 +45,7 @@ If no exchange is specified, it will use the exchange with the highest liquidity
     - 1: ETH
     - 56: BSC
     - 250: FTM
+    - 369: PLS
   - `exchange`: string
     - `paint`: PaintSwap
     - `spirit`: SpiritSwap
@@ -55,7 +57,7 @@ If no exchange is specified, it will use the exchange with the highest liquidity
 - Data: `{ token: Token }`
 - Example:
   - `http://localhost:3000/api/v1/tokens/0xC30d1b0Ce932C3dd3373a2C23aDA4E9608CAf345?chainId=250&secret=<your_secret>&key=<your_key>`
-  - `https://api.casperdefi.com/v1/tokens/0xC30d1b0Ce932C3dd3373a2C23aDA4E9608CAf345?chainId=250&secret=<your_secret>&key=<your_key>`
+  - `https://api.diablodex.io:3000/v1/tokens/0xC30d1b0Ce932C3dd3373a2C23aDA4E9608CAf345?chainId=250&secret=<your_secret>&key=<your_key>`
 
 ## /tokens/:token/trading-view
 
@@ -74,6 +76,7 @@ If no exchange is specified, it will use the exchange with the highest liquidity
     - 1: ETH
     - 56: BSC
     - 250: FTM
+    - 369: PLS
   - `exchange`: string
     - `paint`: PaintSwap
     - `spirit`: SpiritSwap
@@ -85,7 +88,7 @@ If no exchange is specified, it will use the exchange with the highest liquidity
 - Data: `token: Token`
 - Examples:
   - `http://localhost:3000/api/v1/tokens/0xC30d1b0Ce932C3dd3373a2C23aDA4E9608CAf345/trading-view?from=1616651042018&to=1624427042018&chainId=250&secret=<your_secret>&key=<your_key>`
-  - `https://api.casperdefi.com/v1/tokens/0xC30d1b0Ce932C3dd3373a2C23aDA4E9608CAf345/trading-view?from=1616651042018&to=1624427042018&chainId=250&secret=<your_secret>&key=<your_key>`
+  - `https://api.diablodex.io:3000/v1/tokens/0xC30d1b0Ce932C3dd3373a2C23aDA4E9608CAf345/trading-view?from=1616651042018&to=1624427042018&chainId=250&secret=<your_secret>&key=<your_key>`
 
 ## /tokens/:token/swaps
 
@@ -101,6 +104,7 @@ If no exchange is specified, it will use the exchange with the highest liquidity
     - 1: ETH
     - 56: BSC
     - 250: FTM
+    - 369: PLS
   - `exchange`: string
     - `paint`: PaintSwap
     - `spirit`: SpiritSwap
@@ -112,7 +116,7 @@ If no exchange is specified, it will use the exchange with the highest liquidity
 - Data: `{ swaps: Swap[] }`
 - Example:
   - `http://localhost:3000/api/v1/tokens/0xC30d1b0Ce932C3dd3373a2C23aDA4E9608CAf345/swaps?chainId=250&secret=<your_secret>&key=<your_key>`
-  - `https://api.casperdefi.com/v1/tokens/0xC30d1b0Ce932C3dd3373a2C23aDA4E9608CAf345/swaps?chainId=250&secret=<your_secret>&key=<your_key>`
+  - `https://api.diablodex.io:3000/v1/tokens/0xC30d1b0Ce932C3dd3373a2C23aDA4E9608CAf345/swaps?chainId=250&secret=<your_secret>&key=<your_key>`
 
 ## /tokens/:token/mints
 
@@ -128,6 +132,7 @@ If no exchange is specified, it will use the exchange with the highest liquidity
     - 1: ETH
     - 56: BSC
     - 250: FTM
+    - 369: PLS
   - `exchange`: string
     - `paint`: PaintSwap
     - `spirit`: SpiritSwap
@@ -139,7 +144,7 @@ If no exchange is specified, it will use the exchange with the highest liquidity
 - Data: `{ mints: Mint[] }`
 - Example:
   - `http://localhost:3000/api/v1/tokens/0xC30d1b0Ce932C3dd3373a2C23aDA4E9608CAf345/mints?chainId=250&secret=<your_secret>&key=<your_key>`
-  - `https://api.casperdefi.com/v1/tokens/0xC30d1b0Ce932C3dd3373a2C23aDA4E9608CAf345/mints?chainId=250&secret=<your_secret>&key=<your_key>`
+  - `https://api.diablodex.io:3000/v1/tokens/0xC30d1b0Ce932C3dd3373a2C23aDA4E9608CAf345/mints?chainId=250&secret=<your_secret>&key=<your_key>`
 
 ## /tokens/:token/burns
 
@@ -155,6 +160,7 @@ If no exchange is specified, it will use the exchange with the highest liquidity
     - 1: ETH
     - 56: BSC
     - 250: FTM
+    - 369: PLS
   - `exchange`: string
     - `paint`: PaintSwap
     - `spirit`: SpiritSwap
@@ -166,4 +172,4 @@ If no exchange is specified, it will use the exchange with the highest liquidity
 - Data: `{ burns: Burn[] }`
 - Example:
   - `http://localhost:3000/api/v1/tokens/0xC30d1b0Ce932C3dd3373a2C23aDA4E9608CAf345/burns?chainId=250&secret=<your_secret>&key=<your_key>`
-  - `https://api.casperdefi.com/v1/tokens/0xC30d1b0Ce932C3dd3373a2C23aDA4E9608CAf345/burns?chainId=250&secret=<your_secret>&key=<your_key>`
+  - `https://api.diablodex.io:3000/v1/tokens/0xC30d1b0Ce932C3dd3373a2C23aDA4E9608CAf345/burns?chainId=250&secret=<your_secret>&key=<your_key>`

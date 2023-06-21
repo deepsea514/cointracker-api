@@ -15,6 +15,7 @@ Used to fetch the latest [Burns](../models/burn.md) by chain and exchange.
     - 1: ETH
     - 56: BSC
     - 250: FTM
+    - 369: PLS
   - `exchange`: string
     - `paint`: PaintSwap
     - `spirit`: SpiritSwap
@@ -28,4 +29,4 @@ Used to fetch the latest [Burns](../models/burn.md) by chain and exchange.
 - Data: `{ burns: object[] }`
 - Examples:
   - `http://localhost:3000/api/v1/burns?limit=15&exchange=sushi&chainId=250`
-  - `https://api.casperdefi.com/v1/burns?limit=15&exchange=sushi&chainId=250`
+  - `https://api.diablodex.io:3000/v1/burns?limit=15&exchange=sushi&chainId=250`
