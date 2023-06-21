@@ -7,6 +7,7 @@ import { SPIRIT_SWAP_CONFIG } from './exchanges/ftm/spiritswap'
 import { SPOOKY_SWAP_CONFIG } from './exchanges/ftm/spookyswap'
 import { SUSHI_SWAP_CONFIG } from './exchanges/ftm/sushiswap'
 import { ZOO_DEX_CONFIG } from './exchanges/ftm/zoodex'
+import { PULSE_DEX_CONFIG } from './exchanges/pls/pulsedex'
 
 // Subgraph constants
 
@@ -19,6 +20,7 @@ export enum EXCHANGES {
   PAINT_SWAP = 'paint', // FTM
   ZOO_DEX = 'zoo', // FTM
   SHIBA_SWAP = 'shiba', // FTM
+  PULSE_DEX = 'pulse', // PLS
 }
 
 export enum CHAINS {
@@ -27,6 +29,7 @@ export enum CHAINS {
   FTM = 250,
   MATIC = 137,
   XDAI = 100,
+  PLS = 369,
 }
 
 export const SUBGRAPHS = {
@@ -44,6 +47,9 @@ export const SUBGRAPHS = {
     [`${EXCHANGES.SPIRIT_SWAP}`]: SPIRIT_SWAP_CONFIG,
     [`${EXCHANGES.PAINT_SWAP}`]: PAINT_SWAP_CONFIG,
     [`${EXCHANGES.SHIBA_SWAP}`]: SHIBA_SWAP_CONFIG,
+  },
+  [`${CHAINS.PLS}`]: {
+    [`${EXCHANGES.PULSE_DEX}`]: PULSE_DEX_CONFIG,
   },
 }
 

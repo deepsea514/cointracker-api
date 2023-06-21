@@ -13,6 +13,7 @@ export const TOKENS = {
 // Chain-dynamic constants
 export const NETWORKS: IChainDetails<string> = {
   [CHAINS.FTM]: 'ftm',
+  [CHAINS.PLS]: 'pls',
   [CHAINS.BSC]: 'bsc',
   [CHAINS.ETH]: 'eth',
   [CHAINS.MATIC]: 'matic',
@@ -21,6 +22,7 @@ export const NETWORKS: IChainDetails<string> = {
 // Chain-dynamic constants
 export const NETWORK_NAMES: IChainDetails<string> = {
   [CHAINS.FTM]: 'Fantom Opera',
+  [CHAINS.PLS]: 'Pulse Chain',
   [CHAINS.BSC]: 'Binance Smart Chain',
   [CHAINS.ETH]: 'Ethereum',
   [CHAINS.MATIC]: 'Polygon',
@@ -29,6 +31,7 @@ export const NETWORK_NAMES: IChainDetails<string> = {
 
 export const DEFAULT_BLOCK_TIMES: IChainDetails<number> = {
   [CHAINS.FTM]: 600, // 600 blocks is ~10 minutes ( 1 second blocks )
+  [CHAINS.PLS]: 200, // 200 blocks is ~10 minutes ( 3 second blocks )
   [CHAINS.BSC]: 200, // 200 blocks is ~10 minutes ( 3 second blocks )
   [CHAINS.ETH]: 46, // 46 blocks is ~10 minutes ( 13 second blocks )
   [CHAINS.MATIC]: 46,
@@ -37,6 +40,7 @@ export const DEFAULT_BLOCK_TIMES: IChainDetails<number> = {
 
 export const RPC_URL: IChainDetails<string> = {
   [CHAINS.FTM]: process.env.FTM_URL ?? 'https://rpc.ftm.tools/0be7111f-17ed-4498-b6f9-7afdd22a3488?cache=900',
+  [CHAINS.PLS]: process.env.PLS_URL ?? 'https://rpc.pulsechain.com',
   [CHAINS.BSC]: process.env.BSC_URL ?? 'https://bsc-dataseed.binance.org/',
   [CHAINS.ETH]: process.env.ETH_URL ?? 'https://main-light.eth.linkpool.io/',
   [CHAINS.MATIC]: process.env.MATIC_URL ?? 'https://rpc-mainnet.matic.network',
@@ -45,6 +49,7 @@ export const RPC_URL: IChainDetails<string> = {
 
 export const WEB3_CLIENTS: IChainDetails<Web3> = {
   [CHAINS.FTM]: new Web3(new Web3.providers.HttpProvider(RPC_URL[CHAINS.FTM])),
+  [CHAINS.PLS]: new Web3(new Web3.providers.HttpProvider(RPC_URL[CHAINS.PLS])),
   [CHAINS.BSC]: new Web3(new Web3.providers.HttpProvider(RPC_URL[CHAINS.BSC])),
   [CHAINS.ETH]: new Web3(new Web3.providers.HttpProvider(RPC_URL[CHAINS.ETH])),
   [CHAINS.MATIC]: new Web3(new Web3.providers.HttpProvider(RPC_URL[CHAINS.MATIC])),
@@ -61,6 +66,11 @@ export const BASE_TOKENS: IChainDetails<DEFAULT_CHAIN_TOKENS> = {
     NATIVE: '0x21be370d5312f44cb42ce377bc9b8a0cef1a4c83', // wftm
     STABLE: '0x04068da6c83afcfa0e13ba15a6696662335d5b75', // usdc
     FALLBACK: '0x5Cc61A78F164885776AA610fb0FE1257df78E59B', // spirit
+  },
+  [CHAINS.PLS]: {
+    NATIVE: '0xA1077a294dDE1B09bB078844df40758a5D0f9a27', // wpls
+    STABLE: '0x15D38573d2feeb82e7ad5187aB8c1D52810B1f07', // usdc
+    FALLBACK: '0x95b303987a60c71504d99aa1b13b4da07b0790ab', // plsx
   },
   [CHAINS.BSC]: {
     NATIVE: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c', // bnb
@@ -146,6 +156,12 @@ export const FACTORIES: IChainDetails<FACTORY_DEFINITION[]> = {
     {
       address: '0xC0AEe478e3658e2610c5F7A4A2E1777cE9e4f2Ac',
       name: 'sushi',
+    },
+  ],
+  [CHAINS.PLS]: [
+    {
+      address: '0x1715a3E4A142d8b698131108995174F37aEBA10D',
+      name: 'pulse',
     },
   ],
 }
