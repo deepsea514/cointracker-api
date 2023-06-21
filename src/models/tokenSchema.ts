@@ -17,22 +17,26 @@ export interface IToken {
   volume24hUSD: number
   volume24hETH?: number
   volume24hFTM?: number
+  volume24hPLS?: number
   volume24hBNB?: number
   volumeChange24h: number
   liquidityUSD: number
   liquidityETH?: number
   liquidityFTM?: number
+  liquidityPLS?: number
   liquidityBNB?: number
   liquidityChange24h: number
   logoURI: string
   priceUSD: number
   priceETH?: number
   priceFTM?: number
+  pricePLS?: number
   priceBNB?: number
   priceChange24h: number
   priceUSDChange24h: number
   priceETHChange24h?: number
   priceFTMChange24h?: number
+  pricePLSChange24h?: number
   priceBNBChange24h?: number
   timestamp: number
   blockNumber: number
@@ -79,6 +83,12 @@ const TokenSchema = new mongoose.Schema<IToken>(
         return parseInt(this.network) == 250
       },
     },
+    volume24hPLS: {
+      type: Number,
+      required: function (this: IToken) {
+        return parseInt(this.network) == 369
+      },
+    },
     volumeChange24h: Number,
     liquidityUSD: Number,
     liquidityETH: {
@@ -97,6 +107,12 @@ const TokenSchema = new mongoose.Schema<IToken>(
       type: Number,
       required: function (this: IToken) {
         return parseInt(this.network) == 250
+      },
+    },
+    liquidityPLS: {
+      type: Number,
+      required: function (this: IToken) {
+        return parseInt(this.network) == 369
       },
     },
     liquidityChange24h: Number,
@@ -120,6 +136,12 @@ const TokenSchema = new mongoose.Schema<IToken>(
         return parseInt(this.network) == 250
       },
     },
+    pricePLS: {
+      type: Number,
+      required: function (this: IToken) {
+        return parseInt(this.network) == 369
+      },
+    },
     priceChange24h: Number,
     priceUSDChange24h: Number,
     priceETHChange24h: {
@@ -138,6 +160,12 @@ const TokenSchema = new mongoose.Schema<IToken>(
       type: Number,
       required: function (this: IToken) {
         return parseInt(this.network) == 250
+      },
+    },
+    pricePLSChange24h: {
+      type: Number,
+      required: function (this: IToken) {
+        return parseInt(this.network) == 369
       },
     },
     timestamp: Number,
