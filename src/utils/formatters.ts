@@ -373,7 +373,7 @@ export const formatToken = async ({
     liquidityUSD: liquidity ? (liquidity * priceUSD).toString() : null,
     [`liquidity${native}`]: liquidity ? (liquidity * priceETH).toString() : null,
     liquidityChange24h: liquidity && liquidityHistoric ? (liquidity / liquidityHistoric - 1).toString() : null,
-    logoURI: `https://nnmvhbmuirrrctndfirk.supabase.in/storage/v1/object/public/token-images/${token?.address}.png`, // TODO: we need images still, maybe we can get the from FTMscan or covalent
+    logoURI: ` https://mljmnqnfdxzrsriincip.supabase.co/storage/v1/object/public/token-images/${token?.address}.png`, // TODO: we need images still, maybe we can get the from FTMscan or covalent
     priceUSD: priceUSD.toString() ?? null,
     [`price${native}`]: priceETH.toString() ?? null,
     priceChange24h,
