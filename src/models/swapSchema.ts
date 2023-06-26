@@ -7,7 +7,7 @@ export interface ISwapEvent extends Document {
   sender: string
   amountUSD: string
   amountETH?: number
-  amountFTM?: number
+  // amountFTM?: number
   amountPLS?: number
   amountBNB?: number
   amount0In: number
@@ -17,7 +17,7 @@ export interface ISwapEvent extends Document {
   pairAddress: string
   pairLiquidityUSD: number
   pairLiquidityETH?: number
-  pairLiquidityFTM?: number
+  // pairLiquidityFTM?: number
   pairLiquidityPLS?: number
   pairLiquidityBNB?: number
   token0Address: string
@@ -28,8 +28,8 @@ export interface ISwapEvent extends Document {
   token1PriceUSD: number
   token0PriceETH?: number
   token1PriceETH?: number
-  token0PriceFTM?: number
-  token1PriceFTM?: number
+  // token0PriceFTM?: number
+  // token1PriceFTM?: number
   token0PricePLS?: number
   token1PricePLS?: number
   token0PriceBNB?: number
@@ -59,12 +59,12 @@ const SwapSchema = new mongoose.Schema<ISwapEvent>({
       return parseInt(this.network) == 56
     },
   },
-  amountFTM: {
-    type: Number,
-    required: function (this: ISwapEvent) {
-      return parseInt(this.network) == 250
-    },
-  },
+  // amountFTM: {
+  //   type: Number,
+  //   required: function (this: ISwapEvent) {
+  //     return parseInt(this.network) == 250
+  //   },
+  // },
   amountPLS: {
     type: Number,
     required: function (this: ISwapEvent) {
@@ -89,12 +89,12 @@ const SwapSchema = new mongoose.Schema<ISwapEvent>({
       return parseInt(this.network) == 56
     },
   },
-  pairLiquidityFTM: {
-    type: Number,
-    required: function (this: ISwapEvent) {
-      return parseInt(this.network) == 250
-    },
-  },
+  // pairLiquidityFTM: {
+  //   type: Number,
+  //   required: function (this: ISwapEvent) {
+  //     return parseInt(this.network) == 250
+  //   },
+  // },
   pairLiquidityPLS: {
     type: Number,
     required: function (this: ISwapEvent) {
@@ -119,12 +119,12 @@ const SwapSchema = new mongoose.Schema<ISwapEvent>({
       return parseInt(this.network) == 56
     },
   },
-  token0PriceFTM: {
-    type: Number,
-    required: function (this: ISwapEvent) {
-      return parseInt(this.network) == 250
-    },
-  },
+  // token0PriceFTM: {
+  //   type: Number,
+  //   required: function (this: ISwapEvent) {
+  //     return parseInt(this.network) == 250
+  //   },
+  // },
   token0PricePLS: {
     type: Number,
     required: function (this: ISwapEvent) {
@@ -143,12 +143,12 @@ const SwapSchema = new mongoose.Schema<ISwapEvent>({
       return parseInt(this.network) == 56
     },
   },
-  token1PriceFTM: {
-    type: Number,
-    required: function (this: ISwapEvent) {
-      return parseInt(this.network) == 250
-    },
-  },
+  // token1PriceFTM: {
+  //   type: Number,
+  //   required: function (this: ISwapEvent) {
+  //     return parseInt(this.network) == 250
+  //   },
+  // },
   token1PricePLS: {
     type: Number,
     required: function (this: ISwapEvent) {

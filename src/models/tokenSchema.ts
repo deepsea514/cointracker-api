@@ -16,26 +16,26 @@ export interface IToken {
   volume24h: number
   volume24hUSD: number
   volume24hETH?: number
-  volume24hFTM?: number
+  // volume24hFTM?: number
   volume24hPLS?: number
   volume24hBNB?: number
   volumeChange24h: number
   liquidityUSD: number
   liquidityETH?: number
-  liquidityFTM?: number
+  // liquidityFTM?: number
   liquidityPLS?: number
   liquidityBNB?: number
   liquidityChange24h: number
   logoURI: string
   priceUSD: number
   priceETH?: number
-  priceFTM?: number
+  // priceFTM?: number
   pricePLS?: number
   priceBNB?: number
   priceChange24h: number
   priceUSDChange24h: number
   priceETHChange24h?: number
-  priceFTMChange24h?: number
+  // priceFTMChange24h?: number
   pricePLSChange24h?: number
   priceBNBChange24h?: number
   timestamp: number
@@ -77,12 +77,12 @@ const TokenSchema = new mongoose.Schema<IToken>(
         return parseInt(this.network) == 56
       },
     },
-    volume24hFTM: {
-      type: Number,
-      required: function (this: IToken) {
-        return parseInt(this.network) == 250
-      },
-    },
+    // volume24hFTM: {
+    //   type: Number,
+    //   required: function (this: IToken) {
+    //     return parseInt(this.network) == 250
+    //   },
+    // },
     volume24hPLS: {
       type: Number,
       required: function (this: IToken) {
@@ -103,12 +103,12 @@ const TokenSchema = new mongoose.Schema<IToken>(
         return parseInt(this.network) == 56
       },
     },
-    liquidityFTM: {
-      type: Number,
-      required: function (this: IToken) {
-        return parseInt(this.network) == 250
-      },
-    },
+    // liquidityFTM: {
+    //   type: Number,
+    //   required: function (this: IToken) {
+    //     return parseInt(this.network) == 250
+    //   },
+    // },
     liquidityPLS: {
       type: Number,
       required: function (this: IToken) {
@@ -130,12 +130,12 @@ const TokenSchema = new mongoose.Schema<IToken>(
         return parseInt(this.network) == 56
       },
     },
-    priceFTM: {
-      type: Number,
-      required: function (this: IToken) {
-        return parseInt(this.network) == 250
-      },
-    },
+    // priceFTM: {
+    //   type: Number,
+    //   required: function (this: IToken) {
+    //     return parseInt(this.network) == 250
+    //   },
+    // },
     pricePLS: {
       type: Number,
       required: function (this: IToken) {
@@ -156,12 +156,12 @@ const TokenSchema = new mongoose.Schema<IToken>(
         return parseInt(this.network) == 56
       },
     },
-    priceFTMChange24h: {
-      type: Number,
-      required: function (this: IToken) {
-        return parseInt(this.network) == 250
-      },
-    },
+    // priceFTMChange24h: {
+    //   type: Number,
+    //   required: function (this: IToken) {
+    //     return parseInt(this.network) == 250
+    //   },
+    // },
     pricePLSChange24h: {
       type: Number,
       required: function (this: IToken) {

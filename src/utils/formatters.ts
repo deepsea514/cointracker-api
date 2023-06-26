@@ -249,8 +249,8 @@ const getNativeSymbol = (chainId: CHAINS) => {
     ? 'ETH'
     : chainId == CHAINS.BSC
     ? 'BNB'
-    : chainId == CHAINS.FTM
-    ? 'FTM'
+    // : chainId == CHAINS.FTM
+    // ? 'FTM'
     : chainId == CHAINS.PLS
     ? 'PLS'
     : 'ETH'

@@ -311,8 +311,8 @@ export const UNISWAP_CONFIG = {
           totalPairs: pairCount
           totalTransactions: txCount
           totalVolumeUSD
-          totalVolumeFTM: totalVolumeETH
-          totalLiquidityFTM: totalLiquidityETH
+          totalVolumeETH: totalVolumeETH
+          totalLiquidityETH: totalLiquidityETH
           totalLiquidityUSD
         }
       }

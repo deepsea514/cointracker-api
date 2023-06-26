@@ -39,7 +39,7 @@ export async function fetchPaginatedDataFromWeb3({ startingBlock, subgraph, from
       [`${CHAINS.ETH}`]: 280,
       [`${CHAINS.BSC}`]: 1200,
       [`${CHAINS.PLS}`]: 1200,
-      [`${CHAINS.FTM}`]: 3600,
+      // [`${CHAINS.FTM}`]: 3600,
     }
 
     const blocksPerRequest = BLOCKS_PER_REQUEST_PER_CHAIN[`${chain.chainId}`] // this number depends on what network. 500 is only good for fantom

@@ -12,48 +12,48 @@ export const TOKENS = {
 
 // Chain-dynamic constants
 export const NETWORKS: IChainDetails<string> = {
-  [CHAINS.FTM]: 'ftm',
+  // [CHAINS.FTM]: 'ftm',
   [CHAINS.PLS]: 'pls',
   [CHAINS.BSC]: 'bsc',
   [CHAINS.ETH]: 'eth',
-  [CHAINS.MATIC]: 'matic',
-  [CHAINS.XDAI]: 'xdai',
+  // [CHAINS.MATIC]: 'matic',
+  // [CHAINS.XDAI]: 'xdai',
 }
 // Chain-dynamic constants
 export const NETWORK_NAMES: IChainDetails<string> = {
-  [CHAINS.FTM]: 'Fantom Opera',
+  // [CHAINS.FTM]: 'Fantom Opera',
   [CHAINS.PLS]: 'Pulse Chain',
   [CHAINS.BSC]: 'Binance Smart Chain',
   [CHAINS.ETH]: 'Ethereum',
-  [CHAINS.MATIC]: 'Polygon',
-  [CHAINS.XDAI]: 'xDai',
+  // [CHAINS.MATIC]: 'Polygon',
+  // [CHAINS.XDAI]: 'xDai',
 }
 
 export const DEFAULT_BLOCK_TIMES: IChainDetails<number> = {
-  [CHAINS.FTM]: 600, // 600 blocks is ~10 minutes ( 1 second blocks )
+  // [CHAINS.FTM]: 600, // 600 blocks is ~10 minutes ( 1 second blocks )
   [CHAINS.PLS]: 200, // 200 blocks is ~10 minutes ( 3 second blocks )
   [CHAINS.BSC]: 200, // 200 blocks is ~10 minutes ( 3 second blocks )
   [CHAINS.ETH]: 46, // 46 blocks is ~10 minutes ( 13 second blocks )
-  [CHAINS.MATIC]: 46,
-  [CHAINS.XDAI]: 46,
+  // [CHAINS.MATIC]: 46,
+  // [CHAINS.XDAI]: 46,
 }
 
 export const RPC_URL: IChainDetails<string> = {
-  [CHAINS.FTM]: process.env.FTM_URL ?? 'https://rpc.ftm.tools/0be7111f-17ed-4498-b6f9-7afdd22a3488?cache=900',
-  [CHAINS.PLS]: process.env.PLS_URL ?? 'https://rpc.pulsechain.com',
+  // [CHAINS.FTM]: process.env.FTM_URL ?? 'https://rpc.ftm.tools/0be7111f-17ed-4498-b6f9-7afdd22a3488?cache=900',
+  [CHAINS.PLS]: process.env.PLS_URL ?? 'https://rpc.pulsechain.com/',
   [CHAINS.BSC]: process.env.BSC_URL ?? 'https://bsc-dataseed.binance.org/',
   [CHAINS.ETH]: process.env.ETH_URL ?? 'https://main-light.eth.linkpool.io/',
-  [CHAINS.MATIC]: process.env.MATIC_URL ?? 'https://rpc-mainnet.matic.network',
-  [CHAINS.XDAI]: process.env.XDAI_URL ?? 'https://rpc.xdaichain.com/',
+  // [CHAINS.MATIC]: process.env.MATIC_URL ?? 'https://rpc-mainnet.matic.network',
+  // [CHAINS.XDAI]: process.env.XDAI_URL ?? 'https://rpc.xdaichain.com/',
 }
 
 export const WEB3_CLIENTS: IChainDetails<Web3> = {
-  [CHAINS.FTM]: new Web3(new Web3.providers.HttpProvider(RPC_URL[CHAINS.FTM])),
+  // [CHAINS.FTM]: new Web3(new Web3.providers.HttpProvider(RPC_URL[CHAINS.FTM])),
   [CHAINS.PLS]: new Web3(new Web3.providers.HttpProvider(RPC_URL[CHAINS.PLS])),
   [CHAINS.BSC]: new Web3(new Web3.providers.HttpProvider(RPC_URL[CHAINS.BSC])),
   [CHAINS.ETH]: new Web3(new Web3.providers.HttpProvider(RPC_URL[CHAINS.ETH])),
-  [CHAINS.MATIC]: new Web3(new Web3.providers.HttpProvider(RPC_URL[CHAINS.MATIC])),
-  [CHAINS.XDAI]: new Web3(new Web3.providers.HttpProvider(RPC_URL[CHAINS.XDAI])),
+  // [CHAINS.MATIC]: new Web3(new Web3.providers.HttpProvider(RPC_URL[CHAINS.MATIC])),
+  // [CHAINS.XDAI]: new Web3(new Web3.providers.HttpProvider(RPC_URL[CHAINS.XDAI])),
 }
 
 interface DEFAULT_CHAIN_TOKENS {
@@ -62,11 +62,11 @@ interface DEFAULT_CHAIN_TOKENS {
   FALLBACK: string
 }
 export const BASE_TOKENS: IChainDetails<DEFAULT_CHAIN_TOKENS> = {
-  [CHAINS.FTM]: {
-    NATIVE: '0x21be370d5312f44cb42ce377bc9b8a0cef1a4c83', // wftm
-    STABLE: '0x04068da6c83afcfa0e13ba15a6696662335d5b75', // usdc
-    FALLBACK: '0x5Cc61A78F164885776AA610fb0FE1257df78E59B', // spirit
-  },
+  // [CHAINS.FTM]: {
+  //   NATIVE: '0x21be370d5312f44cb42ce377bc9b8a0cef1a4c83', // wftm
+  //   STABLE: '0x04068da6c83afcfa0e13ba15a6696662335d5b75', // usdc
+  //   FALLBACK: '0x5Cc61A78F164885776AA610fb0FE1257df78E59B', // spirit
+  // },
   [CHAINS.PLS]: {
     NATIVE: '0xA1077a294dDE1B09bB078844df40758a5D0f9a27', // wpls
     STABLE: '0x15D38573d2feeb82e7ad5187aB8c1D52810B1f07', // usdc
@@ -82,16 +82,16 @@ export const BASE_TOKENS: IChainDetails<DEFAULT_CHAIN_TOKENS> = {
     STABLE: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48', // usdt
     FALLBACK: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2', // weth
   },
-  [CHAINS.MATIC]: {
-    NATIVE: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2', // weth
-    STABLE: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48', // usdt
-    FALLBACK: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2', // weth
-  },
-  [CHAINS.XDAI]: {
-    NATIVE: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2', // weth
-    STABLE: '0xC0AEe478e3658e2610c5F7A4A2E1777cE9e4f2Ac', // usdc
-    FALLBACK: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2', // weth
-  },
+  // [CHAINS.MATIC]: {
+  //   NATIVE: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2', // weth
+  //   STABLE: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48', // usdt
+  //   FALLBACK: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2', // weth
+  // },
+  // [CHAINS.XDAI]: {
+  //   NATIVE: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2', // weth
+  //   STABLE: '0xC0AEe478e3658e2610c5F7A4A2E1777cE9e4f2Ac', // usdc
+  //   FALLBACK: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2', // weth
+  // },
 }
 
 interface FACTORY_DEFINITION {
@@ -100,32 +100,32 @@ interface FACTORY_DEFINITION {
 }
 
 export const FACTORIES: IChainDetails<FACTORY_DEFINITION[]> = {
-  [CHAINS.FTM]: [
-    {
-      address: '0xef45d134b73241eda7703fa787148d9c9f4950b0',
-      name: 'spirit',
-    },
-    {
-      address: '0x152eE697f2E276fA89E96742e9bB9aB1F2E61bE3',
-      name: 'spooky',
-    },
-    {
-      address: '0x6178C3B21F7cA1adD84c16AD35452c85a85F5df4',
-      name: 'zoo',
-    },
-    {
-      address: '0xc35DADB65012eC5796536bD9864eD8773aBc74C4',
-      name: 'sushi',
-    },
-    {
-      address: '0x733A9D1585f2d14c77b49d39BC7d7dd14CdA4aa5',
-      name: 'paint',
-    },
-    {
-      address: '0xeAcC845E4db0aB59A326513347a37ed4E999aBD8',
-      name: 'shiba',
-    },
-  ],
+  // [CHAINS.FTM]: [
+  //   {
+  //     address: '0xef45d134b73241eda7703fa787148d9c9f4950b0',
+  //     name: 'spirit',
+  //   },
+  //   {
+  //     address: '0x152eE697f2E276fA89E96742e9bB9aB1F2E61bE3',
+  //     name: 'spooky',
+  //   },
+  //   {
+  //     address: '0x6178C3B21F7cA1adD84c16AD35452c85a85F5df4',
+  //     name: 'zoo',
+  //   },
+  //   {
+  //     address: '0xc35DADB65012eC5796536bD9864eD8773aBc74C4',
+  //     name: 'sushi',
+  //   },
+  //   {
+  //     address: '0x733A9D1585f2d14c77b49d39BC7d7dd14CdA4aa5',
+  //     name: 'paint',
+  //   },
+  //   {
+  //     address: '0xeAcC845E4db0aB59A326513347a37ed4E999aBD8',
+  //     name: 'shiba',
+  //   },
+  // ],
   [CHAINS.BSC]: [
     {
       address: '0xcA143Ce32Fe78f1f7019d7d551a6402fC5350c73',
@@ -135,10 +135,6 @@ export const FACTORIES: IChainDetails<FACTORY_DEFINITION[]> = {
   [CHAINS.ETH]: [
     {
       address: '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f', // uniswap v2
-      name: 'uniswap',
-    },
-    {
-      address: '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f', // uniswap v2
       name: 'uni',
     },
     {
@@ -146,18 +142,18 @@ export const FACTORIES: IChainDetails<FACTORY_DEFINITION[]> = {
       name: 'sushi',
     },
   ],
-  [CHAINS.MATIC]: [
-    {
-      address: '0xC0AEe478e3658e2610c5F7A4A2E1777cE9e4f2Ac',
-      name: 'sushi',
-    },
-  ],
-  [CHAINS.XDAI]: [
-    {
-      address: '0xC0AEe478e3658e2610c5F7A4A2E1777cE9e4f2Ac',
-      name: 'sushi',
-    },
-  ],
+  // [CHAINS.MATIC]: [
+  //   {
+  //     address: '0xC0AEe478e3658e2610c5F7A4A2E1777cE9e4f2Ac',
+  //     name: 'sushi',
+  //   },
+  // ],
+  // [CHAINS.XDAI]: [
+  //   {
+  //     address: '0xC0AEe478e3658e2610c5F7A4A2E1777cE9e4f2Ac',
+  //     name: 'sushi',
+  //   },
+  // ],
   [CHAINS.PLS]: [
     {
       address: '0x1715a3E4A142d8b698131108995174F37aEBA10D',
