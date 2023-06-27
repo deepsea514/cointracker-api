@@ -502,17 +502,17 @@ export const getTokenHistoricalFromDB = async (
   return token
 }
 
-export const getExchange = (exchange: EXCHANGES, chain: CHAINS = CHAINS.PLS) => {
+export const getExchange = (exchange: EXCHANGES, chain: CHAINS) => {
   let result = chain.toString().toUpperCase()
   switch (exchange) {
-    case EXCHANGES.UNI_SWAP:
-      return result + '_UNISWAP'
-    case EXCHANGES.PANCAKE_SWAP:
-      return result + '_PANCAKE_SWAP'
+    // case EXCHANGES.UNI_SWAP:
+    //   return result + '_UNISWAP'
+    // case EXCHANGES.PANCAKE_SWAP:
+    //   return result + '_PANCAKE_SWAP'
     // case EXCHANGES.SPIRIT_SWAP:
     //   return result + '_SPIRIT_SWAP'
-    case EXCHANGES.SUSHI_SWAP:
-      return result + '_SUSHI_SWAP'
+    // case EXCHANGES.SUSHI_SWAP:
+    //   return result + '_SUSHI_SWAP'
     // case EXCHANGES.PAINT_SWAP:
     //   return result + '_PAINT_SWAP'
     // case EXCHANGES.ZOO_DEX:

@@ -7,8 +7,8 @@ import { TokenExtendedFragmentUni } from '../../fragments/Token'
 import { TransactionFragment } from '../../fragments/Transaction'
 
 export const UNISWAP_CONFIG = {
-  URL: 'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2',
-  CLIENT: new GraphQLClient('https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2'),
+  URL: 'https://api.thegraph.com/subgraphs/name/ianlapham/uniswapv2',
+  CLIENT: new GraphQLClient('https://api.thegraph.com/subgraphs/name/ianlapham/uniswapv2'),
   QUERIES: {
     PAIRS: gql``,
     TOKENS: gql`
@@ -305,7 +305,7 @@ export const UNISWAP_CONFIG = {
       ${BurnFragment}
     `,
     FACTORY: gql`
-      query UniswapFactories {
+      query Factories {
         uni: uniswapFactories(first: 1) {
           id
           totalPairs: pairCount

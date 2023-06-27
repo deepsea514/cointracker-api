@@ -35,7 +35,7 @@ io.on('connection', async (socket) => {
     socket.join(room)
     socket.emit(
       `connected`,
-      `Welcome to Casper DeFi API. You have subscribed to receieve price details for ${address} every 30 seconds.`,
+      `Welcome to Diablo Dex API. You have subscribed to receive price details for ${address} every 30 seconds.`,
     )
     const token = await getTokenById(room)
     if (!token) socket.emit('error', `Token with address: ${address} not found.`)

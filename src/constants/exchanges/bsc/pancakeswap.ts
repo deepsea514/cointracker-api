@@ -1,16 +1,14 @@
 import { gql, GraphQLClient } from 'graphql-request'
-import { PairFragment } from '../../fragments/Pair'
-import { SwapAmountFragment } from '../../fragments/Swap'
-import { TokenExtendedFragment, TokenExtendedPancakeFragment } from '../../fragments/Token'
+
 export const PANCAKE_SWAP_CONFIG = {
   URL: 'https://api.thegraph.com/subgraphs/name/mahmoudthepeltist/pancakeswap-exchange',
-  CLIENT: new GraphQLClient('https://bsc.streamingfast.io/subgraphs/name/pancakeswap/exchange-v2', {
+  CLIENT: new GraphQLClient('https://api.thegraph.com/subgraphs/name/mahmoudthepeltist/pancakeswap-exchange', {
     headers: { 'content-type': 'application/graphql' },
   }),
   QUERIES: {
     PAIRS: gql`
-      query Pair($token: String = "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c") {
-        pair0: pairs(where: { token0: "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c" }) {
+      query Pair($token: String!) {
+        pair0: pairs(where: { token0: $token }) {
           pairAddress: id
           token0 {
             address: id
@@ -24,7 +22,7 @@ export const PANCAKE_SWAP_CONFIG = {
           block
         }
 
-        pair1: pairs(where: { token1: "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c" }) {
+        pair1: pairs(where: { token1: $token }) {
           pairAddress: id
           token0 {
             address: id
@@ -590,14 +588,14 @@ export const PANCAKE_SWAP_CONFIG = {
       }
     `,
     FACTORY: gql`
-      query PancakeFactories {
+      query Factories {
         pancake: pancakeFactories(first: 1) {
           id
           totalPairs
           totalTransactions
           totalVolumeUSD
-          totalVolumeBNB
-          totalLiquidityBNB
+          totalVolumeETH: totalVolumeBNB
+          totalLiquidityETH: totalLiquidityETH
           totalLiquidityUSD
         }
       }

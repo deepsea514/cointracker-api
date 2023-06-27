@@ -333,15 +333,15 @@ export const SUSHI_SWAP_ETH_CONFIG = {
       ${PairFragment}
     `,
     FACTORY: gql`
-      query UniswapFactories {
-        spirit: uniswapFactories(first: 1) {
+      query Factories {
+        sushi: factories(first: 1) {
           id
           totalPairs: pairCount
           totalTransactions: txCount
-          totalVolumeUSD
-          totalVolumeETH
-          totalLiquidityETH
-          totalLiquidityUSD
+          totalVolumeUSD: volumeUSD
+          totalVolumeETH: volumeETH
+          totalLiquidityETH: liquidityETH
+          totalLiquidityUSD: liquidityUSD
         }
       }
     `,

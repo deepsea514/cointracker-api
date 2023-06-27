@@ -63,9 +63,9 @@ export const PULSE_DEX_CONFIG = {
             txCount: dailyTxns
             volume: dailyVolumeToken
             volumeUSD: dailyVolumeUSD
-            volumePLS: dailyVolumePLS
+            volumeETH: dailyVolumePLS
             liquidity: totalLiquidityToken
-            liquidityPLS: totalLiquidityPLS
+            liquidityETH: totalLiquidityPLS
             liquidityUSD: totalLiquidityUSD
             priceUSD
             date
@@ -158,9 +158,9 @@ export const PULSE_DEX_CONFIG = {
             txCount: dailyTxns
             volume: dailyVolumeToken
             volumeUSD: dailyVolumeUSD
-            volumePLS: dailyVolumePLS
+            volumeETH: dailyVolumePLS
             liquidity: totalLiquidityToken
-            liquidityPLS: totalLiquidityPLS
+            liquidityETH: totalLiquidityPLS
             liquidityUSD: totalLiquidityUSD
             priceUSD
             date
@@ -174,9 +174,9 @@ export const PULSE_DEX_CONFIG = {
           txCount: dailyTxns
           volume: dailyVolumeToken
           volumeUSD: dailyVolumeUSD
-          volumeETH: dailyVolumeETH
+          volumeETH: dailyVolumePLS
           liquidity: totalLiquidityToken
-          liquidityETH: totalLiquidityETH
+          liquidityETH: totalLiquidityPLS
           liquidityUSD: totalLiquidityUSD
           priceUSD
           date
@@ -270,9 +270,9 @@ export const PULSE_DEX_CONFIG = {
                 txCount: dailyTxns
                 volume: dailyVolumeToken
                 volumeUSD: dailyVolumeUSD
-                volumePLS: dailyVolumePLS
+                volumeETH: dailyVolumePLS
                 liquidity: totalLiquidityToken
-                liquidityPLS: totalLiquidityPLS
+                liquidityETH: totalLiquidityPLS
                 liquidityUSD: totalLiquidityUSD
                 priceUSD
                 date
@@ -298,9 +298,9 @@ export const PULSE_DEX_CONFIG = {
                 txCount: dailyTxns
                 volume: dailyVolumeToken
                 volumeUSD: dailyVolumeUSD
-                volumePLS: dailyVolumePLS
+                volumeETH: dailyVolumePLS
                 liquidity: totalLiquidityToken
-                liquidityPLS: totalLiquidityPLS
+                liquidityETH: totalLiquidityPLS
                 liquidityUSD: totalLiquidityUSD
                 priceUSD
                 date
@@ -358,9 +358,9 @@ export const PULSE_DEX_CONFIG = {
                 txCount: dailyTxns
                 volume: dailyVolumeToken
                 volumeUSD: dailyVolumeUSD
-                volumePLS: dailyVolumePLS
+                volumeETH: dailyVolumePLS
                 liquidity: totalLiquidityToken
-                liquidityPLS: totalLiquidityPLS
+                liquidityETH: totalLiquidityPLS
                 liquidityUSD: totalLiquidityUSD
                 priceUSD
                 date
@@ -386,9 +386,9 @@ export const PULSE_DEX_CONFIG = {
                 txCount: dailyTxns
                 volume: dailyVolumeToken
                 volumeUSD: dailyVolumeUSD
-                volumePLS: dailyVolumePLS
+                volumeETH: dailyVolumePLS
                 liquidity: totalLiquidityToken
-                liquidityPLS: totalLiquidityPLS
+                liquidityETH: totalLiquidityPLS
                 liquidityUSD: totalLiquidityUSD
                 priceUSD
                 date
@@ -446,9 +446,9 @@ export const PULSE_DEX_CONFIG = {
                 txCount: dailyTxns
                 volume: dailyVolumeToken
                 volumeUSD: dailyVolumeUSD
-                volumePLS: dailyVolumePLS
+                volumeETH: dailyVolumePLS
                 liquidity: totalLiquidityToken
-                liquidityPLS: totalLiquidityPLS
+                liquidityETH: totalLiquidityPLS
                 liquidityUSD: totalLiquidityUSD
                 priceUSD
                 date
@@ -474,9 +474,9 @@ export const PULSE_DEX_CONFIG = {
                 txCount: dailyTxns
                 volume: dailyVolumeToken
                 volumeUSD: dailyVolumeUSD
-                volumePLS: dailyVolumePLS
+                volumeETH: dailyVolumePLS
                 liquidity: totalLiquidityToken
-                liquidityPLS: totalLiquidityPLS
+                liquidityETH: totalLiquidityPLS
                 liquidityUSD: totalLiquidityUSD
                 priceUSD
                 date
@@ -508,29 +508,38 @@ export const PULSE_DEX_CONFIG = {
       query Swaps($first: Int) {
         swaps(first: $first) {
           id
+          bundle(id: 1) {
+            id
+            chainPrice: plsPrice
+          }
           pair {
             id
-            token0 {
+            transaction {
               id
+              blockNumber: block
+              timestamp
+            }
+            token0 {
+              address: id
               symbol
               decimals
               totalSupply
-              tradeVolume
-              tradeVolumeUSD
-              txCount
-              totalLiquidity
-              derivedPLS
+              volume: tradeVolume
+              volumeUSD: tradeVolumeUSD
+              txCount: totalTransactions
+              liquidity: totalLiquidity
+              derivedETH: derivedPLS
             }
             token1 {
-              id
+              address: id
               symbol
               decimals
               totalSupply
-              tradeVolume
-              tradeVolumeUSD
-              txCount
-              totalLiquidity
-              derivedPLS
+              volume: tradeVolume
+              volumeUSD: tradeVolumeUSD
+              txCount: totalTransactions
+              liquidity: totalLiquidity
+              derivedETH: derivedPLS
             }
             token0Price
             token1Price
@@ -546,34 +555,133 @@ export const PULSE_DEX_CONFIG = {
         }
       }
     `,
-    TOKEN_BURNS: gql``,
+    TOKEN_BURNS: gql`
+      query Burns($first: Int, $pairs: [ID!]!) {
+        bundle(id: 1) {
+          id
+          chainPrice: plsPrice
+        }
+        burns(first: $first, orderBy: timestamp, orderDirection: desc, where: { pair_in: $pairs }) {
+          transaction {
+            id
+            blockNumber: block
+            timestamp
+          }
+          pair {
+            token0 {
+              address: id
+              symbol
+              name
+              decimals
+              volume: tradeVolume
+              volumeUSD: tradeVolumeUSD
+              txCount: totalTransactions
+              liquidity: totalLiquidity
+              derivedETH: derivedPLS
+              dayData: tokenDayData(orderBy: date, orderDirection: desc, first: 2) {
+                txCount: dailyTxns
+                volume: dailyVolumeToken
+                liquidity: totalLiquidityToken
+              }
+
+              sevenDayData: tokenDayData(orderBy: date, orderDirection: desc, first: 7) {
+                txCount: dailyTxns
+                volume: dailyVolumeToken
+                volumeUSD: dailyVolumeUSD
+                volumeETH: dailyVolumePLS
+                liquidity: totalLiquidityToken
+                liquidityETH: totalLiquidityPLS
+                liquidityUSD: totalLiquidityUSD
+                priceUSD
+                date
+              }
+            }
+            token1 {
+              address: id
+              symbol
+              name
+              decimals
+              volume: tradeVolume
+              volumeUSD: tradeVolumeUSD
+              txCount: totalTransactions
+              liquidity: totalLiquidity
+              derivedETH: derivedPLS
+              dayData: tokenDayData(orderBy: date, orderDirection: desc, first: 2) {
+                txCount: dailyTxns
+                volume: dailyVolumeToken
+                liquidity: totalLiquidityToken
+              }
+
+              sevenDayData: tokenDayData(orderBy: date, orderDirection: desc, first: 7) {
+                txCount: dailyTxns
+                volume: dailyVolumeToken
+                volumeUSD: dailyVolumeUSD
+                volumeETH: dailyVolumePLS
+                liquidity: totalLiquidityToken
+                liquidityETH: totalLiquidityPLS
+                liquidityUSD: totalLiquidityUSD
+                priceUSD
+                date
+              }
+            }
+            id
+            reserve0
+            reserve1
+            reserveUSD
+            token0Price
+            token1Price
+            volumeToken0
+            volumeToken1
+            volumeUSD
+          }
+          id
+          amount0In
+          amount0Out
+          amount1In
+          amount1Out
+          amountUSD
+          to
+          from
+          sender
+        }
+      }
+    `,
     BURNS: gql`
       query Burns($first: Int) {
+        bundle(id: 1) {
+          id
+          chainPrice: plsPrice
+        }
         burns(first: $first) {
           id
+          transaction {
+            id
+            blockNumber: block
+            timestamp
+          }
           pair {
             id
             token0 {
-              id
+              address: id
               symbol
               decimals
               totalSupply
-              tradeVolume
-              tradeVolumeUSD
-              txCount
-              totalLiquidity
-              derivedPLS
+              volume: tradeVolume
+              volumeUSD: tradeVolumeUSD
+              txCount: totalTransactions
+              liquidity: totalLiquidity
+              derivedETH: derivedPLS
             }
             token1 {
-              id
+              address: id
               symbol
               decimals
               totalSupply
-              tradeVolume
-              tradeVolumeUSD
-              txCount
-              totalLiquidity
-              derivedPLS
+              volume: tradeVolume
+              volumeUSD: tradeVolumeUSD
+              txCount: totalTransactions
+              liquidity: totalLiquidity
+              derivedETH: derivedPLS
             }
             token0Price
             token1Price
@@ -588,14 +696,14 @@ export const PULSE_DEX_CONFIG = {
       }
     `,
     FACTORY: gql`
-      query pulseXFactories {
+      query Factories {
         pulse: pulseXFactories(first: 1) {
           id
           totalPairs
           totalTransactions
           totalVolumeUSD
-          totalVolumePLS
-          totalLiquidityPLS
+          totalVolumeETH: totalVolumePLS
+          totalLiquidityETH: totalLiquidityPLS
           totalLiquidityUSD
         }
       }

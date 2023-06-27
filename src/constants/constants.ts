@@ -1,6 +1,6 @@
-import { PANCAKE_SWAP_CONFIG } from './exchanges/bsc/pancakeswap'
-import { SUSHI_SWAP_ETH_CONFIG } from './exchanges/eth/sushiswap'
-import { UNISWAP_CONFIG } from './exchanges/eth/uniswap'
+// import { PANCAKE_SWAP_CONFIG } from './exchanges/bsc/pancakeswap'
+// import { SUSHI_SWAP_ETH_CONFIG } from './exchanges/eth/sushiswap'
+// import { UNISWAP_CONFIG } from './exchanges/eth/uniswap'
 // import { PAINT_SWAP_CONFIG } from './exchanges/ftm/paintswap'
 // import { SHIBA_SWAP_CONFIG } from './exchanges/ftm/shibaswap'
 // import { SPIRIT_SWAP_CONFIG } from './exchanges/ftm/spiritswap'
@@ -12,9 +12,9 @@ import { PULSE_DEX_CONFIG } from './exchanges/pls/pulsedex'
 // Subgraph constants
 
 export enum  EXCHANGES {
-  UNI_SWAP = 'uni', // ETH
-  PANCAKE_SWAP = 'pancake', // BSC
-  SUSHI_SWAP = 'sushi', // FTM  (also ETH, BSC)
+  // UNI_SWAP = 'uni', // ETH
+  // PANCAKE_SWAP = 'pancake', // BSC
+  // SUSHI_SWAP = 'sushi', // FTM  (also ETH, BSC)
   // SPOOKY_SWAP = 'spooky', // FTM
   // SPIRIT_SWAP = 'spirit', // FTM
   // PAINT_SWAP = 'paint', // FTM
@@ -24,8 +24,8 @@ export enum  EXCHANGES {
 }
 
 export enum CHAINS {
-  ETH = 1,
-  BSC = 56,
+  // ETH = 1,
+  // BSC = 56,
   // FTM = 250,
   // MATIC = 137,
   // XDAI = 100,
@@ -33,13 +33,13 @@ export enum CHAINS {
 }
 
 export const SUBGRAPHS = {
-  [`${CHAINS.ETH}`]: {
-    [`${EXCHANGES.UNI_SWAP}`]: UNISWAP_CONFIG,
-    [`${EXCHANGES.SUSHI_SWAP}`]: SUSHI_SWAP_ETH_CONFIG,
-  },
-  [`${CHAINS.BSC}`]: {
-    [`${EXCHANGES.PANCAKE_SWAP}`]: PANCAKE_SWAP_CONFIG,
-  },
+  // [`${CHAINS.ETH}`]: {
+  //   [`${EXCHANGES.UNI_SWAP}`]: UNISWAP_CONFIG,
+  //   [`${EXCHANGES.SUSHI_SWAP}`]: SUSHI_SWAP_ETH_CONFIG,
+  // },
+  // [`${CHAINS.BSC}`]: {
+  //   [`${EXCHANGES.PANCAKE_SWAP}`]: PANCAKE_SWAP_CONFIG,
+  // },
   // [`${CHAINS.FTM}`]: {
   //   [`${EXCHANGES.SPOOKY_SWAP}`]: SPOOKY_SWAP_CONFIG,
   //   [`${EXCHANGES.ZOO_DEX}`]: ZOO_DEX_CONFIG,

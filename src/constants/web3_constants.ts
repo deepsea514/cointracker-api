@@ -14,8 +14,8 @@ export const TOKENS = {
 export const NETWORKS: IChainDetails<string> = {
   // [CHAINS.FTM]: 'ftm',
   [CHAINS.PLS]: 'pls',
-  [CHAINS.BSC]: 'bsc',
-  [CHAINS.ETH]: 'eth',
+  // [CHAINS.BSC]: 'bsc',
+  // [CHAINS.ETH]: 'eth',
   // [CHAINS.MATIC]: 'matic',
   // [CHAINS.XDAI]: 'xdai',
 }
@@ -23,8 +23,8 @@ export const NETWORKS: IChainDetails<string> = {
 export const NETWORK_NAMES: IChainDetails<string> = {
   // [CHAINS.FTM]: 'Fantom Opera',
   [CHAINS.PLS]: 'Pulse Chain',
-  [CHAINS.BSC]: 'Binance Smart Chain',
-  [CHAINS.ETH]: 'Ethereum',
+  // [CHAINS.BSC]: 'Binance Smart Chain',
+  // [CHAINS.ETH]: 'Ethereum',
   // [CHAINS.MATIC]: 'Polygon',
   // [CHAINS.XDAI]: 'xDai',
 }
@@ -32,8 +32,8 @@ export const NETWORK_NAMES: IChainDetails<string> = {
 export const DEFAULT_BLOCK_TIMES: IChainDetails<number> = {
   // [CHAINS.FTM]: 600, // 600 blocks is ~10 minutes ( 1 second blocks )
   [CHAINS.PLS]: 200, // 200 blocks is ~10 minutes ( 3 second blocks )
-  [CHAINS.BSC]: 200, // 200 blocks is ~10 minutes ( 3 second blocks )
-  [CHAINS.ETH]: 46, // 46 blocks is ~10 minutes ( 13 second blocks )
+  // [CHAINS.BSC]: 200, // 200 blocks is ~10 minutes ( 3 second blocks )
+  // [CHAINS.ETH]: 46, // 46 blocks is ~10 minutes ( 13 second blocks )
   // [CHAINS.MATIC]: 46,
   // [CHAINS.XDAI]: 46,
 }
@@ -41,8 +41,8 @@ export const DEFAULT_BLOCK_TIMES: IChainDetails<number> = {
 export const RPC_URL: IChainDetails<string> = {
   // [CHAINS.FTM]: process.env.FTM_URL ?? 'https://rpc.ftm.tools/0be7111f-17ed-4498-b6f9-7afdd22a3488?cache=900',
   [CHAINS.PLS]: process.env.PLS_URL ?? 'https://rpc.pulsechain.com/',
-  [CHAINS.BSC]: process.env.BSC_URL ?? 'https://bsc-dataseed.binance.org/',
-  [CHAINS.ETH]: process.env.ETH_URL ?? 'https://main-light.eth.linkpool.io/',
+  // [CHAINS.BSC]: process.env.BSC_URL ?? 'https://bsc-dataseed.binance.org/',
+  // [CHAINS.ETH]: process.env.ETH_URL ?? 'https://mainnet.infura.io/v3/',
   // [CHAINS.MATIC]: process.env.MATIC_URL ?? 'https://rpc-mainnet.matic.network',
   // [CHAINS.XDAI]: process.env.XDAI_URL ?? 'https://rpc.xdaichain.com/',
 }
@@ -50,8 +50,8 @@ export const RPC_URL: IChainDetails<string> = {
 export const WEB3_CLIENTS: IChainDetails<Web3> = {
   // [CHAINS.FTM]: new Web3(new Web3.providers.HttpProvider(RPC_URL[CHAINS.FTM])),
   [CHAINS.PLS]: new Web3(new Web3.providers.HttpProvider(RPC_URL[CHAINS.PLS])),
-  [CHAINS.BSC]: new Web3(new Web3.providers.HttpProvider(RPC_URL[CHAINS.BSC])),
-  [CHAINS.ETH]: new Web3(new Web3.providers.HttpProvider(RPC_URL[CHAINS.ETH])),
+  // [CHAINS.BSC]: new Web3(new Web3.providers.HttpProvider(RPC_URL[CHAINS.BSC])),
+  // [CHAINS.ETH]: new Web3(new Web3.providers.HttpProvider(RPC_URL[CHAINS.ETH])),
   // [CHAINS.MATIC]: new Web3(new Web3.providers.HttpProvider(RPC_URL[CHAINS.MATIC])),
   // [CHAINS.XDAI]: new Web3(new Web3.providers.HttpProvider(RPC_URL[CHAINS.XDAI])),
 }
@@ -68,20 +68,20 @@ export const BASE_TOKENS: IChainDetails<DEFAULT_CHAIN_TOKENS> = {
   //   FALLBACK: '0x5Cc61A78F164885776AA610fb0FE1257df78E59B', // spirit
   // },
   [CHAINS.PLS]: {
-    NATIVE: '0xA1077a294dDE1B09bB078844df40758a5D0f9a27', // wpls
-    STABLE: '0x15D38573d2feeb82e7ad5187aB8c1D52810B1f07', // usdc
+    NATIVE: '0xa1077a294dde1b09bb078844df40758a5d0f9a27', // wpls
+    STABLE: '0x15d38573d2feeb82e7ad5187ab8c1d52810b1f07', // usdc
     FALLBACK: '0x95b303987a60c71504d99aa1b13b4da07b0790ab', // plsx
   },
-  [CHAINS.BSC]: {
-    NATIVE: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c', // bnb
-    STABLE: '0xe9e7cea3dedca5984780bafc599bd69add087d56', // busd
-    FALLBACK: '0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82', // cake
-  },
-  [CHAINS.ETH]: {
-    NATIVE: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2', // weth
-    STABLE: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48', // usdt
-    FALLBACK: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2', // weth
-  },
+  // [CHAINS.BSC]: {
+  //   NATIVE: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c', // bnb
+  //   STABLE: '0xe9e7cea3dedca5984780bafc599bd69add087d56', // busd
+  //   FALLBACK: '0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82', // cake
+  // },
+  // [CHAINS.ETH]: {
+  //   NATIVE: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2', // weth
+  //   STABLE: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48', // usdc
+  //   FALLBACK: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2', // weth
+  // },
   // [CHAINS.MATIC]: {
   //   NATIVE: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2', // weth
   //   STABLE: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48', // usdt
@@ -126,22 +126,22 @@ export const FACTORIES: IChainDetails<FACTORY_DEFINITION[]> = {
   //     name: 'shiba',
   //   },
   // ],
-  [CHAINS.BSC]: [
-    {
-      address: '0xcA143Ce32Fe78f1f7019d7d551a6402fC5350c73',
-      name: 'pancake',
-    },
-  ],
-  [CHAINS.ETH]: [
-    {
-      address: '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f', // uniswap v2
-      name: 'uni',
-    },
-    {
-      address: '0xC0AEe478e3658e2610c5F7A4A2E1777cE9e4f2Ac', // sushiswap v2
-      name: 'sushi',
-    },
-  ],
+  // [CHAINS.BSC]: [
+  //   {
+  //     address: '0xcA143Ce32Fe78f1f7019d7d551a6402fC5350c73',
+  //     name: 'pancake',
+  //   },
+  // ],
+  // [CHAINS.ETH]: [
+  //   {
+  //     address: '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f', // uniswap v2
+  //     name: 'uni',
+  //   },
+  //   {
+  //     address: '0xC0AEe478e3658e2610c5F7A4A2E1777cE9e4f2Ac', // sushiswap v2
+  //     name: 'sushi',
+  //   },
+  // ],
   // [CHAINS.MATIC]: [
   //   {
   //     address: '0xC0AEe478e3658e2610c5F7A4A2E1777cE9e4f2Ac',

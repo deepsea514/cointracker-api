@@ -39,9 +39,9 @@ services:
       CACHE_HOST: redis
       CACHE_PORT: 6379
       # CACHE_EXPIRATION: 1800
-      BSC_URL: https://bsc.publicnode.com/
+      # BSC_URL: https://bsc-dataseed.binance.org/
       # FTM_URL: https://rpc.ankr.com/fantom/
-      ETH_URL: https://eth.meowrpc.com/
+      # ETH_URL: https://mainnet.infura.io/v3/
       PLS_URL: https://rpc.pulsechain.com/
       JWT_SECRET: xTC83d93GmPVkKitxTC83d93GmPVkKitxTC83d93GmPVkKit
       JWT_EXPIRY: 1d
