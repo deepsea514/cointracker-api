@@ -635,13 +635,10 @@ export const PULSE_DEX_CONFIG = {
             volumeUSD
           }
           id
-          amount0In
-          amount0Out
-          amount1In
-          amount1Out
+          amount0
+          amount1
           amountUSD
           to
-          from
           sender
         }
       }
@@ -692,6 +689,8 @@ export const PULSE_DEX_CONFIG = {
           amount0
           amount1
           amountUSD
+          to
+          sender
         }
       }
     `,
