@@ -9,7 +9,7 @@ import {
   WEB3_CLIENTS,
 } from '../../constants/web3_constants'
 
-export type ChainId = 1 | 56 | 369
+export type ChainId = 369
 
 interface IFactoryConfiguration {
   name: string
