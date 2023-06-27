@@ -18,7 +18,7 @@ export const getBurns = async (chainId: CHAINS, exchange: EXCHANGES, limit: numb
   if (!limit || isNaN(limit)) limit = 15
 
   const burnsData = await getOrSetCache(`burns?chainId=${chainId}&exchange=${exchange}&limit=${limit}`, async () => {
-    const { burns, bundle } = await await subgraphHelper.getDataByQuery({
+    const { burns, bundle } = await subgraphHelper.getDataByQuery({
       client: subgraph.CLIENT,
       query: subgraph.QUERIES.BURNS,
       variables: { first: limit },
