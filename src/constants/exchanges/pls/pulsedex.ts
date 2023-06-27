@@ -18,8 +18,8 @@ export const PULSE_DEX_CONFIG = {
             address: id
             symbol
           }
-          timestamp
-          block
+          createdAtTimestamp: timestamp
+          createdAtBlockNumber: block
         }
 
         pair1: pairs(where: { token1: $token }) {
@@ -32,8 +32,8 @@ export const PULSE_DEX_CONFIG = {
             address: id
             symbol
           }
-          timestamp
-          block
+          createdAtTimestamp: timestamp
+          createdAtBlockNumber: block
         }
       }
     `,
