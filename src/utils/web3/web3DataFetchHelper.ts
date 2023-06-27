@@ -36,8 +36,8 @@ export async function fetchPaginatedDataFromWeb3({ startingBlock, subgraph, from
     // 1 bsc block = 3 seconds
     // 1 eth block = 13 seconds
     const BLOCKS_PER_REQUEST_PER_CHAIN = {
-      [`${CHAINS.ETH}`]: 280,
-      [`${CHAINS.BSC}`]: 1200,
+      // [`${CHAINS.ETH}`]: 280,
+      // [`${CHAINS.BSC}`]: 1200,
       [`${CHAINS.PLS}`]: 1200,
       // [`${CHAINS.FTM}`]: 3600,
     }
