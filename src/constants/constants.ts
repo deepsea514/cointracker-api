@@ -12,7 +12,7 @@ import { PULSE_DEX2_CONFIG } from './exchanges/pls/pulsedex2'
 
 // Subgraph constants
 
-export enum  EXCHANGES {
+export enum EXCHANGES {
   // UNI_SWAP = 'uni', // ETH
   // PANCAKE_SWAP = 'pancake', // BSC
   // SUSHI_SWAP = 'sushi', // FTM  (also ETH, BSC)
@@ -32,6 +32,7 @@ export enum CHAINS {
   // MATIC = 137,
   // XDAI = 100,
   PLS = 369,
+  PLS2 = 369,
 }
 
 export const SUBGRAPHS = {
