@@ -33,7 +33,7 @@ server.listen(PORT, async () => {
     //   }
     // }
 
-    for (const exchange of [EXCHANGES.PULSE_DEX]) {
+    for (const exchange of [EXCHANGES.PULSE_DEX, EXCHANGES.PULSE_DEX2]) {
       try {
         console.log(`${new Date().toISOString()}: Starting backfill for ${exchange.toUpperCase()}`)
         await fillDbWithTokens(CHAINS.PLS, exchange)
