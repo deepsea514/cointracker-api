@@ -21,8 +21,8 @@ export enum EXCHANGES {
   // PAINT_SWAP = 'paint', // FTM
   // ZOO_DEX = 'zoo', // FTM
   // SHIBA_SWAP = 'shiba', // FTM
-  PULSE_DEX = 'pulse', // PLS V1
-  PULSE_DEX2 = 'pulse2', // PLS V2
+  PULSE_DEX = ' Diablo PLSXV1', // PLS V1
+  PULSE_DEX2 = 'Diablo PLSXV2', // PLS V2
 }
 
 export enum CHAINS {
@@ -32,7 +32,6 @@ export enum CHAINS {
   // MATIC = 137,
   // XDAI = 100,
   PLS = 369,
-  PLS2 = 369,
 }
 
 export const SUBGRAPHS = {
