@@ -21,7 +21,7 @@ export enum EXCHANGES {
   // PAINT_SWAP = 'paint', // FTM
   // ZOO_DEX = 'zoo', // FTM
   // SHIBA_SWAP = 'shiba', // FTM
-  PULSE_DEX = ' Diablo PLSXV1', // PLS V1
+  PULSE_DEX = 'Diablo PLSXV1', // PLS V1
   PULSE_DEX2 = 'Diablo PLSXV2', // PLS V2
 }
 
