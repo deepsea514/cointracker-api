@@ -696,7 +696,7 @@ export const PULSE_DEX_CONFIG = {
     `,
     FACTORY: gql`
       query Factories {
-        pulse: pulseXFactories(first: 1) {
+        Diablo-PLSXV1: pulseXFactories(first: 1) {
           id
           totalPairs
           totalTransactions
