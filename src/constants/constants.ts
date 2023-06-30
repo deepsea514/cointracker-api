@@ -8,6 +8,7 @@
 // import { SUSHI_SWAP_CONFIG } from './exchanges/ftm/sushiswap'
 // import { ZOO_DEX_CONFIG } from './exchanges/ftm/zoodex'
 import { PULSE_DEX_CONFIG } from './exchanges/pls/pulsedex'
+import { PULSE_DEX2_CONFIG } from './exchanges/pls/pulsedex2'
 
 // Subgraph constants
 
@@ -20,7 +21,8 @@ export enum  EXCHANGES {
   // PAINT_SWAP = 'paint', // FTM
   // ZOO_DEX = 'zoo', // FTM
   // SHIBA_SWAP = 'shiba', // FTM
-  PULSE_DEX = 'pulse', // PLS
+  PULSE_DEX = 'pulse', // PLS V1
+  PULSE_DEX2 = 'pulse2', // PLS V2
 }
 
 export enum CHAINS {
@@ -50,6 +52,7 @@ export const SUBGRAPHS = {
   // },
   [`${CHAINS.PLS}`]: {
     [`${EXCHANGES.PULSE_DEX}`]: PULSE_DEX_CONFIG,
+    [`${EXCHANGES.PULSE_DEX2}`]: PULSE_DEX2_CONFIG,
   },
 }
 
