@@ -32,6 +32,7 @@ export enum CHAINS {
   // MATIC = 137,
   // XDAI = 100,
   PLS = 369,
+  PLS2 = 369,
 }
 
 export const SUBGRAPHS = {
