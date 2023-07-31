@@ -91,6 +91,7 @@ export const getTokenHistoricalFromDB = asyncHandler(async (req: Request, res: R
     // 250: 240, // ~240 seconds
     // 56: 80, // ~240 seconds
     369: 80, // ~240 seconds
+    5000: 80, // `240 seconds
     // 1: 18, // ~240 seconds
     // 100: 28, // ~240
     // 137: 240, // ~240

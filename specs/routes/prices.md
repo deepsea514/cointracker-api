@@ -18,6 +18,7 @@ Used to fetch the [Prices](../models/price.md) for a list of tokens.
     - 56: BSC
     - 250: FTM
     - 369: PLS
+    - 5000: NATIVE
   - `secret`: string
   - `key`: string
 - Access: `Public`

@@ -9,6 +9,7 @@ export interface ISwapEvent extends Document {
   amountETH?: number
   // amountFTM?: number
   amountPLS?: number
+  amountNATIVE?: number
   amountBNB?: number
   amount0In: number
   amount1In: number
@@ -19,6 +20,7 @@ export interface ISwapEvent extends Document {
   pairLiquidityETH?: number
   // pairLiquidityFTM?: number
   pairLiquidityPLS?: number
+  pairLiquidityNATIVE?: number
   pairLiquidityBNB?: number
   token0Address: string
   token1Address: string
@@ -32,6 +34,8 @@ export interface ISwapEvent extends Document {
   // token1PriceFTM?: number
   token0PricePLS?: number
   token1PricePLS?: number
+  token0PriceNATIVE?: number
+  token1PriceNATIVE?: number
   token0PriceBNB?: number
   token1PriceBNB?: number
   walletAddress: string
@@ -71,6 +75,12 @@ const SwapSchema = new mongoose.Schema<ISwapEvent>({
       return parseInt(this.network) == 369
     },
   },
+  amountNATIVE: {
+    type: Number,
+    required: function (this: ISwapEvent) {
+      return parseInt(this.network) == 5000
+    },
+  },
   amount0In: Number,
   amount1In: Number,
   amount0Out: Number,
@@ -99,6 +109,12 @@ const SwapSchema = new mongoose.Schema<ISwapEvent>({
     type: Number,
     required: function (this: ISwapEvent) {
       return parseInt(this.network) == 369
+    },
+  },
+  pairLiquidityNATIVE: {
+    type: Number,
+    required: function (this: ISwapEvent) {
+      return parseInt(this.network) == 5000
     },
   },
   token0Address: String,
@@ -131,6 +147,12 @@ const SwapSchema = new mongoose.Schema<ISwapEvent>({
       return parseInt(this.network) == 369
     },
   },
+  token0PriceNATIVE: {
+    type: Number,
+    required: function (this: ISwapEvent) {
+      return parseInt(this.network) == 5000
+    },
+  },
   token1PriceETH: {
     type: Number,
     required: function (this: ISwapEvent) {
@@ -153,6 +175,12 @@ const SwapSchema = new mongoose.Schema<ISwapEvent>({
     type: Number,
     required: function (this: ISwapEvent) {
       return parseInt(this.network) == 369
+    },
+  },
+  token1PriceNATIVE: {
+    type: Number,
+    required: function (this: ISwapEvent) {
+      return parseInt(this.network) == 5000
     },
   },
   walletAddress: String,

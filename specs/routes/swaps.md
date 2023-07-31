@@ -15,7 +15,8 @@ Used to fetch the latest [Swaps](../models/swap.md) by chain and exchange.
     - 1: ETH
     - 56: BSC
     - 250: FTM
-    - 3699: PLS
+    - 369: PLS
+    - 5000: NATIVE
   - `exchange`: string
     - `paint`: PaintSwap
     - `spirit`: SpiritSwap

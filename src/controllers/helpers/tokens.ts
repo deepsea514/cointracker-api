@@ -521,6 +521,9 @@ export const getExchange = (exchange: EXCHANGES, chain: CHAINS) => {
     //   return result + '_SHIBA_SWAP'
     // case EXCHANGES.SPOOKY_SWAP:
     // return result + '_SPOOKY_SWAP'
+
+    case EXCHANGES.FUSION_DEX:
+      return result + '_FUSION_DEX'
     case EXCHANGES.PULSE_DEX:
       return result + '_PULSE_DEX'
     default:

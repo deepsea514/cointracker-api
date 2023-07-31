@@ -16,10 +16,12 @@ export interface IMintEvent extends Document {
   amountUSD: string
   amountETH?: number
   amountPLS?: number
+  amountNATIVE?: number
   amountBNB?: number
   pairLiquidityUSD: number
   pairLiquidityETH?: number
   pairLiquidityPLS?: number
+  pairLiquidityNATIVE?: number
   pairLiquidityBNB?: number
   token0PriceUSD: number
   token1PriceUSD: number
@@ -31,6 +33,8 @@ export interface IMintEvent extends Document {
   // token1PriceFTM?: number
   token0PricePLS?: number
   token1PricePLS?: number
+  token0PriceNATIVE?: number
+  token1PriceNATIVE?: number
   token0PriceBNB?: number
   token1PriceBNB?: number
   walletAddress: string
@@ -77,6 +81,12 @@ const MintSchema = new mongoose.Schema<IMintEvent>({
       return parseInt(this.network) == 369
     },
   },
+  amountNATIVE: {
+    type: Number,
+    required: function (this: IMintEvent) {
+      return parseInt(this.network) == 5000
+    },
+  },
   pairLiquidityUSD: Number,
   pairLiquidityETH: {
     type: Number,
@@ -100,6 +110,12 @@ const MintSchema = new mongoose.Schema<IMintEvent>({
     type: Number,
     required: function (this: IMintEvent) {
       return parseInt(this.network) == 369
+    },
+  },
+  pairLiquidityNATIVE: {
+    type: Number,
+    required: function (this: IMintEvent) {
+      return parseInt(this.network) == 5000
     },
   },
   token0PriceUSD: Number,
@@ -127,6 +143,12 @@ const MintSchema = new mongoose.Schema<IMintEvent>({
       return parseInt(this.network) == 369
     },
   },
+  token0PriceNATIVE: {
+    type: Number,
+    required: function (this: IMintEvent) {
+      return parseInt(this.network) == 5000
+    },
+  },
   token1PriceUSD: Number,
   token1PriceETH: {
     type: Number,
@@ -150,6 +172,12 @@ const MintSchema = new mongoose.Schema<IMintEvent>({
     type: Number,
     required: function (this: IMintEvent) {
       return parseInt(this.network) == 369
+    },
+  },
+  token1PriceNATIVE: {
+    type: Number,
+    required: function (this: IMintEvent) {
+      return parseInt(this.network) == 5000
     },
   },
   walletAddress: String,

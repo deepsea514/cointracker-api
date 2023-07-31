@@ -18,6 +18,7 @@ Used to fetch the most traded tokens per exchange. Returns a list of [Token](../
     - 56: BSC
     - 250: FTM
     - 369: PLS
+    - 5000: NATIVE
   - `exchange`: string
     - `paint`: PaintSwap
     - `spirit`: SpiritSwap
@@ -46,6 +47,7 @@ If no exchange is specified, it will use the exchange with the highest liquidity
     - 56: BSC
     - 250: FTM
     - 369: PLS
+    - 5000: NATIVE
   - `exchange`: string
     - `paint`: PaintSwap
     - `spirit`: SpiritSwap
@@ -77,6 +79,7 @@ If no exchange is specified, it will use the exchange with the highest liquidity
     - 56: BSC
     - 250: FTM
     - 369: PLS
+    - 5000: NATIVE
   - `exchange`: string
     - `paint`: PaintSwap
     - `spirit`: SpiritSwap
@@ -105,6 +108,7 @@ If no exchange is specified, it will use the exchange with the highest liquidity
     - 56: BSC
     - 250: FTM
     - 369: PLS
+    - 5000: NATIVE
   - `exchange`: string
     - `paint`: PaintSwap
     - `spirit`: SpiritSwap
@@ -133,6 +137,7 @@ If no exchange is specified, it will use the exchange with the highest liquidity
     - 56: BSC
     - 250: FTM
     - 369: PLS
+    - 5000: NATIVE
   - `exchange`: string
     - `paint`: PaintSwap
     - `spirit`: SpiritSwap
@@ -161,6 +166,7 @@ If no exchange is specified, it will use the exchange with the highest liquidity
     - 56: BSC
     - 250: FTM
     - 369: PLS
+    - 5000: NATIVE
   - `exchange`: string
     - `paint`: PaintSwap
     - `spirit`: SpiritSwap

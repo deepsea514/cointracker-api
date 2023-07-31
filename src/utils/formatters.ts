@@ -245,13 +245,7 @@ export const formatSwaps = async ({
 }
 
 const getNativeSymbol = (chainId: CHAINS) => {
-  return chainId == CHAINS.PLS ? 'WPLS' : 'ETH'
-  // chainId == CHAINS.ETH
-  //   ? 'ETH'
-  //   : chainId == CHAINS.BSC
-  //   ? 'BNB'
-  // : chainId == CHAINS.FTM
-  // ? 'FTM'
+  return chainId == CHAINS.NATIVE ? 'NATIVE' : chainId == CHAINS.PLS ? 'PLS' : 'ETH'
 }
 
 export const formatToken = async ({
