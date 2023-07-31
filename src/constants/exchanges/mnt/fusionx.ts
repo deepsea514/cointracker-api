@@ -18,8 +18,8 @@ export const FUSION_DEX_CONFIG = {
             address: id
             symbol
           }
-          timestamp
-          block
+          createdAtTimestamp: timestamp
+          createdAtBlockNumber: block
         }
 
         pair1: pairs(where: { token1: $token }) {
@@ -32,8 +32,8 @@ export const FUSION_DEX_CONFIG = {
             address: id
             symbol
           }
-          timestamp
-          block
+          createdAtTimestamp: timestamp
+          createdAtBlockNumber: block
         }
       }
     `,
@@ -63,9 +63,9 @@ export const FUSION_DEX_CONFIG = {
             txCount: dailyTxns
             volume: dailyVolumeToken
             volumeUSD: dailyVolumeUSD
-            volumeNATIVE: dailyVolumeNATIVE
+            volumeETH: dailyVolumeNATIVE
             liquidity: totalLiquidityToken
-            liquidityNATIVE: totalLiquidityNATIVE
+            liquidityETH: totalLiquidityNATIVE
             liquidityUSD: totalLiquidityUSD
             priceUSD
             date
@@ -158,9 +158,9 @@ export const FUSION_DEX_CONFIG = {
             txCount: dailyTxns
             volume: dailyVolumeToken
             volumeUSD: dailyVolumeUSD
-            volumeNATIVE: dailyVolumeNATIVE
+            volumeETH: dailyVolumeNATIVE
             liquidity: totalLiquidityToken
-            liquidityNATIVE: totalLiquidityNATIVE
+            liquidityETH: totalLiquidityNATIVE
             liquidityUSD: totalLiquidityUSD
             priceUSD
             date
@@ -174,9 +174,9 @@ export const FUSION_DEX_CONFIG = {
           txCount: dailyTxns
           volume: dailyVolumeToken
           volumeUSD: dailyVolumeUSD
-          volumeETH: dailyVolumeETH
+          volumeETH: dailyVolumeNATIVE
           liquidity: totalLiquidityToken
-          liquidityETH: totalLiquidityETH
+          liquidityETH: totalLiquidityNATIVE
           liquidityUSD: totalLiquidityUSD
           priceUSD
           date
@@ -270,9 +270,9 @@ export const FUSION_DEX_CONFIG = {
                 txCount: dailyTxns
                 volume: dailyVolumeToken
                 volumeUSD: dailyVolumeUSD
-                volumeNATIVE: dailyVolumeNATIVE
+                volumeETH: dailyVolumeNATIVE
                 liquidity: totalLiquidityToken
-                liquidityNATIVE: totalLiquidityNATIVE
+                liquidityETH: totalLiquidityNATIVE
                 liquidityUSD: totalLiquidityUSD
                 priceUSD
                 date
@@ -298,9 +298,9 @@ export const FUSION_DEX_CONFIG = {
                 txCount: dailyTxns
                 volume: dailyVolumeToken
                 volumeUSD: dailyVolumeUSD
-                volumeNATIVE: dailyVolumeNATIVE
+                volumeETH: dailyVolumeNATIVE
                 liquidity: totalLiquidityToken
-                liquidityNATIVE: totalLiquidityNATIVE
+                liquidityETH: totalLiquidityNATIVE
                 liquidityUSD: totalLiquidityUSD
                 priceUSD
                 date
@@ -358,9 +358,9 @@ export const FUSION_DEX_CONFIG = {
                 txCount: dailyTxns
                 volume: dailyVolumeToken
                 volumeUSD: dailyVolumeUSD
-                volumeNATIVE: dailyVolumeNATIVE
+                volumeETH: dailyVolumeNATIVE
                 liquidity: totalLiquidityToken
-                liquidityNATIVE: totalLiquidityNATIVE
+                liquidityETH: totalLiquidityNATIVE
                 liquidityUSD: totalLiquidityUSD
                 priceUSD
                 date
@@ -386,9 +386,9 @@ export const FUSION_DEX_CONFIG = {
                 txCount: dailyTxns
                 volume: dailyVolumeToken
                 volumeUSD: dailyVolumeUSD
-                volumeNATIVE: dailyVolumeNATIVE
+                volumeETH: dailyVolumeNATIVE
                 liquidity: totalLiquidityToken
-                liquidityNATIVE: totalLiquidityNATIVE
+                liquidityETH: totalLiquidityNATIVE
                 liquidityUSD: totalLiquidityUSD
                 priceUSD
                 date
@@ -446,9 +446,9 @@ export const FUSION_DEX_CONFIG = {
                 txCount: dailyTxns
                 volume: dailyVolumeToken
                 volumeUSD: dailyVolumeUSD
-                volumeNATIVE: dailyVolumeNATIVE
+                volumeETH: dailyVolumeNATIVE
                 liquidity: totalLiquidityToken
-                liquidityNATIVE: totalLiquidityNATIVE
+                liquidityETH: totalLiquidityNATIVE
                 liquidityUSD: totalLiquidityUSD
                 priceUSD
                 date
@@ -474,9 +474,9 @@ export const FUSION_DEX_CONFIG = {
                 txCount: dailyTxns
                 volume: dailyVolumeToken
                 volumeUSD: dailyVolumeUSD
-                volumeNATIVE: dailyVolumeNATIVE
+                volumeETH: dailyVolumeNATIVE
                 liquidity: totalLiquidityToken
-                liquidityNATIVE: totalLiquidityNATIVE
+                liquidityETH: totalLiquidityNATIVE
                 liquidityUSD: totalLiquidityUSD
                 priceUSD
                 date
@@ -506,31 +506,40 @@ export const FUSION_DEX_CONFIG = {
     `,
     SWAPS: gql`
       query Swaps($first: Int) {
+        bundle(id: 1) {
+          id
+          chainPrice: nativePrice
+        }
         swaps(first: $first) {
           id
+          transaction {
+            id
+            blockNumber: block
+            timestamp
+          }
           pair {
             id
             token0 {
-              id
+              address: id
               symbol
               decimals
               totalSupply
-              tradeVolume
-              tradeVolumeUSD
-              txCount
-              totalLiquidity
-              derivedNATIVE
+              volume: tradeVolume
+              volumeUSD: tradeVolumeUSD
+              txCount: totalTransactions
+              liquidity: totalLiquidity
+              derivedETH: derivedNATIVE
             }
             token1 {
-              id
+              address: id
               symbol
               decimals
               totalSupply
-              tradeVolume
-              tradeVolumeUSD
-              txCount
-              totalLiquidity
-              derivedNATIVE
+              volume: tradeVolume
+              volumeUSD: tradeVolumeUSD
+              txCount: totalTransactions
+              liquidity: totalLiquidity
+              derivedETH: derivedNATIVE
             }
             token0Price
             token1Price
@@ -546,34 +555,132 @@ export const FUSION_DEX_CONFIG = {
         }
       }
     `,
-    TOKEN_BURNS: gql``,
-    BURNS: gql`
-      query Burns($first: Int) {
-        burns(first: $first) {
+
+    TOKEN_BURNS: gql`
+      query Burns($first: Int, $pairs: [ID!]!) {
+        bundle(id: 1) {
           id
+          chainPrice: nativePrice
+        }
+        burns(first: $first, orderBy: timestamp, orderDirection: desc, where: { pair_in: $pairs }) {
+          transaction {
+            id
+            blockNumber: block
+            timestamp
+          }
           pair {
             id
             token0 {
-              id
+              address: id
               symbol
+              name
               decimals
-              totalSupply
-              tradeVolume
-              tradeVolumeUSD
-              txCount
-              totalLiquidity
-              derivedNATIVE
+              volume: tradeVolume
+              volumeUSD: tradeVolumeUSD
+              txCount: totalTransactions
+              liquidity: totalLiquidity
+              derivedETH: derivedNATIVE
+              dayData: tokenDayData(orderBy: date, orderDirection: desc, first: 2) {
+                txCount: dailyTxns
+                volume: dailyVolumeToken
+                liquidity: totalLiquidityToken
+              }
+
+              sevenDayData: tokenDayData(orderBy: date, orderDirection: desc, first: 7) {
+                txCount: dailyTxns
+                volume: dailyVolumeToken
+                volumeUSD: dailyVolumeUSD
+                volumeETH: dailyVolumeNATIVE
+                liquidity: totalLiquidityToken
+                liquidityETH: totalLiquidityNATIVE
+                liquidityUSD: totalLiquidityUSD
+                priceUSD
+                date
+              }
             }
             token1 {
-              id
+              address: id
+              symbol
+              name
+              decimals
+              volume: tradeVolume
+              volumeUSD: tradeVolumeUSD
+              txCount: totalTransactions
+              liquidity: totalLiquidity
+              derivedETH: derivedNATIVE
+              dayData: tokenDayData(orderBy: date, orderDirection: desc, first: 2) {
+                txCount: dailyTxns
+                volume: dailyVolumeToken
+                liquidity: totalLiquidityToken
+              }
+
+              sevenDayData: tokenDayData(orderBy: date, orderDirection: desc, first: 7) {
+                txCount: dailyTxns
+                volume: dailyVolumeToken
+                volumeUSD: dailyVolumeUSD
+                volumeETH: dailyVolumeNATIVE
+                liquidity: totalLiquidityToken
+                liquidityETH: totalLiquidityNATIVE
+                liquidityUSD: totalLiquidityUSD
+                priceUSD
+                date
+              }
+            }
+            id
+            reserve0
+            reserve1
+            reserveUSD
+            token0Price
+            token1Price
+            volumeToken0
+            volumeToken1
+            volumeUSD
+          }
+          id
+          amount0
+          amount1
+          amountUSD
+          to
+          sender
+        }
+      }
+    `,
+    BURNS: gql`
+      query Burns($first: Int) {
+        bundle(id: 1) {
+          id
+          chainPrice: nativePrice
+        }
+        burns(first: $first) {
+          id
+          transaction {
+            id
+            blockNumber: block
+            timestamp
+          }
+          pair {
+            id
+            token0 {
+              address: id
               symbol
               decimals
               totalSupply
-              tradeVolume
-              tradeVolumeUSD
-              txCount
-              totalLiquidity
-              derivedNATIVE
+              volume: tradeVolume
+              volumeUSD: tradeVolumeUSD
+              txCount: totalTransactions
+              liquidity: totalLiquidity
+              derivedETH: derivedNATIVE
+            }
+            token1 {
+              address: id
+              symbol
+              decimals
+              totalSupply
+              volume: tradeVolume
+              volumeUSD: tradeVolumeUSD
+              txCount: totalTransactions
+              liquidity: totalLiquidity
+              derivedETH: derivedNATIVE
             }
             token0Price
             token1Price
@@ -584,18 +691,20 @@ export const FUSION_DEX_CONFIG = {
           amount0
           amount1
           amountUSD
+          to
+          sender
         }
       }
     `,
     FACTORY: gql`
-      query fusionXFactories {
-        fusion: fusionXFactories(first: 1) {
+      query Factories {
+        fusion: fusionxFactories(first: 1) {
           id
           totalPairs
           totalTransactions
           totalVolumeUSD
-          totalVolumeNATIVE
-          totalLiquidityNATIVE
+          totalVolumeETH: totalVolumeNATIVE
+          totalLiquidityETH: totalLiquidityNATIVE
           totalLiquidityUSD
         }
       }
