@@ -43,7 +43,7 @@ services:
       # FTM_URL: https://rpc.ankr.com/fantom/
       # ETH_URL: https://mainnet.infura.io/v3/
       PLS_URL: https://rpc.pulsechain.com/
-      NATIVE_URL: https://rpc.mantle.xyz/
+      MNT_URL: https://rpc.mantle.xyz/
       JWT_SECRET: xTC83d93GmPVkKitxTC83d93GmPVkKitxTC83d93GmPVkKit
       JWT_EXPIRY: 1d
 volumes:

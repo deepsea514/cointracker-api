@@ -9,7 +9,7 @@ export interface ISwapEvent extends Document {
   amountETH?: number
   // amountFTM?: number
   amountPLS?: number
-  amountNATIVE?: number
+  amountMNT?: number
   amountBNB?: number
   amount0In: number
   amount1In: number
@@ -20,7 +20,7 @@ export interface ISwapEvent extends Document {
   pairLiquidityETH?: number
   // pairLiquidityFTM?: number
   pairLiquidityPLS?: number
-  pairLiquidityNATIVE?: number
+  pairLiquidityMNT?: number
   pairLiquidityBNB?: number
   token0Address: string
   token1Address: string
@@ -34,8 +34,8 @@ export interface ISwapEvent extends Document {
   // token1PriceFTM?: number
   token0PricePLS?: number
   token1PricePLS?: number
-  token0PriceNATIVE?: number
-  token1PriceNATIVE?: number
+  token0PriceMNT?: number
+  token1PriceMNT?: number
   token0PriceBNB?: number
   token1PriceBNB?: number
   walletAddress: string
@@ -75,7 +75,7 @@ const SwapSchema = new mongoose.Schema<ISwapEvent>({
       return parseInt(this.network) == 369
     },
   },
-  amountNATIVE: {
+  amountMNT: {
     type: Number,
     required: function (this: ISwapEvent) {
       return parseInt(this.network) == 5000
@@ -111,7 +111,7 @@ const SwapSchema = new mongoose.Schema<ISwapEvent>({
       return parseInt(this.network) == 369
     },
   },
-  pairLiquidityNATIVE: {
+  pairLiquidityMNT: {
     type: Number,
     required: function (this: ISwapEvent) {
       return parseInt(this.network) == 5000
@@ -147,7 +147,7 @@ const SwapSchema = new mongoose.Schema<ISwapEvent>({
       return parseInt(this.network) == 369
     },
   },
-  token0PriceNATIVE: {
+  token0PriceMNT: {
     type: Number,
     required: function (this: ISwapEvent) {
       return parseInt(this.network) == 5000
@@ -177,7 +177,7 @@ const SwapSchema = new mongoose.Schema<ISwapEvent>({
       return parseInt(this.network) == 369
     },
   },
-  token1PriceNATIVE: {
+  token1PriceMNT: {
     type: Number,
     required: function (this: ISwapEvent) {
       return parseInt(this.network) == 5000

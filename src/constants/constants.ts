@@ -24,7 +24,7 @@ export enum EXCHANGES {
   // SHIBA_SWAP = 'shiba', // FTM
   PULSE_DEX = 'Diablo-PLSXV1', // PLS V1
   PULSE_DEX2 = 'Diablo-PLSXV2', // PLS V2
-  FUSION_DEX = 'fusionx', // NATIVE
+  FUSION_DEX = 'fusionx', // MNT
 }
 
 export enum CHAINS {
@@ -35,7 +35,7 @@ export enum CHAINS {
   // XDAI = 100,
   PLS = 369,
   PLS2 = 369,
-  NATIVE = 5000,
+  MNT = 5000,
 }
 
 export const SUBGRAPHS = {
@@ -58,7 +58,7 @@ export const SUBGRAPHS = {
     [`${EXCHANGES.PULSE_DEX}`]: PULSE_DEX_CONFIG,
     [`${EXCHANGES.PULSE_DEX2}`]: PULSE_DEX2_CONFIG,
   },
-  [`${CHAINS.NATIVE}`]: {
+  [`${CHAINS.MNT}`]: {
     [`${EXCHANGES.FUSION_DEX}`]: FUSION_DEX_CONFIG,
   },
 }

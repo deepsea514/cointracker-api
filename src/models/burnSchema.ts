@@ -16,12 +16,12 @@ export interface IBurnEvent extends Document {
   amountUSD: string
   amountETH?: number
   amountPLS?: number
-  amountNATIVE?: number
+  amountMNT?: number
   amountBNB?: number
   pairLiquidityUSD: number
   pairLiquidityETH?: number
   pairLiquidityPLS?: number
-  pairLiquidityNATIVE?: number
+  pairLiquidityMNT?: number
   pairLiquidityBNB?: number
   token0PriceUSD: number
   token1PriceUSD: number
@@ -33,8 +33,8 @@ export interface IBurnEvent extends Document {
   // token1PriceFTM?: number
   token0PricePLS?: number
   token1PricePLS?: number
-  token0PriceNATIVE?: number
-  token1PriceNATIVE?: number
+  token0PriceMNT?: number
+  token1PriceMNT?: number
   token0PriceBNB?: number
   token1PriceBNB?: number
   walletAddress: string
@@ -81,7 +81,7 @@ const BurnSchema = new mongoose.Schema<IBurnEvent>({
       return parseInt(this.network) == 369
     },
   },
-  amountNATIVE: {
+  amountMNT: {
     type: Number,
     required: function (this: IBurnEvent) {
       return parseInt(this.network) == 5000
@@ -112,7 +112,7 @@ const BurnSchema = new mongoose.Schema<IBurnEvent>({
       return parseInt(this.network) == 369
     },
   },
-  pairLiquidityNATIVE: {
+  pairLiquidityMNT: {
     type: Number,
     required: function (this: IBurnEvent) {
       return parseInt(this.network) == 5000
@@ -143,7 +143,7 @@ const BurnSchema = new mongoose.Schema<IBurnEvent>({
       return parseInt(this.network) == 369
     },
   },
-  token0PriceNATIVE: {
+  token0PriceMNT: {
     type: Number,
     required: function (this: IBurnEvent) {
       return parseInt(this.network) == 5000
@@ -174,7 +174,7 @@ const BurnSchema = new mongoose.Schema<IBurnEvent>({
       return parseInt(this.network) == 369
     },
   },
-  token1PriceNATIVE: {
+  token1PriceMNT: {
     type: Number,
     required: function (this: IBurnEvent) {
       return parseInt(this.network) == 5000

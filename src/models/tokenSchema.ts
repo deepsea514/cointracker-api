@@ -18,14 +18,14 @@ export interface IToken {
   volume24hETH?: number
   // volume24hFTM?: number
   volume24hPLS?: number
-  volume24hNATIVE?: number
+  volume24hMNT?: number
   volume24hBNB?: number
   volumeChange24h: number
   liquidityUSD: number
   liquidityETH?: number
   // liquidityFTM?: number
   liquidityPLS?: number
-  liquidityNATIVE?: number
+  liquidityMNT?: number
   liquidityBNB?: number
   liquidityChange24h: number
   logoURI: string
@@ -33,14 +33,14 @@ export interface IToken {
   priceETH?: number
   // priceFTM?: number
   pricePLS?: number
-  priceNATIVE?: number
+  priceMNT?: number
   priceBNB?: number
   priceChange24h: number
   priceUSDChange24h: number
   priceETHChange24h?: number
   // priceFTMChange24h?: number
   pricePLSChange24h?: number
-  priceNATIVEChange24h?: number
+  priceMNTChange24h?: number
   priceBNBChange24h?: number
   timestamp: number
   blockNumber: number
@@ -87,7 +87,7 @@ const TokenSchema = new mongoose.Schema<IToken>(
     //     return parseInt(this.network) == 250
     //   },
     // },
-    volume24hNATIVE: {
+    volume24hMNT: {
       type: Number,
       required: function (this: IToken) {
         return parseInt(this.network) == 5000
@@ -119,7 +119,7 @@ const TokenSchema = new mongoose.Schema<IToken>(
     //     return parseInt(this.network) == 250
     //   },
     // },
-    liquidityNATIVE: {
+    liquidityMNT: {
       type: Number,
       required: function (this: IToken) {
         return parseInt(this.network) == 5000
@@ -152,7 +152,7 @@ const TokenSchema = new mongoose.Schema<IToken>(
     //     return parseInt(this.network) == 250
     //   },
     // },
-    priceNATIVE: {
+    priceMNT: {
       type: Number,
       required: function (this: IToken) {
         return parseInt(this.network) == 5000
@@ -184,7 +184,7 @@ const TokenSchema = new mongoose.Schema<IToken>(
     //     return parseInt(this.network) == 250
     //   },
     // },
-    priceNATIVEChange24h: {
+    priceMNTChange24h: {
       type: Number,
       required: function (this: IToken) {
         return parseInt(this.network) == 5000
