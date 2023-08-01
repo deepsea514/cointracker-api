@@ -698,7 +698,7 @@ export const FUSION_DEX_CONFIG = {
     `,
     FACTORY: gql`
       query Factories {
-        fusion: fusionxFactories(first: 1) {
+        fusionx: fusionxFactories(first: 1) {
           id
           totalPairs
           totalTransactions
