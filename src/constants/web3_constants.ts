@@ -78,9 +78,9 @@ export const BASE_TOKENS: IChainDetails<DEFAULT_CHAIN_TOKENS> = {
     FALLBACK: '0x95b303987a60c71504d99aa1b13b4da07b0790ab', // plsx
   },
   [CHAINS.MNT]: {
-    NATIVE: '0x78c1b0C915c4FAA5FffA6CAbf0219DA63d7f4cb8', // wmnt
-    STABLE: '0x09Bc4E0D864854c6aFB6eB9A9cdF58aC190D0dF9', // usdc
-    FALLBACK: '0x554388eC984278A3c5BFF09E6192C20CdFCA9F29', // uahm
+    NATIVE: '0x78c1b0c915c4faa5fffa6cabf0219da63d7f4cb8', // wmnt
+    STABLE: '0x09bc4e0d864854c6afb6eb9a9cdf58ac190d0df9', // usdc
+    FALLBACK: '0x554388ec984278a3c5bff09e6192c20cdfca9f29', // uahm
   },
   // [CHAINS.BSC]: {
   //   NATIVE: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c', // bnb
