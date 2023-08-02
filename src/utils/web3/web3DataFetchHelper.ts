@@ -40,6 +40,7 @@ export async function fetchPaginatedDataFromWeb3({ startingBlock, subgraph, from
       // [`${CHAINS.BSC}`]: 1200,
       [`${CHAINS.PLS}`]: 1200,
       [`${CHAINS.MNT}`]: 1200,
+      [`${CHAINS.BASE}`]: 1200,
       // [`${CHAINS.FTM}`]: 3600,
     }
 

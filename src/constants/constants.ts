@@ -10,6 +10,7 @@
 import { PULSE_DEX_CONFIG } from './exchanges/pls/pulsedex'
 import { PULSE_DEX2_CONFIG } from './exchanges/pls/pulsedex2'
 import { FUSION_DEX_CONFIG } from './exchanges/mnt/fusionx'
+import { ROCKET_SWAP_CONFIG } from './exchanges/base/rocketswap'
 
 // Subgraph constants
 
@@ -25,6 +26,7 @@ export enum EXCHANGES {
   PULSE_DEX = 'Diablo-PLSXV1', // PLS V1
   PULSE_DEX2 = 'Diablo-PLSXV2', // PLS V2
   FUSION_DEX = 'fusionx', // MNT
+  ROCKET_SWAP = 'rocketswap', // WETH
 }
 
 export enum CHAINS {
@@ -36,6 +38,7 @@ export enum CHAINS {
   PLS = 369,
   PLS2 = 369,
   MNT = 5000,
+  BASE = 8453,
 }
 
 export const SUBGRAPHS = {
@@ -60,6 +63,9 @@ export const SUBGRAPHS = {
   },
   [`${CHAINS.MNT}`]: {
     [`${EXCHANGES.FUSION_DEX}`]: FUSION_DEX_CONFIG,
+  },
+  [`${CHAINS.BASE}`]: {
+    [`${EXCHANGES.ROCKET_SWAP}`]: ROCKET_SWAP_CONFIG,
   },
 }
 
