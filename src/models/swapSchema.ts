@@ -54,7 +54,7 @@ const SwapSchema = new mongoose.Schema<ISwapEvent>({
   amountETH: {
     type: Number,
     required: function (this: ISwapEvent) {
-      return parseInt(this.network) == 1
+      return parseInt(this.network) == 1 || parseInt(this.network) == 8453
     },
   },
   amountBNB: {
@@ -90,7 +90,7 @@ const SwapSchema = new mongoose.Schema<ISwapEvent>({
   pairLiquidityETH: {
     type: Number,
     required: function (this: ISwapEvent) {
-      return parseInt(this.network) == 1
+      return parseInt(this.network) == 1 || parseInt(this.network) == 8453
     },
   },
   pairLiquidityBNB: {
@@ -126,7 +126,7 @@ const SwapSchema = new mongoose.Schema<ISwapEvent>({
   token0PriceETH: {
     type: Number,
     required: function (this: ISwapEvent) {
-      return parseInt(this.network) == 1
+      return parseInt(this.network) == 1 || parseInt(this.network) == 8453
     },
   },
   token0PriceBNB: {
@@ -156,7 +156,7 @@ const SwapSchema = new mongoose.Schema<ISwapEvent>({
   token1PriceETH: {
     type: Number,
     required: function (this: ISwapEvent) {
-      return parseInt(this.network) == 1
+      return parseInt(this.network) == 1 || parseInt(this.network) == 8453
     },
   },
   token1PriceBNB: {

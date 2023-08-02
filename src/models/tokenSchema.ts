@@ -72,7 +72,7 @@ const TokenSchema = new mongoose.Schema<IToken>(
     volume24hETH: {
       type: Number,
       required: function (this: IToken) {
-        return parseInt(this.network) == 1
+        return parseInt(this.network) == 1 || parseInt(this.network) == 8453
       },
     },
     volume24hBNB: {
@@ -104,7 +104,7 @@ const TokenSchema = new mongoose.Schema<IToken>(
     liquidityETH: {
       type: Number,
       required: function (this: IToken) {
-        return parseInt(this.network) == 1
+        return parseInt(this.network) == 1 || parseInt(this.network) == 8453
       },
     },
     liquidityBNB: {
@@ -137,7 +137,7 @@ const TokenSchema = new mongoose.Schema<IToken>(
     priceETH: {
       type: Number,
       required: function (this: IToken) {
-        return parseInt(this.network) == 1
+        return parseInt(this.network) == 1 || parseInt(this.network) == 8453
       },
     },
     priceBNB: {
@@ -169,7 +169,7 @@ const TokenSchema = new mongoose.Schema<IToken>(
     priceETHChange24h: {
       type: Number,
       required: function (this: IToken) {
-        return parseInt(this.network) == 1
+        return parseInt(this.network) == 1 || parseInt(this.network) == 8453
       },
     },
     priceBNBChange24h: {
