@@ -22,7 +22,14 @@ export const getTotalSupply = async (address: string, web3: Web3) => {
   const contract = getContract(ERC20_ABI, address, web3)
   return contract.methods.totalSupply().call()
 }
+
+export const getBalanceOf = async (tokenAddress: string, ownerAddress: string, web3: Web3) => {
+  const contract = getContract(ERC20_ABI, tokenAddress, web3)
+  return contract.methods.balanceOf(ownerAddress).call()
+}
+
 export default {
   getPairTokens,
   getTotalSupply,
+  getBalanceOf,
 }

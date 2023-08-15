@@ -1,11 +1,18 @@
-import { ERC20_ABI, FACTORIES, UNISWAP_FACTORY_ABI, UNISWAP_PAIR_ABI } from '../constants/web3_constants'
+import {
+  ERC20_ABI,
+  FACTORIES,
+  UNISWAP_FACTORY_ABI,
+  UNISWAP_FACTORY_ABI_V3,
+  UNISWAP_PAIR_ABI,
+  UNISWAP_PAIR_ABI_V3,
+} from '../constants/web3_constants'
 import { IChainConfiguration } from './chain/chainConfiguration'
 import { compareAddress } from './web3/address'
 import web3Helper from './web3/helpers'
 import { AbiItem } from 'web3-utils'
 import { CHAINS, EXCHANGES } from '../constants/constants'
 import { BadRequestError } from './CustomErrors'
-import { getPairDetails } from './web3/prices'
+import { getPairDetails, getPairDetailsV3 } from './web3/prices'
 
 async function fetchNativePrice(chain: IChainConfiguration, exchangeName: string) {
   const factory = FACTORIES[chain.chainId as CHAINS].find((a: any) => a.name === exchangeName)
@@ -16,6 +23,26 @@ async function fetchNativePrice(chain: IChainConfiguration, exchangeName: string
   const details = await getPairDetails(
     UNISWAP_FACTORY_ABI as AbiItem[],
     UNISWAP_PAIR_ABI as AbiItem[],
+    ERC20_ABI as AbiItem[],
+    [chain.tokens.NATIVE, chain.tokens.STABLE],
+    chain,
+    factory.address,
+  )
+
+  const token0IsNative = compareAddress(details.tokens.token0.options.address, chain.tokens.NATIVE, chain.web3)
+
+  return token0IsNative ? details.prices.token0 : details.prices.token1
+}
+
+async function fetchNativePriceV3(chain: IChainConfiguration, exchangeName: string) {
+  const factory = FACTORIES[chain.chainId as CHAINS].find((a: any) => a.name === exchangeName)
+  if (!factory) {
+    throw new BadRequestError('Invalid configuration error.')
+  }
+
+  const details = await getPairDetailsV3(
+    UNISWAP_FACTORY_ABI_V3 as AbiItem[],
+    UNISWAP_PAIR_ABI_V3 as AbiItem[],
     ERC20_ABI as AbiItem[],
     [chain.tokens.NATIVE, chain.tokens.STABLE],
     chain,
@@ -243,7 +270,7 @@ export const formatSwaps = async ({
   }
   return swaps.swaps
 }
-
+// TODO: add network
 const getNativeSymbol = (chainId: CHAINS) => {
   return chainId == CHAINS.MNT ? 'MNT' : chainId == CHAINS.PLS ? 'PLS' : 'ETH'
 }
@@ -321,6 +348,132 @@ export const formatToken = async ({
   const historicTokenPrice = nativeIsDesiredToken
     ? historicNativePrice
     : getTokenRelativePrice(token0IsNative, pairDayDatas[1]?.reserve0, pairDayDatas[1]?.reserve1)
+
+  const currentPriceUSD = nativeIsDesiredToken ? currentNativePrice : currentTokenPrice / currentNativePrice
+  const historicPriceUSD = nativeIsDesiredToken ? historicNativePrice : historicTokenPrice / historicNativePrice
+
+  const priceChange24h =
+    currentTokenPrice && historicTokenPrice ? (currentTokenPrice / historicTokenPrice - 1).toString() : '0'
+  const priceUSDChange24h =
+    currentPriceUSD && historicPriceUSD ? (currentPriceUSD / historicPriceUSD - 1).toString() : '0'
+  const priceETHChange24h =
+    currentTokenPrice && historicTokenPrice ? (currentTokenPrice / historicTokenPrice - 1).toString() : '0'
+
+  const totalSupply = (await web3Helper.getTotalSupply(token.address, chain.web3)) / 10 ** Number(token.decimals)
+
+  const native = getNativeSymbol(chain.chainId)
+  // console.log(native, chain.chainId)
+
+  const finalSevenDayData = token?.sevenDayData?.map((data: any) => {
+    let priceNative = nativeIsDesiredToken
+      ? 1
+      : parseFloat(data.priceUSD) * (parseFloat(data[`liquidity${native}`]) / parseFloat(data.liquidityUSD))
+    if (isNaN(priceNative)) priceNative = 0
+    return {
+      ...data,
+      [`price${native}`]: `${priceNative ?? 0}`,
+    }
+  })
+  return {
+    address: token?.address ?? null,
+    symbol: token?.symbol ?? null,
+    name: token?.name ?? null,
+    decimals: token.decimals,
+    totalSupply: totalSupply.toString(),
+    marketCapUSD: priceUSD ? (totalSupply * priceUSD).toString() : null,
+    [`marketCap${native}`]: priceETH ? (totalSupply * priceETH).toString() : null,
+    volume24h: volume24h ?? null,
+    volume24hUSD: volume24h ? (volume24h * priceUSD).toString() : null,
+    [`volume24h${native}`]: volume24h ? (volume24h * priceETH).toString() : null,
+    volumeChange24h: volume24h && volume24hHistoric ? (volume24h / volume24hHistoric - 1).toString() : null,
+    transactions24h: txCount ? txCount : null,
+    transactions24hChange: txCount && txCountHistoric ? (txCount / txCountHistoric - 1).toString() : null,
+    //   verified, // TODO: we need to get a list of verified tokens from each exchange
+    liquidityUSD: liquidity ? (liquidity * priceUSD).toString() : null,
+    [`liquidity${native}`]: liquidity ? (liquidity * priceETH).toString() : null,
+    liquidityChange24h: liquidity && liquidityHistoric ? (liquidity / liquidityHistoric - 1).toString() : null,
+    logoURI: `https://mljmnqnfdxzrsriincip.supabase.co/storage/v1/object/public/token-images/${token?.address}.png`, // TODO: we need images still, maybe we can get the from FTMscan or covalent
+    priceUSD: priceUSD.toString() ?? null,
+    [`price${native}`]: priceETH.toString() ?? null,
+    priceChange24h,
+    priceUSDChange24h,
+    [`price${native}Change24h`]: priceETHChange24h,
+    AMM: exchange,
+    network: chain.chainId,
+    sevenDayData: finalSevenDayData,
+  }
+}
+
+export const formatTokenV3 = async ({
+  token,
+  bundle,
+  pair,
+  pairDayDatas,
+  nativePairDayDatas,
+  chain,
+  exchange,
+}: {
+  token: any
+  bundle: any
+  pair: any
+  pairDayDatas: any[]
+  nativePairDayDatas: any[]
+  chain: IChainConfiguration
+  exchange: string
+}) => {
+  const tokenIsNative = (token: string) => compareAddress(token, chain.tokens.NATIVE, chain.web3)
+
+  const token0IsNative = tokenIsNative(pair?.token0?.address)
+  const token1IsNative = tokenIsNative(pair?.token1?.address)
+  const nativeIsDesiredToken = tokenIsNative(token.address)
+
+  const base0IsNative = tokenIsNative(nativePairDayDatas[0]?.pool.token0?.address)
+  const returnNullIfZero = (val: any) => (['', '0'].includes(val) ? null : val)
+  const nativePrice = returnNullIfZero(bundle.chainPrice) ?? (await fetchNativePriceV3(chain, exchange))
+
+  function getTokenRelativePrice(wantsToken0: boolean, reserve0: number | null = null, reserve1: number | null = null) {
+    if (!reserve0 || !reserve1) {
+      return 0
+    }
+
+    if (wantsToken0) {
+      return reserve1 / reserve0
+    }
+
+    return reserve0 / reserve1
+  }
+
+  const priceUSD = nativeIsDesiredToken
+    ? nativePrice
+    : token0IsNative
+    ? pair?.token0Price * nativePrice ?? null
+    : pair?.token1Price * nativePrice ?? null
+
+  const priceETH = priceUSD / nativePrice
+  const volume24h = token.dayData[0]?.volume ?? null
+  const volume24hHistoric = token.dayData[1]?.volume ?? null
+  const txCount = token.dayData[0]?.txCount ?? null
+  const txCountHistoric = token.dayData[1]?.txCount ?? null
+  const liquidity = token.dayData[0]?.liquidity ?? null
+  const liquidityHistoric = token.dayData[1]?.liquidity ?? null
+
+  const reserve0 =
+    (await web3Helper.getBalanceOf(pair?.token0.address, pair?.id, chain.web3)) / 10 ** Number(token.decimals)
+  const reserve1 =
+    (await web3Helper.getBalanceOf(pair?.token1.address, pair?.id, chain.web3)) / 10 ** Number(token.decimals)
+
+  // Current & historic FTM price
+  const currentNativePrice = getTokenRelativePrice(base0IsNative, reserve0, reserve1)
+  const historicNativePrice = getTokenRelativePrice(base0IsNative, reserve0, reserve1)
+
+  // Current & Historic token Price in FTM
+  const currentTokenPrice = nativeIsDesiredToken
+    ? currentNativePrice
+    : getTokenRelativePrice(token0IsNative, reserve0, reserve1)
+
+  const historicTokenPrice = nativeIsDesiredToken
+    ? historicNativePrice
+    : getTokenRelativePrice(token0IsNative, reserve0, reserve1)
 
   const currentPriceUSD = nativeIsDesiredToken ? currentNativePrice : currentTokenPrice / currentNativePrice
   const historicPriceUSD = nativeIsDesiredToken ? historicNativePrice : historicTokenPrice / historicNativePrice

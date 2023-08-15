@@ -7,3 +7,9 @@ export function findMostLiquidExchange(address: string, chainId: CHAINS) {
     web3Helper.findMostLiquidExchange(address, chainId),
   )
 }
+
+export function findMostLiquidExchangeV3(address: string, chainId: CHAINS) {
+  return getOrSetCache(`pairs/exchanges?address=${address}&chainId=${chainId}`, () =>
+    web3Helper.findMostLiquidExchangeV3(address, chainId),
+  )
+}

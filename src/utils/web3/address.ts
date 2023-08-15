@@ -22,8 +22,17 @@ export const getPairAddress = async (
   return await factoryContract.methods.getPair(firstAddress, secondAddress).call()
 }
 
+export const getPairAddressV3 = async (
+  firstAddress: string,
+  secondAddress: string,
+  factoryContract: Contract,
+): Promise<string> => {
+  return await factoryContract.methods.getPool(firstAddress, secondAddress).call()
+}
+
 export default {
   checksumAddress,
   getPairAddress,
+  getPairAddressV3,
   compareAddress,
 }

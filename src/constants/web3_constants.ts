@@ -189,6 +189,10 @@ export const FACTORIES: IChainDetails<FACTORY_DEFINITION[]> = {
       address: '0xE5020961fA51ffd3662CDf307dEf18F9a87Cce7c', // fusion v2
       name: 'fusionx',
     },
+    {
+      address: '0x530d2766d1988cc1c000c8b7d00334c14b69ad71', // fusion v3
+      name: 'fusionxv3',
+    },
   ],
   [CHAINS.BASE]: [
     {
@@ -969,7 +973,7 @@ export const ERC20_ABI: AbiItem[] = [
   },
 ]
 
-export const UNISWAP_V3_FACTORY_ABI = [
+export const UNISWAP_FACTORY_ABI_V3 = [
   { inputs: [], stateMutability: 'nonpayable', type: 'constructor' },
   {
     anonymous: false,
@@ -1069,7 +1073,7 @@ export const UNISWAP_V3_FACTORY_ABI = [
   },
 ]
 
-export const UNISWAP_V3_PAIR_ABI = [
+export const UNISWAP_PAIR_ABI_V3 = [
   { inputs: [], stateMutability: 'nonpayable', type: 'constructor' },
   {
     anonymous: false,
@@ -1454,9 +1458,9 @@ export const UNISWAP_V3_PAIR_ABI = [
 
 export default {
   UNISWAP_FACTORY_ABI,
-  UNISWAP_V3_FACTORY_ABI,
+  UNISWAP_FACTORY_ABI_V3,
   UNISWAP_PAIR_ABI,
-  UNISWAP_V3_PAIR_ABI,
+  UNISWAP_PAIR_ABI_V3,
   ERC20_ABI,
   RPC_URL,
   BASE_TOKENS,

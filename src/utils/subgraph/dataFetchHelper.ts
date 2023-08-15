@@ -115,3 +115,46 @@ export async function fetchTokenHistoricalDataBetweenTimeStamps(
 
   return data
 }
+
+export async function fetchTokenHistoricalDataBetweenTimeStampsV3(
+  token0: string,
+  token1: string,
+  subgraph: {
+    CLIENT: GraphQLClient
+    QUERIES: {
+      TOKENS: string
+      TOKENS_HISTORICAL: string
+      MINTS: string
+      SWAPS: string
+      BURNS: string
+    }
+  },
+  chain: IChainConfiguration,
+  factory: string,
+  from: number,
+  to: number,
+) {
+  // Use Web3 to get the chains NATIVE-STABLE pair address & contract
+  // Pair is used in the graphql query, but the contract isn't used unless
+  // we need to fetch further data with web3
+  const factoryContract = web3Helper.getContract(UNISWAP_FACTORY_ABI as AbiItem[], factory, chain.web3)
+  const tokenNativePair = (await web3Helper.getPairAddressV3(token0, token1, factoryContract)).toLowerCase()
+  // can only get a maximum of 1000 from the subgraph at a time (may return less)
+  // we need to get the full 1000 since we can't know how many tx took place per block/time-frame
+  const limit = 1000
+  if (compareAddress(tokenNativePair, TOKENS.ZERO, chain.web3)) {
+    throw new PairUnavailableError(
+      `Could not find a pair for this token on ${chain.chainId}. token0: ${token0} - token1: ${token1}`,
+    )
+  }
+
+  const [data] = await fetchPaginatedDataFromGraphQL_ALT({
+    first: limit,
+    subgraph,
+    pair: tokenNativePair,
+    to,
+    from,
+  })
+
+  return data
+}

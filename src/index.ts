@@ -2,7 +2,7 @@ import 'dotenv/config'
 import server from './server'
 import { connect } from './db/connect'
 import { CronJob } from './utils/cron'
-import { fillDbWithTokens } from './utils/fillDb'
+import { fillDbWithTokens, fillDbWithTokensV3 } from './utils/fillDb'
 import { CHAINS, EXCHANGES } from './constants/constants'
 import History from './models/historySchema'
 import Token from './models/tokenSchema'
@@ -32,6 +32,18 @@ server.listen(PORT, async () => {
     //     console.log(`${new Date().toISOString()}: Completed ${exchange.toUpperCase()} successfully`)
     //   }
     // }
+    // TODO: add dexes
+
+    for (const exchange of [EXCHANGES.FUSION_DEX_V3]) {
+      try {
+        console.log(`${new Date().toISOString()}: Starting backfill for ${exchange.toUpperCase()}`)
+        await fillDbWithTokensV3(CHAINS.MNT, exchange)
+      } catch {
+        console.log(`${new Date().toISOString()}: Failed to complete ${exchange.toUpperCase()}`)
+      } finally {
+        console.log(`${new Date().toISOString()}: Completed ${exchange.toUpperCase()} successfully`)
+      }
+    }
 
     for (const exchange of [EXCHANGES.ROCKET_SWAP]) {
       try {
