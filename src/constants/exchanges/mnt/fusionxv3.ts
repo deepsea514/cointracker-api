@@ -51,7 +51,7 @@ export const FUSION_DEX_V3_CONFIG = {
           volume
           volumeUSD
           txCount
-          liquidity: totalLiquidity
+          liquidity: totalValueLocked
           feesUSD
           derivedETH
 
