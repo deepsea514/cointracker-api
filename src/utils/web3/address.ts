@@ -27,7 +27,20 @@ export const getPairAddressV3 = async (
   secondAddress: string,
   factoryContract: Contract,
 ): Promise<string> => {
-  return await factoryContract.methods.getPool(firstAddress, secondAddress).call()
+  const feeTiers = [100, 500, 2500, 10000]
+  const pools = await Promise.all(
+    feeTiers.map(async (feeTier) => {
+      return await factoryContract.methods.getPool(firstAddress, secondAddress, feeTier).call()
+    }),
+  )
+
+  let result = ''
+  for (const pool of pools) {
+    if (pool !== '0x0000000000000000000000000000000000000000') {
+      result = pool
+    }
+  }
+  return result
 }
 
 export default {
