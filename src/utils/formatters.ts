@@ -681,23 +681,44 @@ export const formatTokenV3 = async ({
   const liquidity = token.dayData[0]?.liquidity ?? null
   const liquidityHistoric = token.dayData[1]?.liquidity ?? null
 
-  const reserve0 =
-    (await web3Helper.getBalanceOf(pair?.token0.address, pair?.id, chain.web3)) / 10 ** Number(token.decimals)
-  const reserve1 =
-    (await web3Helper.getBalanceOf(pair?.token1.address, pair?.id, chain.web3)) / 10 ** Number(token.decimals)
+  // const reserve0 =
+  //   (await web3Helper.getBalanceOf(pair?.token0.address, pair?.id, chain.web3)) / 10 ** Number(token.decimals)
+  // const reserve1 =
+  //   (await web3Helper.getBalanceOf(pair?.token1.address, pair?.id, chain.web3)) / 10 ** Number(token.decimals)
+
+  // // Current & historic FTM price
+  // const currentNativePrice = getTokenRelativePrice(base0IsNative, reserve0, reserve1)
+  // const historicNativePrice = getTokenRelativePrice(base0IsNative, reserve0, reserve1)
+
+  // // Current & Historic token Price in FTM
+  // const currentTokenPrice = nativeIsDesiredToken
+  //   ? currentNativePrice
+  //   : getTokenRelativePrice(token0IsNative, reserve0, reserve1)
+
+  // const historicTokenPrice = nativeIsDesiredToken
+  //   ? historicNativePrice
+  //   : getTokenRelativePrice(token0IsNative, reserve0, reserve1)
 
   // Current & historic FTM price
-  const currentNativePrice = getTokenRelativePrice(base0IsNative, reserve0, reserve1)
-  const historicNativePrice = getTokenRelativePrice(base0IsNative, reserve0, reserve1)
+  const currentNativePrice = getTokenRelativePrice(
+    base0IsNative,
+    nativePairDayDatas[0]?.reserve0,
+    nativePairDayDatas[0]?.reserve1,
+  )
+  const historicNativePrice = getTokenRelativePrice(
+    base0IsNative,
+    nativePairDayDatas[1]?.reserve0,
+    nativePairDayDatas[1]?.reserve1,
+  )
 
   // Current & Historic token Price in FTM
   const currentTokenPrice = nativeIsDesiredToken
     ? currentNativePrice
-    : getTokenRelativePrice(token0IsNative, reserve0, reserve1)
+    : getTokenRelativePrice(token0IsNative, pairDayDatas[0]?.reserve0, pairDayDatas[0]?.reserve1)
 
   const historicTokenPrice = nativeIsDesiredToken
     ? historicNativePrice
-    : getTokenRelativePrice(token0IsNative, reserve0, reserve1)
+    : getTokenRelativePrice(token0IsNative, pairDayDatas[1]?.reserve0, pairDayDatas[1]?.reserve1)
 
   const currentPriceUSD = nativeIsDesiredToken ? currentNativePrice : currentTokenPrice / currentNativePrice
   const historicPriceUSD = nativeIsDesiredToken ? historicNativePrice : historicTokenPrice / historicNativePrice
