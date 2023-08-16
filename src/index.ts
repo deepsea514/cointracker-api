@@ -45,38 +45,38 @@ server.listen(PORT, async () => {
       }
     }
 
-    // for (const exchange of [EXCHANGES.ROCKET_SWAP]) {
-    //   try {
-    //     console.log(`${new Date().toISOString()}: Starting backfill for ${exchange.toUpperCase()}`)
-    //     await fillDbWithTokens(CHAINS.BASE, exchange)
-    //   } catch {
-    //     console.log(`${new Date().toISOString()}: Failed to complete ${exchange.toUpperCase()}`)
-    //   } finally {
-    //     console.log(`${new Date().toISOString()}: Completed ${exchange.toUpperCase()} successfully`)
-    //   }
-    // }
+    for (const exchange of [EXCHANGES.ROCKET_SWAP]) {
+      try {
+        console.log(`${new Date().toISOString()}: Starting backfill for ${exchange.toUpperCase()}`)
+        await fillDbWithTokens(CHAINS.BASE, exchange)
+      } catch {
+        console.log(`${new Date().toISOString()}: Failed to complete ${exchange.toUpperCase()}`)
+      } finally {
+        console.log(`${new Date().toISOString()}: Completed ${exchange.toUpperCase()} successfully`)
+      }
+    }
 
-    // for (const exchange of [EXCHANGES.FUSION_DEX]) {
-    //   try {
-    //     console.log(`${new Date().toISOString()}: Starting backfill for ${exchange.toUpperCase()}`)
-    //     await fillDbWithTokens(CHAINS.MNT, exchange)
-    //   } catch {
-    //     console.log(`${new Date().toISOString()}: Failed to complete ${exchange.toUpperCase()}`)
-    //   } finally {
-    //     console.log(`${new Date().toISOString()}: Completed ${exchange.toUpperCase()} successfully`)
-    //   }
-    // }
+    for (const exchange of [EXCHANGES.FUSION_DEX]) {
+      try {
+        console.log(`${new Date().toISOString()}: Starting backfill for ${exchange.toUpperCase()}`)
+        await fillDbWithTokens(CHAINS.MNT, exchange)
+      } catch {
+        console.log(`${new Date().toISOString()}: Failed to complete ${exchange.toUpperCase()}`)
+      } finally {
+        console.log(`${new Date().toISOString()}: Completed ${exchange.toUpperCase()} successfully`)
+      }
+    }
 
-    // for (const exchange of [EXCHANGES.PULSE_DEX, EXCHANGES.PULSE_DEX2]) {
-    //   try {
-    //     console.log(`${new Date().toISOString()}: Starting backfill for ${exchange.toUpperCase()}`)
-    //     await fillDbWithTokens(CHAINS.PLS, exchange)
-    //   } catch {
-    //     console.log(`${new Date().toISOString()}: Failed to complete ${exchange.toUpperCase()}`)
-    //   } finally {
-    //     console.log(`${new Date().toISOString()}: Completed ${exchange.toUpperCase()} successfully`)
-    //   }
-    // }
+    for (const exchange of [EXCHANGES.PULSE_DEX, EXCHANGES.PULSE_DEX2]) {
+      try {
+        console.log(`${new Date().toISOString()}: Starting backfill for ${exchange.toUpperCase()}`)
+        await fillDbWithTokens(CHAINS.PLS, exchange)
+      } catch {
+        console.log(`${new Date().toISOString()}: Failed to complete ${exchange.toUpperCase()}`)
+      } finally {
+        console.log(`${new Date().toISOString()}: Completed ${exchange.toUpperCase()} successfully`)
+      }
+    }
 
     // for (const exchange of [EXCHANGES.PANCAKE_SWAP]) {
     //   try {
