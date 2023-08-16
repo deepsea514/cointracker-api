@@ -34,16 +34,16 @@ server.listen(PORT, async () => {
     // }
     // TODO: add dexes
 
-    for (const exchange of [EXCHANGES.FUSION_DEX_V3]) {
-      try {
-        console.log(`${new Date().toISOString()}: Starting backfill for ${exchange.toUpperCase()}`)
-        await fillDbWithTokensV3(CHAINS.MNT, exchange)
-      } catch {
-        console.log(`${new Date().toISOString()}: Failed to complete ${exchange.toUpperCase()}`)
-      } finally {
-        console.log(`${new Date().toISOString()}: Completed ${exchange.toUpperCase()} successfully`)
-      }
-    }
+    // for (const exchange of [EXCHANGES.FUSION_DEX_V3]) {
+    //   try {
+    //     console.log(`${new Date().toISOString()}: Starting backfill for ${exchange.toUpperCase()}`)
+    //     await fillDbWithTokensV3(CHAINS.MNT, exchange)
+    //   } catch {
+    //     console.log(`${new Date().toISOString()}: Failed to complete ${exchange.toUpperCase()}`)
+    //   } finally {
+    //     console.log(`${new Date().toISOString()}: Completed ${exchange.toUpperCase()} successfully`)
+    //   }
+    // }
 
     for (const exchange of [EXCHANGES.ROCKET_SWAP]) {
       try {
