@@ -222,6 +222,7 @@ export const getTokensV3 = async (chainId: CHAINS, exchange: EXCHANGES, limit: n
 
   return tokens
 }
+
 export const getTokensWithoutSevenDayData = async (
   chainId: CHAINS,
   exchange: EXCHANGES,
@@ -888,9 +889,11 @@ export const getExchange = (exchange: EXCHANGES, chain: CHAINS) => {
 
 export default {
   getTokens,
+  getTokensV3,
   getTokenHistorical,
   getTokenHistoricalV3,
   getTokenHistoricalFromDB,
   getTokenByAddress,
+  getTokenByAddressV3,
   getExchange,
 }

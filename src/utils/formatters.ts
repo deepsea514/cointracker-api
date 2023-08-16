@@ -54,6 +54,74 @@ async function fetchNativePriceV3(chain: IChainConfiguration, exchangeName: stri
   return token0IsNative ? details.prices.token0 : details.prices.token1
 }
 
+export const formatBurnsV3 = async ({
+  burns,
+  chain,
+  exchange,
+}: {
+  burns: any
+  chain: IChainConfiguration
+  exchange: EXCHANGES
+}) => {
+  const tokenIsNative = (token: string) => compareAddress(token, chain.tokens.NATIVE, chain.web3)
+  let nativePrice = burns.bundle.chainPrice
+  if (!nativePrice || nativePrice === '0') {
+    nativePrice = await fetchNativePriceV3(chain, exchange)
+  }
+
+  for (let i = 0; i < burns.burns.length; i++) {
+    const burn = burns.burns[i]
+    const token0IsNative = tokenIsNative(burn.pair.token0.address)
+    const token1IsNative = tokenIsNative(burn.pair.token1.address)
+
+    if (!burn.pair.reserveUSD || Number(burn.pair.reserveUSD) === 0) {
+      const backupReserveUSD = token0IsNative
+        ? burn.pair.reserve1 * nativePrice * 2
+        : burn.pair.reserve0 * nativePrice * 2
+      burn.pair.reserveUSD = backupReserveUSD.toString()
+    }
+
+    burn.token0PriceUSD = (token0IsNative ? nativePrice : burn.pair.token1Price * nativePrice).toString()
+    burn.token1PriceUSD = (token1IsNative ? nativePrice : burn.pair.token0Price * nativePrice).toString()
+
+    burn.token0PriceETH = (burn.token0PriceUSD / nativePrice).toString()
+    burn.token1PriceETH = (burn.token1PriceUSD / nativePrice).toString()
+
+    if (!burn.amountUSD || Number(burn.amountUSD) === 0) {
+      burn.amountUSD = ((token0IsNative ? burn.amount0 : burn.amount1) * nativePrice).toString()
+    }
+    const native = getNativeSymbol(chain.chainId)
+
+    burns.burns[i] = {
+      transactionAddress: burn.transaction.id,
+      timestamp: burn.transaction.timestamp,
+      blockNumber: burn.transaction.blockNumber,
+      to: burn.to,
+      sender: burn.sender,
+      pairAddress: burn.pair.id,
+      token0Address: burn.pair.token0.address,
+      token1Address: burn.pair.token1.address,
+      token0Symbol: burn.pair.token0.symbol,
+      token1Symbol: burn.pair.token1.symbol,
+      amount0: burn.amount0,
+      amount1: burn.amount1,
+      amountUSD: burn.amountUSD,
+      [`amount${native}`]: (burn.amountUSD / nativePrice).toString(),
+      pairLiquidityUSD: burn.pair.reserveUSD,
+      [`pairLiquidity${native}`]: (burn.pair.reserveUSD / nativePrice).toString(),
+      token0PriceUSD: burn.token0PriceUSD,
+      [`token0Price${native}`]: burn.token0PriceETH,
+      token1PriceUSD: burn.token1PriceUSD,
+      [`token1Price${native}`]: burn.token1PriceETH,
+      walletAddress: burn.sender,
+      walletCategory: null,
+      AMM: exchange, // TODO: look up proper name instead of short code (paint/spirit/sushi)
+      network: chain.chainId, // TODO: get chain name instead of chain ID currently
+    }
+  }
+  return burns.burns
+}
+
 export const formatBurns = async ({
   burns,
   chain,
@@ -193,6 +261,77 @@ export const formatMints = async ({
   return mints.mints
 }
 
+export const formatMintsV3 = async ({
+  mints,
+  chain,
+  exchange,
+}: {
+  mints: any
+  chain: IChainConfiguration
+  exchange: string
+}) => {
+  const tokenIsNative = (token: string) => compareAddress(token, chain.tokens.NATIVE, chain.web3)
+  let nativePrice = mints.bundle.chainPrice
+  if (!nativePrice || nativePrice === '0') {
+    nativePrice = await fetchNativePriceV3(chain, exchange)
+  }
+
+  for (let i = 0; i < mints.mints.length; i++) {
+    const mint = mints.mints[i]
+    const token0IsNative = tokenIsNative(mint.pair.token0.address)
+    const token1IsNative = tokenIsNative(mint.pair.token1.address)
+
+    if (!mint.pair.reserveUSD || Number(mint.pair.reserveUSD) === 0) {
+      const backupReserveUSD = token0IsNative
+        ? mint.pair.reserve1 * nativePrice * 2
+        : mint.pair.reserve0 * nativePrice * 2
+      mint.pair.reserveUSD = backupReserveUSD.toString()
+    }
+
+    mint.token0PriceUSD = (token0IsNative ? nativePrice : mint.pair.token1Price * nativePrice).toString()
+    mint.token1PriceUSD = (token1IsNative ? nativePrice : mint.pair.token0Price * nativePrice).toString()
+
+    mint.token0PriceETH = (mint.token0PriceUSD / nativePrice).toString()
+    mint.token1PriceETH = (mint.token1PriceUSD / nativePrice).toString()
+
+    if (!mint.amountUSD || Number(mint.amountUSD) === 0) {
+      mint.amountUSD = ((token0IsNative ? mint.amount0 : mint.amount1) * nativePrice).toString()
+    }
+
+    const native = getNativeSymbol(chain.chainId)
+    // console.log(native, chain.chainId)
+
+    mints.mints[i] = {
+      transactionAddress: mint.transaction.id,
+      timestamp: mint.transaction.timestamp,
+      blockNumber: mint.transaction.blockNumber,
+      to: mint.to,
+      sender: mint.sender,
+      pairAddress: mint.pair.id,
+      token0Address: mint.pair.token0.address,
+      token1Address: mint.pair.token1.address,
+      token0Symbol: mint.pair.token0.symbol,
+      token1Symbol: mint.pair.token1.symbol,
+      amount0: mint.amount0,
+      amount1: mint.amount1,
+      amountUSD: mint.amountUSD,
+      [`amount${native}`]: (mint.amountUSD / nativePrice).toString(),
+      pairLiquidityUSD: mint.pair.reserveUSD,
+      [`pairLiquidity${native}`]: (mint.pair.reserveUSD / nativePrice).toString(),
+      token0PriceUSD: mint.token0PriceUSD,
+      [`token0Price${native}`]: mint.token0PriceETH,
+      token1PriceUSD: mint.token1PriceUSD,
+      [`token1Price${native}`]: mint.token1PriceETH,
+      walletAddress: mint.to,
+      walletCategory: null,
+      AMM: exchange, // TODO: look up proper name instead of short code (paint/spirit/sushi)
+      network: chain.chainId, // TODO: get chain name instead of chain ID currently
+    }
+  }
+
+  return mints.mints
+}
+
 export const formatSwaps = async ({
   swaps,
   chain,
@@ -212,6 +351,91 @@ export const formatSwaps = async ({
     const swap = swaps.swaps[i]
     const token0IsNative = tokenIsNative(swap.pair.token0.address)
     const token1IsNative = tokenIsNative(swap.pair.token1.address)
+
+    if (!swap.pair.reserveUSD || Number(swap.pair.reserveUSD) === 0) {
+      const backupReserveUSD = token0IsNative
+        ? swap.pair.reserve1 * nativePrice * 2
+        : swap.pair.reserve0 * nativePrice * 2
+
+      swap.pair.reserveUSD = backupReserveUSD.toString()
+    }
+
+    swap.token0PriceUSD = (token0IsNative ? nativePrice : swap.pair.token1Price * nativePrice).toString()
+    swap.token1PriceUSD = (token1IsNative ? nativePrice : swap.pair.token0Price * nativePrice).toString()
+
+    swap.token0PriceETH = (swap.token0PriceUSD / nativePrice).toString()
+    swap.token1PriceETH = (swap.token1PriceUSD / nativePrice).toString()
+
+    if (!swap.amountUSD || Number(swap.amountUSD) === 0) {
+      const amount0 = swap.amount0In + swap.amount0Out
+      const amount1 = swap.amount1In + swap.amount1Out
+      swap.amountUSD = ((token0IsNative ? amount0 : amount1) * nativePrice).toString()
+    }
+    // console.log(swaps[i])
+    const native: string = getNativeSymbol(chain.chainId)
+    // console.log(native, chain.chainId)
+
+    swaps.swaps[i] = {
+      transactionAddress: swap.transaction.id,
+      timestamp: swap.transaction.timestamp,
+      blockNumber: swap.transaction.blockNumber,
+      to: swap.to,
+      sender: swap.sender,
+      pairAddress: swap.pair.id,
+      amount0In: swap.amount0In,
+      amount1In: swap.amount1In,
+      amount0Out: swap.amount0Out,
+      amount1Out: swap.amount1Out,
+      amountUSD: swap.amountUSD,
+      pairLiquidityUSD: swap.pair.reserveUSD,
+      token0Address: swap.pair.token0.address,
+      token1Address: swap.pair.token1.address,
+      token0Symbol: swap.pair.token0.symbol,
+      token1Symbol: swap.pair.token1.symbol,
+      token0PriceUSD: swap.token0PriceUSD,
+      token1PriceUSD: swap.token1PriceUSD,
+      [`token0Price${native}`]: swap.token0PriceETH,
+      [`token1Price${native}`]: swap.token1PriceETH,
+
+      // TODO: do we actually want the prices in ETH here? I think probably we want the native token (FTM/ETH/BSC) if so,
+      // should this still be called ETH for simplicity ?
+      [`amount${native}`]: (swap.amountUSD / nativePrice).toString(),
+      [`pairLiquidity${native}`]: (swap.pair.reserveUSD / nativePrice).toString(),
+      walletAddress: swap.from ? swap.from : null, // TODO: This value is undefined for sushi. Not included in subgraph. Will need to fill in with web3, or deploy a new subgraph if we need this
+      walletCategory: null,
+      AMM: exchange, // TODO: look up proper name instead of short code (paint/spirit/sushi)
+      network: chain.chainId, // TODO: get chain name instead of chain ID currently
+    }
+  }
+  return swaps.swaps
+}
+
+export const formatSwapsV3 = async ({
+  swaps,
+  chain,
+  exchange,
+}: {
+  swaps: any
+  chain: IChainConfiguration
+  exchange: EXCHANGES
+}) => {
+  const tokenIsNative = (token: string) => compareAddress(token, chain.tokens.NATIVE, chain.web3)
+  let nativePrice = swaps.bundle.chainPrice
+  if (!nativePrice || nativePrice === '0') {
+    nativePrice = await fetchNativePriceV3(chain, exchange)
+  }
+
+  for (let i = 0; i < swaps.swaps.length; i++) {
+    const swap = swaps.swaps[i]
+    const token0IsNative = tokenIsNative(swap.pair.token0.address)
+    const token1IsNative = tokenIsNative(swap.pair.token1.address)
+
+    // const reserve0 =
+    //   (await web3Helper.getBalanceOf(swap.pair.token0.address, swap.pair.id, chain.web3)) /
+    //   10 ** Number(swap.pair.token0.decimals)
+    // const reserve1 =
+    //   (await web3Helper.getBalanceOf(swap.pair.token1.address, swap.pair.id, chain.web3)) /
+    //   10 ** Number(swap.pair.token1.decimals)
 
     if (!swap.pair.reserveUSD || Number(swap.pair.reserveUSD) === 0) {
       const backupReserveUSD = token0IsNative

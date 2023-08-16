@@ -5,10 +5,10 @@ import { AbiItem } from 'web3-utils'
 import { BadRequestError } from '../../utils/CustomErrors'
 import { getOrSetCache } from '../../cache/redis'
 import { getExchangeDetailsByName } from '../../utils/dataHelpers'
-import { findMostLiquidExchange } from '../../utils/web3/cacheHelpers'
+import { findMostLiquidExchange, findMostLiquidExchangeV3 } from '../../utils/web3/cacheHelpers'
 import { getChainConfiguration } from '../../utils/chain/chainConfiguration'
-import { UNISWAP_FACTORY_ABI } from '../../constants/web3_constants'
-import { formatSwaps } from '../../utils/formatters'
+import { UNISWAP_FACTORY_ABI, UNISWAP_FACTORY_ABI_V3 } from '../../constants/web3_constants'
+import { formatSwaps, formatSwapsV3 } from '../../utils/formatters'
 
 export const getSwaps = async (chainId: CHAINS, exchange: EXCHANGES, limit: number = 15) => {
   const subgraph = SUBGRAPHS[`${chainId}`]?.[`${exchange}`]
@@ -29,6 +29,48 @@ export const getSwaps = async (chainId: CHAINS, exchange: EXCHANGES, limit: numb
 
   const swaps = await formatSwaps({ swaps: swapsData, chain, exchange })
 
+  return swaps
+}
+
+export const getTokenSwapsV3 = async (
+  chainId: CHAINS,
+  exchange: EXCHANGES | null,
+  limit: number = 15,
+  address: string,
+) => {
+  const exchangeDetails = exchange
+    ? getExchangeDetailsByName(exchange, chainId)
+    : await findMostLiquidExchangeV3(address, chainId)
+
+  if (!exchangeDetails?.name) throw new BadRequestError('Invalid configuration error.')
+
+  const chain = getChainConfiguration(chainId)
+  const subgraph = SUBGRAPHS[`${chainId}`]?.[exchangeDetails.name]
+
+  if (!subgraph) throw new BadRequestError('Invalid configuration error.')
+
+  const contract = web3Helper.getContract(UNISWAP_FACTORY_ABI_V3 as AbiItem[], exchangeDetails.address, chain.web3)
+  const stablePair = await web3Helper.getPairAddressV3(address, chain.tokens.STABLE, contract)
+  const nativePair = await web3Helper.getPairAddressV3(address, chain.tokens.NATIVE, contract)
+  let pairs: string[] = []
+  if (address.toLowerCase() === chain.tokens.STABLE.toLowerCase()) pairs.push(nativePair.toLowerCase())
+  else if (address.toLowerCase() === chain.tokens.NATIVE.toLowerCase()) pairs.push(stablePair.toLowerCase())
+  else pairs = [stablePair.toLowerCase(), nativePair.toLowerCase()]
+  const swapsData = await getOrSetCache(
+    `swaps?address=${address}&chainId=${chainId}&exchange=${exchangeDetails.name}&limit=${limit}`,
+    async () => {
+      const data = await subgraphHelper.getDataByQuery({
+        client: subgraph.CLIENT,
+        query: subgraph.QUERIES.TOKEN_SWAPS,
+        variables: { first: limit, pairs: pairs },
+      })
+      // console.log(data)
+
+      return { swaps: data.swaps, bundle: data.bundle }
+    },
+  )
+
+  const swaps = await formatSwapsV3({ swaps: swapsData, chain, exchange: exchangeDetails.name })
   return swaps
 }
 
@@ -77,4 +119,5 @@ export const getTokenSwaps = async (
 export default {
   getSwaps,
   getTokenSwaps,
+  getTokenSwapsV3,
 }

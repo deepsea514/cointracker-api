@@ -116,7 +116,7 @@ export async function findMostLiquidExchangeV3(address: string, chainId: CHAINS)
         client: subgraph.CLIENT,
         query: gql`
           query getPairData($pair: ID!) {
-            pair(id: $pair) {
+            pool(id: $pair) {
               totalValueLockedToken0
               totalValueLockedToken1
               token0 {
