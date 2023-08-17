@@ -21,7 +21,7 @@ const getPricing = async (
   if (!addresses?.length) return []
 
   const mostLiquidNativeExchange = await findMostLiquidExchange(chain.tokens.NATIVE, chain.chainId)
-
+  const isV3 = mostLiquidNativeExchange.name.includes('V3')
   // get all the required base token-token data
   const { prices: basePrices, tokens: baseTokens } = await web3Helper.getPairDetails(
     factoryAbi,
@@ -30,6 +30,7 @@ const getPricing = async (
     [chain.tokens.NATIVE, chain.tokens.STABLE],
     chain,
     mostLiquidNativeExchange.address,
+    isV3,
   )
 
   // Get the price of the chains native token in terms of its base stable token
@@ -42,6 +43,8 @@ const getPricing = async (
       if (web3Helper.compareAddress(address, chain.tokens.NATIVE, chain.web3)) return { address, price: nativePrice }
       if (web3Helper.compareAddress(address, chain.tokens.STABLE, chain.web3)) return { address, price: 1 }
 
+      const isV3 = mostLiquidNativeExchange.name.includes('V3')
+
       const { prices, tokens } = await web3Helper.getPairDetails(
         factoryAbi,
         pairAbi,
@@ -49,6 +52,7 @@ const getPricing = async (
         [address, chain.tokens.NATIVE],
         chain,
         mostLiquidExchange.address,
+        isV3,
       )
 
       const tokenPrice = web3Helper.compareAddress(tokens.token0.options.address, chain.tokens.NATIVE, chain.web3)
@@ -84,11 +88,16 @@ const getHistoricalPricing = async (
 
   const token = await getTokenDetails(tokenAddress, chain.web3)
   const mostLiquidExchange = await findMostLiquidExchange(tokenAddress, chain.chainId)
-
+  const isV3 = mostLiquidExchange.name.includes('V3')
   const factoryContract = web3Helper.getContract(factoryAbi, mostLiquidExchange.address, chain.web3)
 
   // USDC-WFTM base pricing
-  const basePairAddress = await web3Helper.getPairAddress(chain.tokens.NATIVE, chain.tokens.STABLE, factoryContract)
+  const basePairAddress = await web3Helper.getPairAddress(
+    chain.tokens.NATIVE,
+    chain.tokens.STABLE,
+    factoryContract,
+    isV3,
+  )
 
   const baseContract = web3Helper.getContract(pairAbi, basePairAddress, chain.web3)
 
@@ -115,7 +124,7 @@ const getHistoricalPricing = async (
     return getBaseNativeCoinHistoricalPricing(baseHistory, token, chain.web3)
   }
 
-  const pairAddress = await web3Helper.getPairAddress(tokenAddress, chain.tokens.NATIVE, factoryContract)
+  const pairAddress = await web3Helper.getPairAddress(tokenAddress, chain.tokens.NATIVE, factoryContract, isV3)
 
   const pairContract = web3Helper.getContract(pairAbi, pairAddress, chain.web3)
 
