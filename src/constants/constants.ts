@@ -7,10 +7,10 @@
 // import { SPOOKY_SWAP_CONFIG } from './exchanges/ftm/spookyswap'
 // import { SUSHI_SWAP_CONFIG } from './exchanges/ftm/sushiswap'
 // import { ZOO_DEX_CONFIG } from './exchanges/ftm/zoodex'
-import { PULSE_DEX_CONFIG } from './exchanges/pls/pulsedex'
-import { PULSE_DEX2_CONFIG } from './exchanges/pls/pulsedex2'
-import { FUSION_DEX_CONFIG } from './exchanges/mnt/fusionx'
-import { FUSION_DEX_V3_CONFIG } from './exchanges/mnt/fusionxv3'
+import { PULSEX_V1_CONFIG } from './exchanges/pls/pulsexV1'
+import { PULSEX_V2_CONFIG } from './exchanges/pls/pulsexV2'
+import { FUSIONX_V2_CONFIG } from './exchanges/mnt/fusionxV2'
+import { FUSIONX_V3_CONFIG } from './exchanges/mnt/fusionxV3'
 import { ROCKET_SWAP_CONFIG } from './exchanges/base/rocketswap'
 
 // Subgraph constants
@@ -24,10 +24,10 @@ export enum EXCHANGES {
   // PAINT_SWAP = 'paint', // FTM
   // ZOO_DEX = 'zoo', // FTM
   // SHIBA_SWAP = 'shiba', // FTM
-  PULSE_DEX = 'Diablo-PLSXV1', // PLS V1
-  PULSE_DEX2 = 'Diablo-PLSXV2', // PLS V2
-  FUSION_DEX = 'fusionx', // MNT
-  FUSION_DEX_V3 = 'fusionxv3', // MNT
+  PULSEX_V1 = 'pulsexV1', // PLS V1
+  PULSEX_V2 = 'pulsexV2', // PLS V2
+  FUSIONX_V2 = 'fusionxV2', // MNT
+  FUSIONX_V3 = 'fusionxV3', // MNT
   ROCKET_SWAP = 'rocketswap', // WETH
 }
 
@@ -38,9 +38,7 @@ export enum CHAINS {
   // MATIC = 137,
   // XDAI = 100,
   PLS = 369,
-  PLS2 = 369,
   MNT = 5000,
-  MNTV3 = 5000,
   BASE = 8453,
 }
 
@@ -61,12 +59,12 @@ export const SUBGRAPHS = {
   //   [`${EXCHANGES.SHIBA_SWAP}`]: SHIBA_SWAP_CONFIG,
   // },
   [`${CHAINS.PLS}`]: {
-    [`${EXCHANGES.PULSE_DEX}`]: PULSE_DEX_CONFIG,
-    [`${EXCHANGES.PULSE_DEX2}`]: PULSE_DEX2_CONFIG,
+    [`${EXCHANGES.PULSEX_V1}`]: PULSEX_V1_CONFIG,
+    [`${EXCHANGES.PULSEX_V2}`]: PULSEX_V2_CONFIG,
   },
   [`${CHAINS.MNT}`]: {
-    [`${EXCHANGES.FUSION_DEX}`]: FUSION_DEX_CONFIG,
-    [`${EXCHANGES.FUSION_DEX_V3}`]: FUSION_DEX_V3_CONFIG,
+    [`${EXCHANGES.FUSIONX_V2}`]: FUSIONX_V2_CONFIG,
+    [`${EXCHANGES.FUSIONX_V3}`]: FUSIONX_V3_CONFIG,
   },
   [`${CHAINS.BASE}`]: {
     [`${EXCHANGES.ROCKET_SWAP}`]: ROCKET_SWAP_CONFIG,

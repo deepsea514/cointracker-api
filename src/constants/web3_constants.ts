@@ -177,21 +177,21 @@ export const FACTORIES: IChainDetails<FACTORY_DEFINITION[]> = {
   [CHAINS.PLS]: [
     {
       address: '0x1715a3E4A142d8b698131108995174F37aEBA10D', // pulsex V1
-      name: 'Diablo-PLSXV1',
+      name: 'pulsexV1',
     },
     {
       address: '0x29eA7545DEf87022BAdc76323F373EA1e707C523', // pulsex V2
-      name: 'Diablo-PLSXV2',
+      name: 'pulsexV2',
     },
   ],
   [CHAINS.MNT]: [
     {
       address: '0xE5020961fA51ffd3662CDf307dEf18F9a87Cce7c', // fusion v2
-      name: 'fusionx',
+      name: 'fusionxV2',
     },
     {
       address: '0x530d2766d1988cc1c000c8b7d00334c14b69ad71', // fusion v3
-      name: 'fusionxv3',
+      name: 'fusionxV3',
     },
   ],
   [CHAINS.BASE]: [

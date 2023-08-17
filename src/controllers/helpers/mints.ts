@@ -3,18 +3,20 @@ import { CHAINS, EXCHANGES, SUBGRAPHS } from '../../constants/constants'
 import { BadRequestError } from '../../utils/CustomErrors'
 import { getOrSetCache } from '../../cache/redis'
 import { getExchangeDetailsByName } from '../../utils/dataHelpers'
-import { findMostLiquidExchange, findMostLiquidExchangeV3 } from '../../utils/web3/cacheHelpers'
+import { findMostLiquidExchange } from '../../utils/web3/cacheHelpers'
 import { getChainConfiguration } from '../../utils/chain/chainConfiguration'
 import web3Helper from '../../utils/web3/helpers'
 import { AbiItem } from 'web3-utils'
 import { UNISWAP_FACTORY_ABI, UNISWAP_FACTORY_ABI_V3 } from '../../constants/web3_constants'
-import { formatMints, formatMintsV3 } from '../../utils/formatters'
+import { formatMints } from '../../utils/formatters'
 
 export const getMints = async (chainId: CHAINS, exchange: EXCHANGES, limit: number = 15) => {
   const subgraph = SUBGRAPHS[`${chainId}`]?.[`${exchange}`]
   const chain = getChainConfiguration(chainId)
 
   if (!subgraph) throw new BadRequestError('Invalid configuration error.')
+
+  const isV3 = exchange.includes('V3')
 
   const mintsData = await getOrSetCache(`mints?chainId=${chainId}&exchange=${exchange}&limit=${limit}`, async () => {
     const { mints, bundle } = await subgraphHelper.getDataByQuery({
@@ -25,7 +27,7 @@ export const getMints = async (chainId: CHAINS, exchange: EXCHANGES, limit: numb
     return { mints, bundle }
   })
 
-  const mints = await formatMints({ mints: mintsData, chain, exchange })
+  const mints = await formatMints({ mints: mintsData, chain, exchange, isV3 })
 
   return mints
 }
@@ -47,8 +49,14 @@ export const getTokenMints = async (
 
   if (!subgraph) throw new BadRequestError('Invalid configuration error.')
 
-  const contract = web3Helper.getContract(UNISWAP_FACTORY_ABI as AbiItem[], exchangeDetails.address, chain.web3)
-  const pair = await web3Helper.getPairAddress(address, chain.tokens.NATIVE, contract)
+  const isV3 = exchangeDetails.name.includes('V3')
+
+  const contract = web3Helper.getContract(
+    isV3 ? (UNISWAP_FACTORY_ABI_V3 as AbiItem[]) : (UNISWAP_FACTORY_ABI as AbiItem[]),
+    exchangeDetails.address,
+    chain.web3,
+  )
+  const pair = await web3Helper.getPairAddress(address, chain.tokens.NATIVE, contract, isV3)
 
   const mintsData = await getOrSetCache(
     `mints?address=${address}&chainId=${chainId}&exchange=${exchangeDetails.name}&limit=${limit}`,
@@ -62,44 +70,7 @@ export const getTokenMints = async (
     },
   )
 
-  const mints = await formatMints({ mints: mintsData, chain, exchange: exchangeDetails.name })
-
-  return mints
-}
-
-export const getTokenMintsV3 = async (
-  chainId: CHAINS,
-  exchange: EXCHANGES | null,
-  limit: number = 15,
-  address: string,
-) => {
-  const exchangeDetails = exchange
-    ? getExchangeDetailsByName(exchange, chainId)
-    : await findMostLiquidExchangeV3(address, chainId)
-
-  if (!exchangeDetails?.name) throw new BadRequestError('Invalid configuration error.')
-
-  const chain = getChainConfiguration(chainId)
-  const subgraph = SUBGRAPHS[`${chainId}`]?.[exchangeDetails.name]
-
-  if (!subgraph) throw new BadRequestError('Invalid configuration error.')
-
-  const contract = web3Helper.getContract(UNISWAP_FACTORY_ABI_V3 as AbiItem[], exchangeDetails.address, chain.web3)
-  const pair = await web3Helper.getPairAddressV3(address, chain.tokens.NATIVE, contract)
-
-  const mintsData = await getOrSetCache(
-    `mints?address=${address}&chainId=${chainId}&exchange=${exchangeDetails.name}&limit=${limit}`,
-    async () => {
-      const { mints, bundle } = await subgraphHelper.getDataByQuery({
-        client: subgraph.CLIENT,
-        query: subgraph.QUERIES.TOKEN_MINTS,
-        variables: { first: limit, pairs: [pair.toLowerCase()] },
-      })
-      return { mints, bundle }
-    },
-  )
-
-  const mints = await formatMintsV3({ mints: mintsData, chain, exchange: exchangeDetails.name })
+  const mints = await formatMints({ mints: mintsData, chain, exchange: exchangeDetails.name, isV3 })
 
   return mints
 }
@@ -107,5 +78,4 @@ export const getTokenMintsV3 = async (
 export default {
   getMints,
   getTokenMints,
-  getTokenMintsV3,
 }

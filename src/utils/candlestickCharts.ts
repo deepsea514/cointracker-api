@@ -235,9 +235,10 @@ type PairReserves = {
 
 export function calculateReservesAndPrice(
   pair: IRawPairData,
-  swaps: IRawSwapData[],
+  swaps: any,
   initialReserves: PairReserves,
   token0IsNative: boolean,
+  isV3: boolean,
 ) {
   // Get the first swap to calculate the current reserves balance
   const _firstRaw = swaps.shift()
@@ -246,17 +247,29 @@ export function calculateReservesAndPrice(
   }
 
   // Format the first swap into ISwapDataset
-  const first = formatSwap(
-    token0IsNative,
-    new Big(initialReserves.pair.reserve0).add(new Big(_firstRaw.amount0In)).sub(new Big(_firstRaw.amount0Out)), // reverse the swap to get the previous reserves balance
-    new Big(initialReserves.pair.reserve1).add(new Big(_firstRaw.amount1In)).sub(new Big(_firstRaw.amount1Out)),
-    new Big(initialReserves.pair.reserve0), // starting point is the current reserves balance
-    new Big(initialReserves.pair.reserve1),
-    +_firstRaw.transaction.blockNumber,
-    +_firstRaw.transaction.timestamp,
-    +_firstRaw.amount0In + +_firstRaw.amount0Out,
-    +_firstRaw.amount1In + +_firstRaw.amount1Out,
-  )
+  const first = isV3
+    ? formatSwap(
+        token0IsNative,
+        new Big(initialReserves.pair.reserve0).add(new Big(_firstRaw.amount0)), // reverse the swap to get the previous reserves balance
+        new Big(initialReserves.pair.reserve1).add(new Big(_firstRaw.amount1)),
+        new Big(initialReserves.pair.reserve0), // starting point is the current reserves balance
+        new Big(initialReserves.pair.reserve1),
+        +_firstRaw.transaction.blockNumber,
+        +_firstRaw.transaction.timestamp,
+        +_firstRaw.amount0,
+        +_firstRaw.amount1,
+      )
+    : formatSwap(
+        token0IsNative,
+        new Big(initialReserves.pair.reserve0).add(new Big(_firstRaw.amount0In)).sub(new Big(_firstRaw.amount0Out)), // reverse the swap to get the previous reserves balance
+        new Big(initialReserves.pair.reserve1).add(new Big(_firstRaw.amount1In)).sub(new Big(_firstRaw.amount1Out)),
+        new Big(initialReserves.pair.reserve0), // starting point is the current reserves balance
+        new Big(initialReserves.pair.reserve1),
+        +_firstRaw.transaction.blockNumber,
+        +_firstRaw.transaction.timestamp,
+        +_firstRaw.amount0In + +_firstRaw.amount0Out,
+        +_firstRaw.amount1In + +_firstRaw.amount1Out,
+      )
 
   // Begin collecting the swaps, working backwards
   const formattedSwaps = [first]
@@ -265,66 +278,29 @@ export function calculateReservesAndPrice(
   for (const [index, swap] of Object.entries(swaps) as any) {
     const prevEntry = formattedSwaps[index] // always one behind 'swaps' since we used shift earlier & added the first swap manually
     formattedSwaps.push(
-      formatSwap(
-        token0IsNative,
-        prevEntry.reserve0,
-        prevEntry.reserve1,
-        prevEntry.reserve0.sub(new Big(swap.amount0In)).add(new Big(swap.amount0Out)),
-        prevEntry.reserve1.sub(new Big(swap.amount1In)).add(new Big(swap.amount1Out)),
-        +swap.transaction.blockNumber,
-        +swap.transaction.timestamp,
-        +swap.amount0In + +swap.amount0Out,
-        +swap.amount1In + +swap.amount1Out,
-      ),
-    )
-  }
-
-  return formattedSwaps
-}
-
-export function calculateReservesAndPriceV3(
-  pair: IRawPairData,
-  swaps: IRawSwapDataV3[],
-  initialReserves: PairReserves,
-  token0IsNative: boolean,
-) {
-  // Get the first swap to calculate the current reserves balance
-  const _firstRaw = swaps.shift()
-  if (!_firstRaw) {
-    return []
-  }
-
-  // Format the first swap into ISwapDataset
-  const first = formatSwap(
-    token0IsNative,
-    new Big(initialReserves.pair.reserve0).add(new Big(_firstRaw.amount0)), // reverse the swap to get the previous reserves balance
-    new Big(initialReserves.pair.reserve1).add(new Big(_firstRaw.amount1)),
-    new Big(initialReserves.pair.reserve0), // starting point is the current reserves balance
-    new Big(initialReserves.pair.reserve1),
-    +_firstRaw.transaction.blockNumber,
-    +_firstRaw.transaction.timestamp,
-    +_firstRaw.amount0,
-    +_firstRaw.amount1,
-  )
-
-  // Begin collecting the swaps, working backwards
-  const formattedSwaps = [first]
-
-  // This loop calculates the price & reserve balance during every swap
-  for (const [index, swap] of Object.entries(swaps) as any) {
-    const prevEntry = formattedSwaps[index] // always one behind 'swaps' since we used shift earlier & added the first swap manually
-    formattedSwaps.push(
-      formatSwap(
-        token0IsNative,
-        prevEntry.reserve0,
-        prevEntry.reserve1,
-        prevEntry.reserve0.add(new Big(swap.amount0)),
-        prevEntry.reserve1.add(new Big(swap.amount1)),
-        +swap.transaction.blockNumber,
-        +swap.transaction.timestamp,
-        +swap.amount0In,
-        +swap.amount1In,
-      ),
+      isV3
+        ? formatSwap(
+            token0IsNative,
+            prevEntry.reserve0,
+            prevEntry.reserve1,
+            prevEntry.reserve0.add(new Big(swap.amount0)),
+            prevEntry.reserve1.add(new Big(swap.amount1)),
+            +swap.transaction.blockNumber,
+            +swap.transaction.timestamp,
+            +swap.amount0In,
+            +swap.amount1In,
+          )
+        : formatSwap(
+            token0IsNative,
+            prevEntry.reserve0,
+            prevEntry.reserve1,
+            prevEntry.reserve0.sub(new Big(swap.amount0In)).add(new Big(swap.amount0Out)),
+            prevEntry.reserve1.sub(new Big(swap.amount1In)).add(new Big(swap.amount1Out)),
+            +swap.transaction.blockNumber,
+            +swap.transaction.timestamp,
+            +swap.amount0In + +swap.amount0Out,
+            +swap.amount1In + +swap.amount1Out,
+          ),
     )
   }
 

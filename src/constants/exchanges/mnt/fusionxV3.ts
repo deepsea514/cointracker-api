@@ -1,6 +1,6 @@
 import { gql, GraphQLClient } from 'graphql-request'
 
-export const FUSION_DEX_V3_CONFIG = {
+export const FUSIONX_V3_CONFIG = {
   URL: 'https://graph.fusionx.finance/subgraphs/name/fusionx/exchange-v3',
   CLIENT: new GraphQLClient('https://graph.fusionx.finance/subgraphs/name/fusionx/exchange-v3', {
     headers: { 'content-type': 'application/graphql' },
@@ -705,7 +705,7 @@ export const FUSION_DEX_V3_CONFIG = {
     `,
     FACTORY: gql`
       query Factories {
-        fusionxv3: factories(first: 1) {
+        fusionxV3: factories(first: 1) {
           id
           totalPairs: poolCount
           totalTransactions: txCount

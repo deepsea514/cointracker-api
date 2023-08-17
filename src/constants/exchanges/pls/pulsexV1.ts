@@ -1,8 +1,8 @@
 import { gql, GraphQLClient } from 'graphql-request'
 
-export const PULSE_DEX2_CONFIG = {
-  URL: 'https://graph.pulsechain.com/subgraphs/name/pulsechain/pulsexv2',
-  CLIENT: new GraphQLClient('https://graph.pulsechain.com/subgraphs/name/pulsechain/pulsexv2', {
+export const PULSEX_V1_CONFIG = {
+  URL: 'https://graph.pulsechain.com/subgraphs/name/pulsechain/pulsex',
+  CLIENT: new GraphQLClient('https://graph.pulsechain.com/subgraphs/name/pulsechain/pulsex', {
     headers: { 'content-type': 'application/graphql' },
   }),
   QUERIES: {
@@ -696,7 +696,7 @@ export const PULSE_DEX2_CONFIG = {
     `,
     FACTORY: gql`
       query Factories {
-        Diablo-PLSXV2: pulseXFactories(first: 1) {
+        pulsexV1: pulseXFactories(first: 1) {
           id
           totalPairs
           totalTransactions

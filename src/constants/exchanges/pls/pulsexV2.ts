@@ -1,8 +1,8 @@
 import { gql, GraphQLClient } from 'graphql-request'
 
-export const FUSION_DEX_CONFIG = {
-  URL: 'https://graph.fusionx.finance/subgraphs/name/fusionx/exchange',
-  CLIENT: new GraphQLClient('https://graph.fusionx.finance/subgraphs/name/fusionx/exchange', {
+export const PULSEX_V2_CONFIG = {
+  URL: 'https://graph.pulsechain.com/subgraphs/name/pulsechain/pulsexv2',
+  CLIENT: new GraphQLClient('https://graph.pulsechain.com/subgraphs/name/pulsechain/pulsexv2', {
     headers: { 'content-type': 'application/graphql' },
   }),
   QUERIES: {
@@ -41,7 +41,7 @@ export const FUSION_DEX_CONFIG = {
       query Token($first: Int) {
         bundle(id: 1) {
           id
-          chainPrice: nativePrice
+          chainPrice: plsPrice
         }
         tokens(first: $first, orderBy: totalTransactions, orderDirection: desc) {
           address: id
@@ -52,7 +52,7 @@ export const FUSION_DEX_CONFIG = {
           volumeUSD: tradeVolumeUSD
           txCount: totalTransactions
           liquidity: totalLiquidity
-          derivedETH: derivedNATIVE
+          derivedETH: derivedPLS
           dayData: tokenDayData(orderBy: date, orderDirection: desc, first: 2) {
             txCount: dailyTxns
             volume: dailyVolumeToken
@@ -63,9 +63,9 @@ export const FUSION_DEX_CONFIG = {
             txCount: dailyTxns
             volume: dailyVolumeToken
             volumeUSD: dailyVolumeUSD
-            volumeETH: dailyVolumeNATIVE
+            volumeETH: dailyVolumePLS
             liquidity: totalLiquidityToken
-            liquidityETH: totalLiquidityNATIVE
+            liquidityETH: totalLiquidityPLS
             liquidityUSD: totalLiquidityUSD
             priceUSD
             date
@@ -77,7 +77,7 @@ export const FUSION_DEX_CONFIG = {
       query Token($first: Int) {
         bundle(id: 1) {
           id
-          chainPrice: nativePrice
+          chainPrice: plsPrice
         }
         tokens(first: $first, orderBy: totalTransactions, orderDirection: desc) {
           address: id
@@ -88,7 +88,7 @@ export const FUSION_DEX_CONFIG = {
           volumeUSD: tradeVolumeUSD
           txCount: totalTransactions
           liquidity: totalLiquidity
-          derivedETH: derivedNATIVE
+          derivedETH: derivedPLS
         }
       }
     `,
@@ -96,7 +96,7 @@ export const FUSION_DEX_CONFIG = {
       query Token($address: ID!, $pair: ID!, $baseTokens: [ID!]!) {
         bundle(id: 1) {
           id
-          chainPrice: nativePrice
+          chainPrice: plsPrice
         }
 
         nativePairDayDatas: pairDayDatas(
@@ -147,7 +147,7 @@ export const FUSION_DEX_CONFIG = {
           volumeUSD: tradeVolumeUSD
           txCount: totalTransactions
           liquidity: totalLiquidity
-          derivedETH: derivedNATIVE
+          derivedETH: derivedPLS
           dayData: tokenDayData(orderBy: date, orderDirection: desc, first: 2) {
             txCount: dailyTxns
             volume: dailyVolumeToken
@@ -158,9 +158,9 @@ export const FUSION_DEX_CONFIG = {
             txCount: dailyTxns
             volume: dailyVolumeToken
             volumeUSD: dailyVolumeUSD
-            volumeETH: dailyVolumeNATIVE
+            volumeETH: dailyVolumePLS
             liquidity: totalLiquidityToken
-            liquidityETH: totalLiquidityNATIVE
+            liquidityETH: totalLiquidityPLS
             liquidityUSD: totalLiquidityUSD
             priceUSD
             date
@@ -174,9 +174,9 @@ export const FUSION_DEX_CONFIG = {
           txCount: dailyTxns
           volume: dailyVolumeToken
           volumeUSD: dailyVolumeUSD
-          volumeETH: dailyVolumeNATIVE
+          volumeETH: dailyVolumePLS
           liquidity: totalLiquidityToken
-          liquidityETH: totalLiquidityNATIVE
+          liquidityETH: totalLiquidityPLS
           liquidityUSD: totalLiquidityUSD
           priceUSD
           date
@@ -241,7 +241,7 @@ export const FUSION_DEX_CONFIG = {
       query Mint($first: Int, $pairs: [ID!]!) {
         bundle(id: 1) {
           id
-          chainPrice: nativePrice
+          chainPrice: plsPrice
         }
         mints(first: $first, orderBy: timestamp, orderDirection: desc, where: { pair_in: $pairs }) {
           transaction {
@@ -259,7 +259,7 @@ export const FUSION_DEX_CONFIG = {
               volumeUSD: tradeVolumeUSD
               txCount: totalTransactions
               liquidity: totalLiquidity
-              derivedETH: derivedNATIVE
+              derivedETH: derivedPLS
               dayData: tokenDayData(orderBy: date, orderDirection: desc, first: 2) {
                 txCount: dailyTxns
                 volume: dailyVolumeToken
@@ -270,9 +270,9 @@ export const FUSION_DEX_CONFIG = {
                 txCount: dailyTxns
                 volume: dailyVolumeToken
                 volumeUSD: dailyVolumeUSD
-                volumeETH: dailyVolumeNATIVE
+                volumeETH: dailyVolumePLS
                 liquidity: totalLiquidityToken
-                liquidityETH: totalLiquidityNATIVE
+                liquidityETH: totalLiquidityPLS
                 liquidityUSD: totalLiquidityUSD
                 priceUSD
                 date
@@ -287,7 +287,7 @@ export const FUSION_DEX_CONFIG = {
               volumeUSD: tradeVolumeUSD
               txCount: totalTransactions
               liquidity: totalLiquidity
-              derivedETH: derivedNATIVE
+              derivedETH: derivedPLS
               dayData: tokenDayData(orderBy: date, orderDirection: desc, first: 2) {
                 txCount: dailyTxns
                 volume: dailyVolumeToken
@@ -298,9 +298,9 @@ export const FUSION_DEX_CONFIG = {
                 txCount: dailyTxns
                 volume: dailyVolumeToken
                 volumeUSD: dailyVolumeUSD
-                volumeETH: dailyVolumeNATIVE
+                volumeETH: dailyVolumePLS
                 liquidity: totalLiquidityToken
-                liquidityETH: totalLiquidityNATIVE
+                liquidityETH: totalLiquidityPLS
                 liquidityUSD: totalLiquidityUSD
                 priceUSD
                 date
@@ -329,7 +329,7 @@ export const FUSION_DEX_CONFIG = {
       query Mint($first: Int) {
         bundle(id: 1) {
           id
-          chainPrice: nativePrice
+          chainPrice: plsPrice
         }
         mints(first: $first, orderBy: timestamp, orderDirection: desc) {
           transaction {
@@ -347,7 +347,7 @@ export const FUSION_DEX_CONFIG = {
               volumeUSD: tradeVolumeUSD
               txCount: totalTransactions
               liquidity: totalLiquidity
-              derivedETH: derivedNATIVE
+              derivedETH: derivedPLS
               dayData: tokenDayData(orderBy: date, orderDirection: desc, first: 2) {
                 txCount: dailyTxns
                 volume: dailyVolumeToken
@@ -358,9 +358,9 @@ export const FUSION_DEX_CONFIG = {
                 txCount: dailyTxns
                 volume: dailyVolumeToken
                 volumeUSD: dailyVolumeUSD
-                volumeETH: dailyVolumeNATIVE
+                volumeETH: dailyVolumePLS
                 liquidity: totalLiquidityToken
-                liquidityETH: totalLiquidityNATIVE
+                liquidityETH: totalLiquidityPLS
                 liquidityUSD: totalLiquidityUSD
                 priceUSD
                 date
@@ -375,7 +375,7 @@ export const FUSION_DEX_CONFIG = {
               volumeUSD: tradeVolumeUSD
               txCount: totalTransactions
               liquidity: totalLiquidity
-              derivedETH: derivedNATIVE
+              derivedETH: derivedPLS
               dayData: tokenDayData(orderBy: date, orderDirection: desc, first: 2) {
                 txCount: dailyTxns
                 volume: dailyVolumeToken
@@ -386,9 +386,9 @@ export const FUSION_DEX_CONFIG = {
                 txCount: dailyTxns
                 volume: dailyVolumeToken
                 volumeUSD: dailyVolumeUSD
-                volumeETH: dailyVolumeNATIVE
+                volumeETH: dailyVolumePLS
                 liquidity: totalLiquidityToken
-                liquidityETH: totalLiquidityNATIVE
+                liquidityETH: totalLiquidityPLS
                 liquidityUSD: totalLiquidityUSD
                 priceUSD
                 date
@@ -417,7 +417,7 @@ export const FUSION_DEX_CONFIG = {
       query Swaps($first: Int, $pairs: [ID!]!) {
         bundle(id: 1) {
           id
-          chainPrice: nativePrice
+          chainPrice: plsPrice
         }
         swaps(first: $first, orderBy: timestamp, orderDirection: desc, where: { pair_in: $pairs }) {
           transaction {
@@ -435,7 +435,7 @@ export const FUSION_DEX_CONFIG = {
               volumeUSD: tradeVolumeUSD
               txCount: totalTransactions
               liquidity: totalLiquidity
-              derivedETH: derivedNATIVE
+              derivedETH: derivedPLS
               dayData: tokenDayData(orderBy: date, orderDirection: desc, first: 2) {
                 txCount: dailyTxns
                 volume: dailyVolumeToken
@@ -446,9 +446,9 @@ export const FUSION_DEX_CONFIG = {
                 txCount: dailyTxns
                 volume: dailyVolumeToken
                 volumeUSD: dailyVolumeUSD
-                volumeETH: dailyVolumeNATIVE
+                volumeETH: dailyVolumePLS
                 liquidity: totalLiquidityToken
-                liquidityETH: totalLiquidityNATIVE
+                liquidityETH: totalLiquidityPLS
                 liquidityUSD: totalLiquidityUSD
                 priceUSD
                 date
@@ -463,7 +463,7 @@ export const FUSION_DEX_CONFIG = {
               volumeUSD: tradeVolumeUSD
               txCount: totalTransactions
               liquidity: totalLiquidity
-              derivedETH: derivedNATIVE
+              derivedETH: derivedPLS
               dayData: tokenDayData(orderBy: date, orderDirection: desc, first: 2) {
                 txCount: dailyTxns
                 volume: dailyVolumeToken
@@ -474,9 +474,9 @@ export const FUSION_DEX_CONFIG = {
                 txCount: dailyTxns
                 volume: dailyVolumeToken
                 volumeUSD: dailyVolumeUSD
-                volumeETH: dailyVolumeNATIVE
+                volumeETH: dailyVolumePLS
                 liquidity: totalLiquidityToken
-                liquidityETH: totalLiquidityNATIVE
+                liquidityETH: totalLiquidityPLS
                 liquidityUSD: totalLiquidityUSD
                 priceUSD
                 date
@@ -506,19 +506,19 @@ export const FUSION_DEX_CONFIG = {
     `,
     SWAPS: gql`
       query Swaps($first: Int) {
-        bundle(id: 1) {
-          id
-          chainPrice: nativePrice
-        }
         swaps(first: $first) {
           id
-          transaction {
+          bundle(id: 1) {
             id
-            blockNumber: block
-            timestamp
+            chainPrice: plsPrice
           }
           pair {
             id
+            transaction {
+              id
+              blockNumber: block
+              timestamp
+            }
             token0 {
               address: id
               symbol
@@ -528,7 +528,7 @@ export const FUSION_DEX_CONFIG = {
               volumeUSD: tradeVolumeUSD
               txCount: totalTransactions
               liquidity: totalLiquidity
-              derivedETH: derivedNATIVE
+              derivedETH: derivedPLS
             }
             token1 {
               address: id
@@ -539,7 +539,7 @@ export const FUSION_DEX_CONFIG = {
               volumeUSD: tradeVolumeUSD
               txCount: totalTransactions
               liquidity: totalLiquidity
-              derivedETH: derivedNATIVE
+              derivedETH: derivedPLS
             }
             token0Price
             token1Price
@@ -555,12 +555,11 @@ export const FUSION_DEX_CONFIG = {
         }
       }
     `,
-
     TOKEN_BURNS: gql`
       query Burns($first: Int, $pairs: [ID!]!) {
         bundle(id: 1) {
           id
-          chainPrice: nativePrice
+          chainPrice: plsPrice
         }
         burns(first: $first, orderBy: timestamp, orderDirection: desc, where: { pair_in: $pairs }) {
           transaction {
@@ -569,7 +568,6 @@ export const FUSION_DEX_CONFIG = {
             timestamp
           }
           pair {
-            id
             token0 {
               address: id
               symbol
@@ -579,7 +577,7 @@ export const FUSION_DEX_CONFIG = {
               volumeUSD: tradeVolumeUSD
               txCount: totalTransactions
               liquidity: totalLiquidity
-              derivedETH: derivedNATIVE
+              derivedETH: derivedPLS
               dayData: tokenDayData(orderBy: date, orderDirection: desc, first: 2) {
                 txCount: dailyTxns
                 volume: dailyVolumeToken
@@ -590,9 +588,9 @@ export const FUSION_DEX_CONFIG = {
                 txCount: dailyTxns
                 volume: dailyVolumeToken
                 volumeUSD: dailyVolumeUSD
-                volumeETH: dailyVolumeNATIVE
+                volumeETH: dailyVolumePLS
                 liquidity: totalLiquidityToken
-                liquidityETH: totalLiquidityNATIVE
+                liquidityETH: totalLiquidityPLS
                 liquidityUSD: totalLiquidityUSD
                 priceUSD
                 date
@@ -607,7 +605,7 @@ export const FUSION_DEX_CONFIG = {
               volumeUSD: tradeVolumeUSD
               txCount: totalTransactions
               liquidity: totalLiquidity
-              derivedETH: derivedNATIVE
+              derivedETH: derivedPLS
               dayData: tokenDayData(orderBy: date, orderDirection: desc, first: 2) {
                 txCount: dailyTxns
                 volume: dailyVolumeToken
@@ -618,9 +616,9 @@ export const FUSION_DEX_CONFIG = {
                 txCount: dailyTxns
                 volume: dailyVolumeToken
                 volumeUSD: dailyVolumeUSD
-                volumeETH: dailyVolumeNATIVE
+                volumeETH: dailyVolumePLS
                 liquidity: totalLiquidityToken
-                liquidityETH: totalLiquidityNATIVE
+                liquidityETH: totalLiquidityPLS
                 liquidityUSD: totalLiquidityUSD
                 priceUSD
                 date
@@ -649,7 +647,7 @@ export const FUSION_DEX_CONFIG = {
       query Burns($first: Int) {
         bundle(id: 1) {
           id
-          chainPrice: nativePrice
+          chainPrice: plsPrice
         }
         burns(first: $first) {
           id
@@ -669,7 +667,7 @@ export const FUSION_DEX_CONFIG = {
               volumeUSD: tradeVolumeUSD
               txCount: totalTransactions
               liquidity: totalLiquidity
-              derivedETH: derivedNATIVE
+              derivedETH: derivedPLS
             }
             token1 {
               address: id
@@ -680,7 +678,7 @@ export const FUSION_DEX_CONFIG = {
               volumeUSD: tradeVolumeUSD
               txCount: totalTransactions
               liquidity: totalLiquidity
-              derivedETH: derivedNATIVE
+              derivedETH: derivedPLS
             }
             token0Price
             token1Price
@@ -698,13 +696,13 @@ export const FUSION_DEX_CONFIG = {
     `,
     FACTORY: gql`
       query Factories {
-        fusionx: fusionxFactories(first: 1) {
+        pulsexV2: pulseXFactories(first: 1) {
           id
           totalPairs
           totalTransactions
           totalVolumeUSD
-          totalVolumeETH: totalVolumeNATIVE
-          totalLiquidityETH: totalLiquidityNATIVE
+          totalVolumeETH: totalVolumePLS
+          totalLiquidityETH: totalLiquidityPLS
           totalLiquidityUSD
         }
       }

@@ -12,13 +12,9 @@ export const getTokens = asyncHandler(async (req: Request, res: Response, next: 
   const chainId = req.query.chainId as unknown as CHAINS
   const exchange = req.query.exchange as unknown as EXCHANGES
   const limit = req.query.limit ? parseInt(req.query.limit as string) : 15
-  if (exchange && exchange.includes('3')) {
-    const tokens = await tokensHelper.getTokensV3(chainId, exchange, limit)
-    res.status(200).json(JsonResponse({ tokens }))
-  } else {
-    const tokens = await tokensHelper.getTokens(chainId, exchange, limit)
-    res.status(200).json(JsonResponse({ tokens }))
-  }
+  const tokens = await tokensHelper.getTokens(chainId, exchange, limit)
+
+  res.status(200).json(JsonResponse({ tokens }))
 })
 
 export const getTokenSwaps = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
@@ -26,15 +22,9 @@ export const getTokenSwaps = asyncHandler(async (req: Request, res: Response, ne
   const chainId = req.query.chainId as unknown as CHAINS
   const exchange = req.query.exchange as unknown as EXCHANGES
   const limit = req.query.limit ? parseInt(req.query.limit as string) : 15
-  if (exchange && exchange.includes('3')) {
-    const swaps = await swapsHelper.getTokenSwapsV3(chainId, exchange, limit, address)
+  const swaps = await swapsHelper.getTokenSwaps(chainId, exchange, limit, address)
 
-    res.status(200).json(JsonResponse({ swaps }))
-  } else {
-    const swaps = await swapsHelper.getTokenSwaps(chainId, exchange, limit, address)
-
-    res.status(200).json(JsonResponse({ swaps }))
-  }
+  res.status(200).json(JsonResponse({ swaps }))
 })
 
 export const getTokenMints = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
@@ -42,15 +32,9 @@ export const getTokenMints = asyncHandler(async (req: Request, res: Response, ne
   const chainId = req.query.chainId as unknown as CHAINS
   const exchange = req.query.exchange as unknown as EXCHANGES
   const limit = req.query.limit ? parseInt(req.query.limit as string) : 15
-  if (exchange && exchange.includes('3')) {
-    const mints = await mintsHelper.getTokenMintsV3(chainId, exchange, limit, address)
+  const mints = await mintsHelper.getTokenMints(chainId, exchange, limit, address)
 
-    res.status(200).json(JsonResponse({ mints }))
-  } else {
-    const mints = await mintsHelper.getTokenMints(chainId, exchange, limit, address)
-
-    res.status(200).json(JsonResponse({ mints }))
-  }
+  res.status(200).json(JsonResponse({ mints }))
 })
 
 export const getTokenBurns = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
@@ -58,15 +42,9 @@ export const getTokenBurns = asyncHandler(async (req: Request, res: Response, ne
   const chainId = req.query.chainId as unknown as CHAINS
   const exchange = req.query.exchange as unknown as EXCHANGES
   const limit = req.query.limit ? parseInt(req.query.limit as string) : 15
-  if (exchange && exchange.includes('3')) {
-    const burns = await burnsHelper.getTokenBurnsV3(chainId, exchange, limit, address)
+  const burns = await burnsHelper.getTokenBurns(chainId, exchange, limit, address)
 
-    res.status(200).json(JsonResponse({ burns }))
-  } else {
-    const burns = await burnsHelper.getTokenBurns(chainId, exchange, limit, address)
-
-    res.status(200).json(JsonResponse({ burns }))
-  }
+  res.status(200).json(JsonResponse({ burns }))
 })
 
 export const getTokenHistorical = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
@@ -129,13 +107,8 @@ export const getTokenByAddress = asyncHandler(async (req: Request, res: Response
   const exchange = req.query.exchange as unknown as EXCHANGES
   const address = req.params.token
 
-  if (exchange && exchange.includes('3')) {
-    const token = await tokensHelper.getTokenByAddressV3(chainId, exchange, address)
-    res.status(200).json(JsonResponse({ token }))
-  } else {
-    const token = await tokensHelper.getTokenByAddress(chainId, exchange, address)
-    res.status(200).json(JsonResponse({ token }))
-  }
+  const token = await tokensHelper.getTokenByAddress(chainId, exchange, address)
+  res.status(200).json(JsonResponse({ token }))
 })
 
 export default {
