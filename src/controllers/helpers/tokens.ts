@@ -36,7 +36,6 @@ export const getTokenByAddress = async (
   const exchangeDetails = exchange
     ? getExchangeDetailsByName(exchange, chainId)
     : await findMostLiquidExchange(address, chainId)
-  console.log('exchangeDetails---------------', exchangeDetails)
   const subgraph = SUBGRAPHS[`${chainId}`]?.[`${exchangeDetails.name}`]
 
   const chain = getChainConfiguration(chainId)
@@ -68,7 +67,6 @@ export const getTokenByAddress = async (
     ? stableNativePair?.pairAddress ??
       (await web3Helper.getPairAddress(chain.tokens.STABLE, chain.tokens.NATIVE, contract, isV3))
     : tokenNativePair?.pairAddress ?? (await web3Helper.getPairAddress(address, chain.tokens.NATIVE, contract, isV3))
-  console.log('pair**************', pair)
   const tokenData = await getOrSetCache(
     `${chainId}/tokens?chainId=${chainId}&exchange=${exchange}&address=${address}`,
     async () => {
@@ -86,7 +84,6 @@ export const getTokenByAddress = async (
     },
     cache,
   )
-  console.log("tokenData++++++++++++++++++", tokenData)
 
   if (!tokenData.token)
     throw new ResourceNotFoundError(`Token with id ${address} not found on ${exchange} @ ${chainId}`)
@@ -118,7 +115,7 @@ export const getTokens = async (chainId: CHAINS, exchange: EXCHANGES, limit: num
       // we need to make multiple queries here to get all that information. luckily caching!
       return await Promise.all(
         data.tokens.map((token: any) => {
-          console.log('token address+++++++++++++++++++', token.address)
+          // console.log(token.address)
           return getTokenByAddress(chainId, exchange, token.address, cache)
         }),
       )
