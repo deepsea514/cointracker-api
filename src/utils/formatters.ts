@@ -14,7 +14,8 @@ import { CHAINS, EXCHANGES } from '../constants/constants'
 import { BadRequestError } from './CustomErrors'
 import { getPairDetails } from './web3/prices'
 
-async function fetchNativePrice(chain: IChainConfiguration, exchangeName: string, isV3: boolean) {
+async function fetchNativePrice(chain: IChainConfiguration, exchangeName: string) {
+  const isV3 = exchangeName.includes('V3')
   const factory = FACTORIES[chain.chainId as CHAINS].find((a: any) => a.name === exchangeName)
   if (!factory) {
     throw new BadRequestError('Invalid configuration error.')
@@ -39,17 +40,15 @@ export const formatBurns = async ({
   burns,
   chain,
   exchange,
-  isV3,
 }: {
   burns: any
   chain: IChainConfiguration
   exchange: EXCHANGES
-  isV3: boolean
 }) => {
   const tokenIsNative = (token: string) => compareAddress(token, chain.tokens.NATIVE, chain.web3)
   let nativePrice = burns.bundle.chainPrice
   if (!nativePrice || nativePrice === '0') {
-    nativePrice = await fetchNativePrice(chain, exchange, isV3)
+    nativePrice = await fetchNativePrice(chain, exchange)
   }
 
   for (let i = 0; i < burns.burns.length; i++) {
@@ -109,17 +108,15 @@ export const formatMints = async ({
   mints,
   chain,
   exchange,
-  isV3,
 }: {
   mints: any
   chain: IChainConfiguration
   exchange: string
-  isV3: boolean
 }) => {
   const tokenIsNative = (token: string) => compareAddress(token, chain.tokens.NATIVE, chain.web3)
   let nativePrice = mints.bundle.chainPrice
   if (!nativePrice || nativePrice === '0') {
-    nativePrice = await fetchNativePrice(chain, exchange, isV3)
+    nativePrice = await fetchNativePrice(chain, exchange)
   }
 
   for (let i = 0; i < mints.mints.length; i++) {
@@ -182,17 +179,15 @@ export const formatSwaps = async ({
   swaps,
   chain,
   exchange,
-  isV3,
 }: {
   swaps: any
   chain: IChainConfiguration
   exchange: EXCHANGES
-  isV3: boolean
 }) => {
   const tokenIsNative = (token: string) => compareAddress(token, chain.tokens.NATIVE, chain.web3)
   let nativePrice = swaps.bundle.chainPrice
   if (!nativePrice || nativePrice === '0') {
-    nativePrice = await fetchNativePrice(chain, exchange, isV3)
+    nativePrice = await fetchNativePrice(chain, exchange)
   }
 
   for (let i = 0; i < swaps.swaps.length; i++) {
@@ -278,7 +273,6 @@ export const formatToken = async ({
   nativePairDayDatas,
   chain,
   exchange,
-  isV3,
 }: {
   token: any
   bundle: any
@@ -287,17 +281,19 @@ export const formatToken = async ({
   nativePairDayDatas: any[]
   chain: IChainConfiguration
   exchange: string
-  isV3: boolean
 }) => {
+  const isV3 = exchange.includes('V3')
   const tokenIsNative = (token: string) => compareAddress(token, chain.tokens.NATIVE, chain.web3)
 
   const token0IsNative = tokenIsNative(pair?.token0?.address)
   const token1IsNative = tokenIsNative(pair?.token1?.address)
   const nativeIsDesiredToken = tokenIsNative(token.address)
 
-  const base0IsNative = tokenIsNative(nativePairDayDatas[0]?.token0?.address)
+  const base0IsNative = tokenIsNative(
+    isV3 ? nativePairDayDatas[0]?.pool?.token0?.address : nativePairDayDatas[0]?.token0?.address,
+  )
   const returnNullIfZero = (val: any) => (['', '0'].includes(val) ? null : val)
-  const nativePrice = returnNullIfZero(bundle.chainPrice) ?? (await fetchNativePrice(chain, exchange, isV3))
+  const nativePrice = returnNullIfZero(bundle.chainPrice) ?? (await fetchNativePrice(chain, exchange))
 
   function getTokenRelativePrice(wantsToken0: boolean, reserve0: number | null = null, reserve1: number | null = null) {
     if (!reserve0 || !reserve1) {

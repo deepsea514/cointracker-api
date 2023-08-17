@@ -16,8 +16,6 @@ export const getSwaps = async (chainId: CHAINS, exchange: EXCHANGES, limit: numb
   const chain = getChainConfiguration(chainId)
   if (!subgraph) throw new BadRequestError('Invalid configuration error.')
 
-  const isV3 = exchange.includes('V3')
-
   const swapsData = await getOrSetCache(`swaps?chainId=${chainId}&exchange=${exchange}&limit=${limit}`, async () => {
     const data = await subgraphHelper.getDataByQuery({
       client: subgraph.CLIENT,
@@ -29,7 +27,7 @@ export const getSwaps = async (chainId: CHAINS, exchange: EXCHANGES, limit: numb
     return { swaps: data.swaps, bundle: data.bundle }
   })
 
-  const swaps = await formatSwaps({ swaps: swapsData, chain, exchange, isV3 })
+  const swaps = await formatSwaps({ swaps: swapsData, chain, exchange })
 
   return swaps
 }
@@ -78,7 +76,7 @@ export const getTokenSwaps = async (
     },
   )
 
-  const swaps = await formatSwaps({ swaps: swapsData, chain, exchange: exchangeDetails.name, isV3 })
+  const swaps = await formatSwaps({ swaps: swapsData, chain, exchange: exchangeDetails.name })
   return swaps
 }
 

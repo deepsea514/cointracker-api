@@ -16,8 +16,6 @@ export const getMints = async (chainId: CHAINS, exchange: EXCHANGES, limit: numb
 
   if (!subgraph) throw new BadRequestError('Invalid configuration error.')
 
-  const isV3 = exchange.includes('V3')
-
   const mintsData = await getOrSetCache(`mints?chainId=${chainId}&exchange=${exchange}&limit=${limit}`, async () => {
     const { mints, bundle } = await subgraphHelper.getDataByQuery({
       client: subgraph.CLIENT,
@@ -27,7 +25,7 @@ export const getMints = async (chainId: CHAINS, exchange: EXCHANGES, limit: numb
     return { mints, bundle }
   })
 
-  const mints = await formatMints({ mints: mintsData, chain, exchange, isV3 })
+  const mints = await formatMints({ mints: mintsData, chain, exchange })
 
   return mints
 }
@@ -70,7 +68,7 @@ export const getTokenMints = async (
     },
   )
 
-  const mints = await formatMints({ mints: mintsData, chain, exchange: exchangeDetails.name, isV3 })
+  const mints = await formatMints({ mints: mintsData, chain, exchange: exchangeDetails.name })
 
   return mints
 }

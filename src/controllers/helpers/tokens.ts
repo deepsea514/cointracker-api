@@ -36,7 +36,7 @@ export const getTokenByAddress = async (
   const exchangeDetails = exchange
     ? getExchangeDetailsByName(exchange, chainId)
     : await findMostLiquidExchange(address, chainId)
-
+  console.log('exchangeDetails---------------', exchangeDetails)
   const subgraph = SUBGRAPHS[`${chainId}`]?.[`${exchangeDetails.name}`]
 
   const chain = getChainConfiguration(chainId)
@@ -68,7 +68,7 @@ export const getTokenByAddress = async (
     ? stableNativePair?.pairAddress ??
       (await web3Helper.getPairAddress(chain.tokens.STABLE, chain.tokens.NATIVE, contract, isV3))
     : tokenNativePair?.pairAddress ?? (await web3Helper.getPairAddress(address, chain.tokens.NATIVE, contract, isV3))
-
+  console.log('pair**************', pair)
   const tokenData = await getOrSetCache(
     `${chainId}/tokens?chainId=${chainId}&exchange=${exchange}&address=${address}`,
     async () => {
@@ -86,7 +86,7 @@ export const getTokenByAddress = async (
     },
     cache,
   )
-  // console.log(tokenData)
+  console.log("tokenData++++++++++++++++++", tokenData)
 
   if (!tokenData.token)
     throw new ResourceNotFoundError(`Token with id ${address} not found on ${exchange} @ ${chainId}`)
@@ -95,7 +95,6 @@ export const getTokenByAddress = async (
     ...tokenData,
     chain,
     exchange: exchangeDetails.name,
-    isV3,
   })
 
   return token
@@ -119,7 +118,7 @@ export const getTokens = async (chainId: CHAINS, exchange: EXCHANGES, limit: num
       // we need to make multiple queries here to get all that information. luckily caching!
       return await Promise.all(
         data.tokens.map((token: any) => {
-          // console.log(token.address)
+          console.log('token address+++++++++++++++++++', token.address)
           return getTokenByAddress(chainId, exchange, token.address, cache)
         }),
       )
@@ -341,10 +340,26 @@ async function getRecentCandles(
     },
   })
 
+  const initialReservesV3 = await subgraphHelper.getDataByQuery({
+    client: subgraph.CLIENT,
+    query: gql`
+      query GetReservesAtBlock($pair: ID!, $block: Int!) {
+        pair: pool(id: $pair, block: { number: $block }) {
+          reserve0: volumeToken0
+          reserve1: volumeToken1
+        }
+      }
+    `,
+    variables: {
+      pair: data.pair.id.toLowerCase(),
+      block: Number(data.swaps[0].transaction.blockNumber),
+    },
+  })
+
   return getCandlestickFromSwaps(
     data.pair,
     data.swaps,
-    initialReserves,
+    isV3 ? initialReservesV3 : initialReserves,
     timeFrameSeconds,
     !compareAddress(data.pair.token0.id, token0, chain.web3),
     chainId,

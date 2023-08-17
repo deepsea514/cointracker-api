@@ -121,7 +121,7 @@ export const FUSIONX_V3_CONFIG = {
           reserve1: volumeToken1
         }
 
-        poolDayDatas(orderBy: date, orderDirection: desc, where: { pool: $pair }, first: 2) {
+        pairDayDatas: poolDayDatas(orderBy: date, orderDirection: desc, where: { pool: $pair }, first: 2) {
           reserve0: volumeToken0
           reserve1: volumeToken1
         }

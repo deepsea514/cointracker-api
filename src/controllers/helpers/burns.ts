@@ -17,8 +17,6 @@ export const getBurns = async (chainId: CHAINS, exchange: EXCHANGES, limit: numb
   if (!subgraph || !chainId || !exchange) throw new BadRequestError('Invalid configuration error.')
   if (!limit || isNaN(limit)) limit = 15
 
-  const isV3 = exchange.includes('V3')
-
   const burnsData = await getOrSetCache(`burns?chainId=${chainId}&exchange=${exchange}&limit=${limit}`, async () => {
     const { burns, bundle } = await subgraphHelper.getDataByQuery({
       client: subgraph.CLIENT,
@@ -28,7 +26,7 @@ export const getBurns = async (chainId: CHAINS, exchange: EXCHANGES, limit: numb
     return { burns, bundle }
   })
 
-  const burns = await formatBurns({ burns: burnsData, chain, exchange, isV3 })
+  const burns = await formatBurns({ burns: burnsData, chain, exchange })
 
   return burns
 }
@@ -70,7 +68,7 @@ export const getTokenBurns = async (
     },
   )
 
-  const burns = await formatBurns({ burns: burnsData, chain, exchange: exchangeDetails.name, isV3 })
+  const burns = await formatBurns({ burns: burnsData, chain, exchange: exchangeDetails.name })
 
   return burns
 }
