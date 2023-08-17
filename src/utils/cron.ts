@@ -9,11 +9,11 @@ async function getNewestTokenHistory(dbToken: IToken & Document<any, any>): Prom
   if (!tokenHistory) return []
   let newest = tokenHistory?.[0]?.timestamp
   if (!newest) newest = new Date().getTime() / 1000 - 30 * 24 * 60 * 60
-  // console.log(
-  //   `Newest history: ${Math.floor(
-  //     (new Date().getTime() - new Date(newest * 1000).getTime()) / 60000,
-  //   )} minutes old for ${dbToken.symbol}`,
-  // )
+  console.log(
+    `Newest history: ${Math.floor(
+      (new Date().getTime() - new Date(newest * 1000).getTime()) / 60000,
+    )} minutes old for ${dbToken.symbol}`,
+  )
 
   const history = await getTokenHistorical(
     Number(dbToken?.network),
@@ -24,7 +24,7 @@ async function getNewestTokenHistory(dbToken: IToken & Document<any, any>): Prom
     new Date().getTime(),
     false,
   )
-  // console.log(`Found ${history?.length} history for ${dbToken?.symbol}`)
+  console.log(`Found ${history?.length} history for ${dbToken?.symbol}`)
 
   if (history.length == 0) {
     return tokenHistory
@@ -39,7 +39,7 @@ async function getNewestTokenHistory(dbToken: IToken & Document<any, any>): Prom
 
 export const CronJob = async (): Promise<void> => {
   const start = new Date().getTime()
-  // console.log('running a task every minute', new Date().toISOString())
+  console.log('running a task every minute', new Date().toISOString())
 
   // Get all tokens & history
   // TODO: Future optimization: Every token looks up the chains NATIVE-STABLE pair on-chain
@@ -48,7 +48,7 @@ export const CronJob = async (): Promise<void> => {
   // TODO: this will be a lot of data, cant we just get the most recent history item?
   // or maybe we want to update with separate tasks (per chain or per exchange?)
   const tokens = await Token.find()
-  // console.log(`Found ${tokens.length} tokens in the db.`)
+  console.log(`Found ${tokens.length} tokens in the db.`)
 
   for (let i = 0; i < tokens.length; i++) {
     let retries = 0
@@ -58,20 +58,20 @@ export const CronJob = async (): Promise<void> => {
     do {
       try {
         let history = await getNewestTokenHistory(tokens[i])
-        // console.log(history?.length)
+        console.log(history?.length)
       } catch (err: any) {
         shouldRetry =
           err.name !== 'InsufficientDataError' && err.name !== 'PairUnavailableError' ? ++retries < MAX_RETRIES : false
 
         if (shouldRetry) {
-          // console.log(`Retrying to update ${tokens[i].id}: ${retries}/${MAX_RETRIES}`)
+          console.log(`Retrying to update ${tokens[i].id}: ${retries}/${MAX_RETRIES}`)
         } else {
-          // console.log(`Could not update ${tokens[i].id} because of ${err.name}\n${err.message}.`)
+          console.log(`Could not update ${tokens[i].id} because of ${err.name}\n${err.message}.`)
           break
         }
       }
     } while (shouldRetry)
   }
 
-  // console.log(`Update Time Elapsed: ${(new Date().getTime() - start) / 1000}s`)
+  console.log(`Update Time Elapsed: ${(new Date().getTime() - start) / 1000}s`)
 }
