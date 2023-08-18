@@ -321,42 +321,42 @@ async function getRecentCandles(
   }
 
   // Fetch the exact reserves at that point in time
-  const initialReserves = await subgraphHelper.getDataByQuery({
-    client: subgraph.CLIENT,
-    query: gql`
-      query GetReservesAtBlock($pair: ID!, $block: Int!) {
-        pair(id: $pair, block: { number: $block }) {
-          reserve0
-          reserve1
-        }
-      }
-    `,
-    variables: {
-      pair: data.pair.id.toLowerCase(),
-      block: Number(data.swaps[0].transaction.blockNumber),
-    },
-  })
-
-  const initialReservesV3 = await subgraphHelper.getDataByQuery({
-    client: subgraph.CLIENT,
-    query: gql`
-      query GetReservesAtBlock($pair: ID!, $block: Int!) {
-        pair: pool(id: $pair, block: { number: $block }) {
-          reserve0: volumeToken0
-          reserve1: volumeToken1
-        }
-      }
-    `,
-    variables: {
-      pair: data.pair.id.toLowerCase(),
-      block: Number(data.swaps[0].transaction.blockNumber),
-    },
-  })
+  const initialReserves = isV3
+    ? await subgraphHelper.getDataByQuery({
+        client: subgraph.CLIENT,
+        query: gql`
+          query GetReservesAtBlock($pair: ID!, $block: Int!) {
+            pair: pool(id: $pair, block: { number: $block }) {
+              reserve0: volumeToken0
+              reserve1: volumeToken1
+            }
+          }
+        `,
+        variables: {
+          pair: data.pair.id.toLowerCase(),
+          block: Number(data.swaps[0].transaction.blockNumber),
+        },
+      })
+    : await subgraphHelper.getDataByQuery({
+        client: subgraph.CLIENT,
+        query: gql`
+          query GetReservesAtBlock($pair: ID!, $block: Int!) {
+            pair(id: $pair, block: { number: $block }) {
+              reserve0
+              reserve1
+            }
+          }
+        `,
+        variables: {
+          pair: data.pair.id.toLowerCase(),
+          block: Number(data.swaps[0].transaction.blockNumber),
+        },
+      })
 
   return getCandlestickFromSwaps(
     data.pair,
     data.swaps,
-    isV3 ? initialReservesV3 : initialReserves,
+    initialReserves,
     timeFrameSeconds,
     !compareAddress(data.pair.token0.id, token0, chain.web3),
     chainId,

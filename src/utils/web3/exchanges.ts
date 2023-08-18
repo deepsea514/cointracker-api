@@ -1,4 +1,3 @@
-import { getChainConfiguration, IChainConfiguration } from '../chain/chainConfiguration'
 import Web3 from 'web3'
 import web3Helper from '../../utils/web3/helpers'
 import subgraphHelper from '../subgraph/subgraph'
@@ -7,7 +6,6 @@ import {
   FACTORIES,
   UNISWAP_FACTORY_ABI,
   UNISWAP_FACTORY_ABI_V3,
-  UNISWAP_PAIR_ABI,
   RPC_URL,
   BASE_TOKENS,
   WEB3_CLIENTS,
@@ -56,8 +54,8 @@ export async function findMostLiquidExchange(address: string, chainId: CHAINS) {
             query: gql`
               query getPairData($pair: ID!) {
                 pair: pool(id: $pair) {
-                  totalValueLockedToken0
-                  totalValueLockedToken1
+                  reserve0: totalValueLockedToken0
+                  reserve1: totalValueLockedToken1
                   token0 {
                     id
                   }
@@ -102,13 +100,7 @@ export async function findMostLiquidExchange(address: string, chainId: CHAINS) {
         name: exchange.name,
         address: exchange.address,
         pair: exchange.pair,
-        liquidity: isV3
-          ? token0IsDesired
-            ? +pairData.totalValueLockedToken0
-            : +pairData.totalValueLockedToken1
-          : token0IsDesired
-          ? +pairData.reserve0
-          : +pairData.reserve1,
+        liquidity: token0IsDesired ? +pairData.reserve0 : +pairData.reserve1,
       }
     }),
   )
