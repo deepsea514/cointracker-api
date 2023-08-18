@@ -379,7 +379,7 @@ export const formatToken = async ({
   const finalSevenDayData = token?.sevenDayData?.map((data: any) => {
     let priceNative = nativeIsDesiredToken
       ? 1
-      : parseFloat(data.priceUSD) * (isV3? parseFloat(data[`liquidity${native}`]) / parseFloat(data.liquidityUSD))
+      : parseFloat(data.priceUSD) * (parseFloat(data[`liquidity${native}`]) / parseFloat(data.liquidityUSD))
     if (isNaN(priceNative)) priceNative = 0
     return {
       ...data,
