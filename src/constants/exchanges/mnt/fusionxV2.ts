@@ -63,9 +63,9 @@ export const FUSIONX_V2_CONFIG = {
             txCount: dailyTxns
             volume: dailyVolumeToken
             volumeUSD: dailyVolumeUSD
-            volumeETH: dailyVolumeNATIVE
+            volumeMNT: dailyVolumeNATIVE
             liquidity: totalLiquidityToken
-            liquidityETH: totalLiquidityNATIVE
+            liquidityMNT: totalLiquidityNATIVE
             liquidityUSD: totalLiquidityUSD
             priceUSD
             date
@@ -158,9 +158,9 @@ export const FUSIONX_V2_CONFIG = {
             txCount: dailyTxns
             volume: dailyVolumeToken
             volumeUSD: dailyVolumeUSD
-            volumeETH: dailyVolumeNATIVE
+            volumeMNT: dailyVolumeNATIVE
             liquidity: totalLiquidityToken
-            liquidityETH: totalLiquidityNATIVE
+            liquidityMNT: totalLiquidityNATIVE
             liquidityUSD: totalLiquidityUSD
             priceUSD
             date
@@ -174,9 +174,9 @@ export const FUSIONX_V2_CONFIG = {
           txCount: dailyTxns
           volume: dailyVolumeToken
           volumeUSD: dailyVolumeUSD
-          volumeETH: dailyVolumeNATIVE
+          volumeMNT: dailyVolumeNATIVE
           liquidity: totalLiquidityToken
-          liquidityETH: totalLiquidityNATIVE
+          liquidityMNT: totalLiquidityNATIVE
           liquidityUSD: totalLiquidityUSD
           priceUSD
           date
@@ -270,9 +270,9 @@ export const FUSIONX_V2_CONFIG = {
                 txCount: dailyTxns
                 volume: dailyVolumeToken
                 volumeUSD: dailyVolumeUSD
-                volumeETH: dailyVolumeNATIVE
+                volumeMNT: dailyVolumeNATIVE
                 liquidity: totalLiquidityToken
-                liquidityETH: totalLiquidityNATIVE
+                liquidityMNT: totalLiquidityNATIVE
                 liquidityUSD: totalLiquidityUSD
                 priceUSD
                 date
@@ -298,9 +298,9 @@ export const FUSIONX_V2_CONFIG = {
                 txCount: dailyTxns
                 volume: dailyVolumeToken
                 volumeUSD: dailyVolumeUSD
-                volumeETH: dailyVolumeNATIVE
+                volumeMNT: dailyVolumeNATIVE
                 liquidity: totalLiquidityToken
-                liquidityETH: totalLiquidityNATIVE
+                liquidityMNT: totalLiquidityNATIVE
                 liquidityUSD: totalLiquidityUSD
                 priceUSD
                 date
@@ -358,9 +358,9 @@ export const FUSIONX_V2_CONFIG = {
                 txCount: dailyTxns
                 volume: dailyVolumeToken
                 volumeUSD: dailyVolumeUSD
-                volumeETH: dailyVolumeNATIVE
+                volumeMNT: dailyVolumeNATIVE
                 liquidity: totalLiquidityToken
-                liquidityETH: totalLiquidityNATIVE
+                liquidityMNT: totalLiquidityNATIVE
                 liquidityUSD: totalLiquidityUSD
                 priceUSD
                 date
@@ -386,9 +386,9 @@ export const FUSIONX_V2_CONFIG = {
                 txCount: dailyTxns
                 volume: dailyVolumeToken
                 volumeUSD: dailyVolumeUSD
-                volumeETH: dailyVolumeNATIVE
+                volumeMNT: dailyVolumeNATIVE
                 liquidity: totalLiquidityToken
-                liquidityETH: totalLiquidityNATIVE
+                liquidityMNT: totalLiquidityNATIVE
                 liquidityUSD: totalLiquidityUSD
                 priceUSD
                 date
@@ -446,9 +446,9 @@ export const FUSIONX_V2_CONFIG = {
                 txCount: dailyTxns
                 volume: dailyVolumeToken
                 volumeUSD: dailyVolumeUSD
-                volumeETH: dailyVolumeNATIVE
+                volumeMNT: dailyVolumeNATIVE
                 liquidity: totalLiquidityToken
-                liquidityETH: totalLiquidityNATIVE
+                liquidityMNT: totalLiquidityNATIVE
                 liquidityUSD: totalLiquidityUSD
                 priceUSD
                 date
@@ -474,9 +474,9 @@ export const FUSIONX_V2_CONFIG = {
                 txCount: dailyTxns
                 volume: dailyVolumeToken
                 volumeUSD: dailyVolumeUSD
-                volumeETH: dailyVolumeNATIVE
+                volumeMNT: dailyVolumeNATIVE
                 liquidity: totalLiquidityToken
-                liquidityETH: totalLiquidityNATIVE
+                liquidityMNT: totalLiquidityNATIVE
                 liquidityUSD: totalLiquidityUSD
                 priceUSD
                 date
@@ -590,9 +590,9 @@ export const FUSIONX_V2_CONFIG = {
                 txCount: dailyTxns
                 volume: dailyVolumeToken
                 volumeUSD: dailyVolumeUSD
-                volumeETH: dailyVolumeNATIVE
+                volumeMNT: dailyVolumeNATIVE
                 liquidity: totalLiquidityToken
-                liquidityETH: totalLiquidityNATIVE
+                liquidityMNT: totalLiquidityNATIVE
                 liquidityUSD: totalLiquidityUSD
                 priceUSD
                 date
@@ -618,9 +618,9 @@ export const FUSIONX_V2_CONFIG = {
                 txCount: dailyTxns
                 volume: dailyVolumeToken
                 volumeUSD: dailyVolumeUSD
-                volumeETH: dailyVolumeNATIVE
+                volumeMNT: dailyVolumeNATIVE
                 liquidity: totalLiquidityToken
-                liquidityETH: totalLiquidityNATIVE
+                liquidityMNT: totalLiquidityNATIVE
                 liquidityUSD: totalLiquidityUSD
                 priceUSD
                 date

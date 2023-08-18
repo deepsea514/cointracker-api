@@ -327,8 +327,8 @@ async function getRecentCandles(
         query: gql`
           query GetReservesAtBlock($pair: ID!, $block: Int!) {
             pair: pool(id: $pair, block: { number: $block }) {
-              reserve0: volumeToken0
-              reserve1: volumeToken1
+              reserve0: totalValueLockedToken0
+              reserve1: totalValueLockedToken1
             }
           }
         `,

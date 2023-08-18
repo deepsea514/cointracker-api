@@ -65,9 +65,9 @@ export const FUSIONX_V3_CONFIG = {
             # txCount: dailyTxns
             volume
             volumeUSD
-            # volumeETH: dailyVolumeETH
+            volumeMNT: volume
             liquidity: totalValueLocked
-            # liquidityETH: totalLiquidityETH
+            liquidityMNT: totalValueLocked
             liquidityUSD: totalValueLockedUSD
             priceUSD
             feesUSD
@@ -116,21 +116,23 @@ export const FUSIONX_V3_CONFIG = {
             token1 {
               address: id
             }
+            reserve0: totalValueLockedToken0
+            reserve1: totalValueLockedToken1
           }
-          reserve0: volumeToken0
-          reserve1: volumeToken1
         }
 
         pairDayDatas: poolDayDatas(orderBy: date, orderDirection: desc, where: { pool: $pair }, first: 2) {
-          reserve0: volumeToken0
-          reserve1: volumeToken1
+          pool {
+            reserve0: totalValueLockedToken0
+            reserve1: totalValueLockedToken1
+          }
         }
 
         pair: pool(id: $pair) {
           id
-          reserve0: volumeToken0
-          reserve1: volumeToken1
-          reserveUSD: volumeUSD
+          reserve0: totalValueLockedToken0
+          reserve1: totalValueLockedToken1
+          reserveUSD: totalValueLockedUSD
           token0Price
           token1Price
           token0 {
@@ -164,9 +166,9 @@ export const FUSIONX_V3_CONFIG = {
             # txCount: dailyTxns
             volume
             volumeUSD
-            # volumeETH: dailyVolumeETH
+            volumeMNT: volume
             liquidity: totalValueLocked
-            # liquidityETH: totalLiquidityETH
+            liquidityMNT: totalValueLocked
             liquidityUSD: totalValueLockedUSD
             priceUSD
             feesUSD
@@ -181,9 +183,9 @@ export const FUSIONX_V3_CONFIG = {
           # txCount: dailyTxns
           volume
           volumeUSD
-          # volumeETH: dailyVolumeETH
+          volumeMNT: volume
           liquidity: totalValueLocked
-          # liquidityETH: totalLiquidityETH
+          liquidityMNT: totalValueLocked
           liquidityUSD: totalValueLockedUSD
           priceUSD
           feesUSD
@@ -195,9 +197,9 @@ export const FUSIONX_V3_CONFIG = {
       query GetSwaps($first: Int!, $skip: Int!, $pair: ID!, $timestamp_lte: BigInt!, $timestamp_gte: BigInt!) {
         pair: pool(id: $pair) {
           id
-          reserve0: volumeToken0
-          reserve1: volumeToken1
-          reserveUSD: volumeUSD
+          reserve0: totalValueLockedToken0
+          reserve1: totalValueLockedToken1
+          reserveUSD: totalValueLockedUSD
           token0Price
           token1Price
           token0 {
@@ -225,10 +227,8 @@ export const FUSIONX_V3_CONFIG = {
             timestamp
           }
           id
-          amount0: amount0
-          # amount0Out
-          amount1: amount1
-          # amount1Out
+          amount0
+          amount1
           amountUSD
           to: recipient
           from: origin
@@ -278,9 +278,9 @@ export const FUSIONX_V3_CONFIG = {
                 # txCount: dailyTxns
                 volume
                 volumeUSD
-                # volumeETH: dailyVolumeETH
+                volumeMNT: volume
                 liquidity: totalValueLocked
-                # liquidityETH: totalLiquidityETH
+                liquidityMNT: totalValueLocked
                 liquidityUSD: totalValueLockedUSD
                 priceUSD
                 date
@@ -306,9 +306,9 @@ export const FUSIONX_V3_CONFIG = {
                 # txCount: dailyTxns
                 volume
                 volumeUSD
-                # volumeETH: dailyVolumeETH
+                volumeMNT: volume
                 liquidity: totalValueLocked
-                # liquidityETH: totalLiquidityETH
+                liquidityMNT: totalValueLocked
                 liquidityUSD: totalValueLockedUSD
                 priceUSD
                 date
@@ -366,9 +366,9 @@ export const FUSIONX_V3_CONFIG = {
                 # txCount: dailyTxns
                 volume
                 volumeUSD
-                # volumeETH: dailyVolumeETH
+                volumeMNT: volume
                 liquidity: totalValueLocked
-                # liquidityETH: totalLiquidityETH
+                liquidityMNT: totalValueLocked
                 liquidityUSD: totalValueLockedUSD
                 priceUSD
                 date
@@ -394,9 +394,9 @@ export const FUSIONX_V3_CONFIG = {
                 # txCount: dailyTxns
                 volume
                 volumeUSD
-                # volumeETH: dailyVolumeETH
+                volumeMNT: volume
                 liquidity: totalValueLocked
-                # liquidityETH: totalLiquidityETH
+                liquidityMNT: totalValueLocked
                 liquidityUSD: totalValueLockedUSD
                 priceUSD
                 date
@@ -454,9 +454,9 @@ export const FUSIONX_V3_CONFIG = {
                 # txCount: dailyTxns
                 volume
                 volumeUSD
-                # volumeETH: dailyVolumeETH
+                volumeMNT: volume
                 liquidity: totalValueLocked
-                # liquidityETH: totalLiquidityETH
+                liquidityMNT: totalValueLocked
                 liquidityUSD: totalValueLockedUSD
                 priceUSD
                 date
@@ -482,9 +482,9 @@ export const FUSIONX_V3_CONFIG = {
                 # txCount: dailyTxns
                 volume
                 volumeUSD
-                # volumeETH: dailyVolumeETH
+                volumeMNT: volume
                 liquidity: totalValueLocked
-                # liquidityETH: totalLiquidityETH
+                liquidityMNT: totalValueLocked
                 liquidityUSD: totalValueLockedUSD
                 priceUSD
                 date
@@ -493,7 +493,7 @@ export const FUSIONX_V3_CONFIG = {
             id
             reserve0: totalValueLockedToken0
             reserve1: totalValueLockedToken1
-            reserveUSD: totalValueLockedUSD
+            reserveUSD: totalValueLockedUSDUntracked
             token0Price
             token1Price
             volumeToken0
@@ -501,10 +501,8 @@ export const FUSIONX_V3_CONFIG = {
             volumeUSD
           }
           id
-          amount0In: amount0
-          # amount0Out
-          amount1In: amount1
-          # amount1Out
+          amount0
+          amount1
           amountUSD
           to: recipient
           from: origin
@@ -597,9 +595,9 @@ export const FUSIONX_V3_CONFIG = {
                 # txCount: dailyTxns
                 volume
                 volumeUSD
-                # volumeETH: dailyVolumeETH
+                volumeMNT: volume
                 liquidity: totalValueLocked
-                # liquidityETH: totalLiquidityETH
+                liquidityMNT: totalValueLocked
                 liquidityUSD: totalValueLockedUSD
                 priceUSD
                 date
@@ -625,9 +623,9 @@ export const FUSIONX_V3_CONFIG = {
                 # txCount: dailyTxns
                 volume
                 volumeUSD
-                # volumeETH: dailyVolumeETH
+                volumeMNT: volume
                 liquidity: totalValueLocked
-                # liquidityETH: totalLiquidityETH
+                liquidityMNT: totalValueLocked
                 liquidityUSD: totalValueLockedUSD
                 priceUSD
                 date

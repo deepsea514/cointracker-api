@@ -63,9 +63,9 @@ export const PULSEX_V1_CONFIG = {
             txCount: dailyTxns
             volume: dailyVolumeToken
             volumeUSD: dailyVolumeUSD
-            volumeETH: dailyVolumePLS
+            volumePLS: dailyVolumePLS
             liquidity: totalLiquidityToken
-            liquidityETH: totalLiquidityPLS
+            liquidityPLS: totalLiquidityPLS
             liquidityUSD: totalLiquidityUSD
             priceUSD
             date
@@ -158,9 +158,9 @@ export const PULSEX_V1_CONFIG = {
             txCount: dailyTxns
             volume: dailyVolumeToken
             volumeUSD: dailyVolumeUSD
-            volumeETH: dailyVolumePLS
+            volumePLS: dailyVolumePLS
             liquidity: totalLiquidityToken
-            liquidityETH: totalLiquidityPLS
+            liquidityPLS: totalLiquidityPLS
             liquidityUSD: totalLiquidityUSD
             priceUSD
             date
@@ -174,9 +174,9 @@ export const PULSEX_V1_CONFIG = {
           txCount: dailyTxns
           volume: dailyVolumeToken
           volumeUSD: dailyVolumeUSD
-          volumeETH: dailyVolumePLS
+          volumePLS: dailyVolumePLS
           liquidity: totalLiquidityToken
-          liquidityETH: totalLiquidityPLS
+          liquidityPLS: totalLiquidityPLS
           liquidityUSD: totalLiquidityUSD
           priceUSD
           date
@@ -270,9 +270,9 @@ export const PULSEX_V1_CONFIG = {
                 txCount: dailyTxns
                 volume: dailyVolumeToken
                 volumeUSD: dailyVolumeUSD
-                volumeETH: dailyVolumePLS
+                volumePLS: dailyVolumePLS
                 liquidity: totalLiquidityToken
-                liquidityETH: totalLiquidityPLS
+                liquidityPLS: totalLiquidityPLS
                 liquidityUSD: totalLiquidityUSD
                 priceUSD
                 date
@@ -298,9 +298,9 @@ export const PULSEX_V1_CONFIG = {
                 txCount: dailyTxns
                 volume: dailyVolumeToken
                 volumeUSD: dailyVolumeUSD
-                volumeETH: dailyVolumePLS
+                volumePLS: dailyVolumePLS
                 liquidity: totalLiquidityToken
-                liquidityETH: totalLiquidityPLS
+                liquidityPLS: totalLiquidityPLS
                 liquidityUSD: totalLiquidityUSD
                 priceUSD
                 date
@@ -358,9 +358,9 @@ export const PULSEX_V1_CONFIG = {
                 txCount: dailyTxns
                 volume: dailyVolumeToken
                 volumeUSD: dailyVolumeUSD
-                volumeETH: dailyVolumePLS
+                volumePLS: dailyVolumePLS
                 liquidity: totalLiquidityToken
-                liquidityETH: totalLiquidityPLS
+                liquidityPLS: totalLiquidityPLS
                 liquidityUSD: totalLiquidityUSD
                 priceUSD
                 date
@@ -386,9 +386,9 @@ export const PULSEX_V1_CONFIG = {
                 txCount: dailyTxns
                 volume: dailyVolumeToken
                 volumeUSD: dailyVolumeUSD
-                volumeETH: dailyVolumePLS
+                volumePLS: dailyVolumePLS
                 liquidity: totalLiquidityToken
-                liquidityETH: totalLiquidityPLS
+                liquidityPLS: totalLiquidityPLS
                 liquidityUSD: totalLiquidityUSD
                 priceUSD
                 date
@@ -446,9 +446,9 @@ export const PULSEX_V1_CONFIG = {
                 txCount: dailyTxns
                 volume: dailyVolumeToken
                 volumeUSD: dailyVolumeUSD
-                volumeETH: dailyVolumePLS
+                volumePLS: dailyVolumePLS
                 liquidity: totalLiquidityToken
-                liquidityETH: totalLiquidityPLS
+                liquidityPLS: totalLiquidityPLS
                 liquidityUSD: totalLiquidityUSD
                 priceUSD
                 date
@@ -474,9 +474,9 @@ export const PULSEX_V1_CONFIG = {
                 txCount: dailyTxns
                 volume: dailyVolumeToken
                 volumeUSD: dailyVolumeUSD
-                volumeETH: dailyVolumePLS
+                volumePLS: dailyVolumePLS
                 liquidity: totalLiquidityToken
-                liquidityETH: totalLiquidityPLS
+                liquidityPLS: totalLiquidityPLS
                 liquidityUSD: totalLiquidityUSD
                 priceUSD
                 date
@@ -588,9 +588,9 @@ export const PULSEX_V1_CONFIG = {
                 txCount: dailyTxns
                 volume: dailyVolumeToken
                 volumeUSD: dailyVolumeUSD
-                volumeETH: dailyVolumePLS
+                volumePLS: dailyVolumePLS
                 liquidity: totalLiquidityToken
-                liquidityETH: totalLiquidityPLS
+                liquidityPLS: totalLiquidityPLS
                 liquidityUSD: totalLiquidityUSD
                 priceUSD
                 date
@@ -616,9 +616,9 @@ export const PULSEX_V1_CONFIG = {
                 txCount: dailyTxns
                 volume: dailyVolumeToken
                 volumeUSD: dailyVolumeUSD
-                volumeETH: dailyVolumePLS
+                volumePLS: dailyVolumePLS
                 liquidity: totalLiquidityToken
-                liquidityETH: totalLiquidityPLS
+                liquidityPLS: totalLiquidityPLS
                 liquidityUSD: totalLiquidityUSD
                 priceUSD
                 date
@@ -701,8 +701,8 @@ export const PULSEX_V1_CONFIG = {
           totalPairs
           totalTransactions
           totalVolumeUSD
-          totalVolumeETH: totalVolumePLS
-          totalLiquidityETH: totalLiquidityPLS
+          totalVolumePLS: totalVolumePLS
+          totalLiquidityPLS: totalLiquidityPLS
           totalLiquidityUSD
         }
       }

@@ -283,12 +283,12 @@ export function calculateReservesAndPrice(
             token0IsNative,
             prevEntry.reserve0,
             prevEntry.reserve1,
-            prevEntry.reserve0.add(new Big(swap.amount0)),
-            prevEntry.reserve1.add(new Big(swap.amount1)),
+            prevEntry.reserve0.sub(new Big(swap.amount0)),
+            prevEntry.reserve1.sub(new Big(swap.amount1)),
             +swap.transaction.blockNumber,
             +swap.transaction.timestamp,
-            +swap.amount0In,
-            +swap.amount1In,
+            +swap.amount0,
+            +swap.amount1,
           )
         : formatSwap(
             token0IsNative,

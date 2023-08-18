@@ -35,27 +35,45 @@ export const getPairDetails = async (
 
   const pairContract = getContract(pairAbi, pairAddress, chain.web3)
 
-  // const reserve0 = getBalanceOf(tokenAddresses[0], pairAddress, chain.web3)
-  // const reserve1 = getBalanceOf(tokenAddresses[1], pairAddress, chain.web3)
-  // const tokens = await getPairTokens(pairContract, chain.web3, erc20Abi)
+  if (isV3) {
+    const [_reserve0, _reserve1, tokens] = await Promise.all([
+      getBalanceOf(tokenAddresses[0], pairAddress, chain.web3),
+      getBalanceOf(tokenAddresses[1], pairAddress, chain.web3),
+      getPairTokens(pairContract, chain.web3, erc20Abi),
+    ])
+    const reserves = { _reserve0, _reserve1 }
+    const decimals = await executeBatchRequest(
+      chain.web3,
+      tokens.token0.methods.decimals().call.request(),
+      tokens.token1.methods.decimals().call.request(),
+    ).then(([d0, d1]) => ({ token0: Number(d0), token1: Number(d1) }))
 
-  const [reserves, tokens] = await Promise.all([
-    getReserves(pairContract),
-    getPairTokens(pairContract, chain.web3, erc20Abi),
-  ])
+    return {
+      factoryContract,
+      pairContract,
+      tokens,
+      reserves,
+      prices: getRelativePrice(reserves, decimals),
+    }
+  } else {
+    const [reserves, tokens] = await Promise.all([
+      getReserves(pairContract),
+      getPairTokens(pairContract, chain.web3, erc20Abi),
+    ])
 
-  const decimals = await executeBatchRequest(
-    chain.web3,
-    tokens.token0.methods.decimals().call.request(),
-    tokens.token1.methods.decimals().call.request(),
-  ).then(([d0, d1]) => ({ token0: Number(d0), token1: Number(d1) }))
+    const decimals = await executeBatchRequest(
+      chain.web3,
+      tokens.token0.methods.decimals().call.request(),
+      tokens.token1.methods.decimals().call.request(),
+    ).then(([d0, d1]) => ({ token0: Number(d0), token1: Number(d1) }))
 
-  return {
-    factoryContract,
-    pairContract,
-    tokens,
-    reserves,
-    prices: getRelativePrice(reserves, decimals),
+    return {
+      factoryContract,
+      pairContract,
+      tokens,
+      reserves,
+      prices: getRelativePrice(reserves, decimals),
+    }
   }
 }
 

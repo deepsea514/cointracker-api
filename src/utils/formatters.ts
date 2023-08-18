@@ -184,6 +184,7 @@ export const formatSwaps = async ({
   chain: IChainConfiguration
   exchange: EXCHANGES
 }) => {
+  const isV3 = exchange.includes('V3')
   const tokenIsNative = (token: string) => compareAddress(token, chain.tokens.NATIVE, chain.web3)
   let nativePrice = swaps.bundle.chainPrice
   if (!nativePrice || nativePrice === '0') {
@@ -194,13 +195,6 @@ export const formatSwaps = async ({
     const swap = swaps.swaps[i]
     const token0IsNative = tokenIsNative(swap.pair.token0.address)
     const token1IsNative = tokenIsNative(swap.pair.token1.address)
-
-    // const reserve0 =
-    //   (await web3Helper.getBalanceOf(swap.pair.token0.address, swap.pair.id, chain.web3)) /
-    //   10 ** Number(swap.pair.token0.decimals)
-    // const reserve1 =
-    //   (await web3Helper.getBalanceOf(swap.pair.token1.address, swap.pair.id, chain.web3)) /
-    //   10 ** Number(swap.pair.token1.decimals)
 
     if (!swap.pair.reserveUSD || Number(swap.pair.reserveUSD) === 0) {
       const backupReserveUSD = token0IsNative
@@ -217,8 +211,8 @@ export const formatSwaps = async ({
     swap.token1PriceETH = (swap.token1PriceUSD / nativePrice).toString()
 
     if (!swap.amountUSD || Number(swap.amountUSD) === 0) {
-      const amount0 = swap.amount0In + swap.amount0Out
-      const amount1 = swap.amount1In + swap.amount1Out
+      const amount0 = isV3 ? swap.amount0 : swap.amount0In + swap.amount0Out
+      const amount1 = isV3 ? swap.amount1 : swap.amount1In + swap.amount1Out
       swap.amountUSD = ((token0IsNative ? amount0 : amount1) * nativePrice).toString()
     }
     // console.log(swaps[i])
@@ -232,10 +226,10 @@ export const formatSwaps = async ({
       to: swap.to,
       sender: swap.sender,
       pairAddress: swap.pair.id,
-      amount0In: swap.amount0In,
-      amount1In: swap.amount1In,
-      amount0Out: swap.amount0Out,
-      amount1Out: swap.amount1Out,
+      amount0In: isV3 ? swap.amount0 : swap.amount0In,
+      amount1In: isV3 ? swap.amount1 : swap.amount1In,
+      amount0Out: isV3 ? swap.amount0 : swap.amount0Out,
+      amount1Out: isV3 ? swap.amount1 : swap.amount1Out,
       amountUSD: swap.amountUSD,
       pairLiquidityUSD: swap.pair.reserveUSD,
       token0Address: swap.pair.token0.address,
@@ -341,23 +335,31 @@ export const formatToken = async ({
   // Current & historic FTM price
   const currentNativePrice = getTokenRelativePrice(
     base0IsNative,
-    nativePairDayDatas[0]?.reserve0,
-    nativePairDayDatas[0]?.reserve1,
+    isV3 ? nativePairDayDatas[0]?.pool?.reserve0 : nativePairDayDatas[0]?.reserve0,
+    isV3 ? nativePairDayDatas[0]?.pool?.reserve1 : nativePairDayDatas[0]?.reserve1,
   )
   const historicNativePrice = getTokenRelativePrice(
     base0IsNative,
-    nativePairDayDatas[1]?.reserve0,
-    nativePairDayDatas[1]?.reserve1,
+    isV3 ? nativePairDayDatas[1]?.pool?.reserve0 : nativePairDayDatas[1]?.reserve0,
+    isV3 ? nativePairDayDatas[1]?.pool?.reserve1 : nativePairDayDatas[1]?.reserve1,
   )
 
   // Current & Historic token Price in FTM
   const currentTokenPrice = nativeIsDesiredToken
     ? currentNativePrice
-    : getTokenRelativePrice(token0IsNative, pairDayDatas[0]?.reserve0, pairDayDatas[0]?.reserve1)
+    : getTokenRelativePrice(
+        token0IsNative,
+        isV3 ? pairDayDatas[0]?.pool?.reserve0 : pairDayDatas[0]?.reserve0,
+        isV3 ? pairDayDatas[0]?.pool?.reserve1 : pairDayDatas[0]?.reserve1,
+      )
 
   const historicTokenPrice = nativeIsDesiredToken
     ? historicNativePrice
-    : getTokenRelativePrice(token0IsNative, pairDayDatas[1]?.reserve0, pairDayDatas[1]?.reserve1)
+    : getTokenRelativePrice(
+        token0IsNative,
+        isV3 ? pairDayDatas[1]?.pool?.reserve0 : pairDayDatas[1]?.reserve0,
+        isV3 ? pairDayDatas[1]?.pool?.reserve1 : pairDayDatas[1]?.reserve1,
+      )
 
   const currentPriceUSD = nativeIsDesiredToken ? currentNativePrice : currentTokenPrice / currentNativePrice
   const historicPriceUSD = nativeIsDesiredToken ? historicNativePrice : historicTokenPrice / historicNativePrice
@@ -377,7 +379,7 @@ export const formatToken = async ({
   const finalSevenDayData = token?.sevenDayData?.map((data: any) => {
     let priceNative = nativeIsDesiredToken
       ? 1
-      : parseFloat(data.priceUSD) * (parseFloat(data[`liquidity${native}`]) / parseFloat(data.liquidityUSD))
+      : parseFloat(data.priceUSD) * (isV3? parseFloat(data[`liquidity${native}`]) / parseFloat(data.liquidityUSD))
     if (isNaN(priceNative)) priceNative = 0
     return {
       ...data,
