@@ -698,7 +698,7 @@ export const FUSIONX_V2_CONFIG = {
     `,
     FACTORY: gql`
       query Factories {
-        fusionxV1: fusionxFactories(first: 1) {
+        fusionxV2: fusionxFactories(first: 1) {
           id
           totalPairs
           totalTransactions
