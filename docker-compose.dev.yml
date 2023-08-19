@@ -55,7 +55,7 @@ services:
       # ETH_URL: https://mainnet.infura.io/v3/
       PLS_URL: https://rpc.pulsechain.com/
       MNT_URL: https://rpc.mantle.xyz/
-      BASE_URL: https://developer-access-mainnet.base.org
+      BASE_URL: https://mainnet.base.org/
       JWT_SECRET: xTC83d93GmPVkKitxTC83d93GmPVkKitxTC83d93GmPVkKit
       JWT_EXPIRY: 1d
 volumes:
