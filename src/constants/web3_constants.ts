@@ -48,7 +48,7 @@ export const RPC_URL: IChainDetails<string> = {
   // [CHAINS.FTM]: process.env.FTM_URL ?? 'https://rpc.ftm.tools/0be7111f-17ed-4498-b6f9-7afdd22a3488?cache=900',
   [CHAINS.PLS]: process.env.PLS_URL ?? 'https://rpc.pulsechain.com/',
   [CHAINS.MNT]: process.env.MNT_URL ?? 'https://rpc.mantle.xyz/',
-  [CHAINS.BASE]: process.env.BASE_URL ?? 'https://mainnet.base.org/',
+  [CHAINS.BASE]: process.env.BASE_URL ?? 'https://rpc.ankr.com/base/19441518f0c67589bfaa9b52f253edd895b90229912293af06a079af3a601e06/',
   // [CHAINS.BSC]: process.env.BSC_URL ?? 'https://bsc-dataseed.binance.org/',
   // [CHAINS.ETH]: process.env.ETH_URL ?? 'https://mainnet.infura.io/v3/',
   // [CHAINS.MATIC]: process.env.MATIC_URL ?? 'https://rpc-mainnet.matic.network',
