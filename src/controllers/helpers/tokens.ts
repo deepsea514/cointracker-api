@@ -12,7 +12,7 @@ import {
   getCandlestickData,
   ICandleStickData,
   IRawPairData,
-  // IRawSwapData,
+  IRawSwapData,
   // IRawSwapDataV3,
 } from '../../utils/candlestickCharts'
 import { fetchTokenHistoricalDataBetweenTimeStamps } from '../../utils/subgraph/dataFetchHelper'
@@ -203,7 +203,7 @@ function reduceCandlestickToTradingViewStable(tv: IHistory[], block: ICandleStic
 
 function getCandlestickFromSwaps(
   pair: IRawPairData,
-  swaps: any,
+  swaps: any[],
   initialReserves: any,
   timeFrameSeconds: number,
   token0IsNative: boolean,
