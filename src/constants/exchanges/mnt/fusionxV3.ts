@@ -553,10 +553,8 @@ export const FUSIONX_V3_CONFIG = {
             volumeToken1
             volumeUSD
           }
-          amount0In: amount0
-          # amount0Out
-          # amount1Out
-          amount1In: amount1
+          amount0
+          amount1
           amountUSD
         }
       }
