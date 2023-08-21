@@ -158,7 +158,7 @@ export function chunkIntervalSwapData(
         // to just leave this out though?
         if (previousSwap) {
           prices[timeSlotEnd].swaps.push({
-            open: previousSwap.open,
+            open: previousSwap.close,
             close: previousSwap.close,
             reserve0: previousSwap.reserve0,
             reserve1: previousSwap.reserve1,
