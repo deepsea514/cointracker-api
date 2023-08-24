@@ -35,9 +35,9 @@ export const NETWORK_NAMES: IChainDetails<string> = {
 
 export const DEFAULT_BLOCK_TIMES: IChainDetails<number> = {
   // [CHAINS.FTM]: 600, // 600 blocks is ~10 minutes ( 1 second blocks )
-  [CHAINS.PLS]: 200, // 200 blocks is ~10 minutes ( 3 second blocks )
-  [CHAINS.MNT]: 200, // 200 blocks is ~10 minutes ( 3 second blocks
-  [CHAINS.BASE]: 200, // 200 blocks is ~10 minutes ( 3 second blocks
+  [CHAINS.PLS]: 60, // 200 blocks is ~10 minutes ( 10 second blocks )
+  [CHAINS.MNT]: 40, // 200 blocks is ~10 minutes ( 15 second blocks )
+  [CHAINS.BASE]: 300, // 200 blocks is ~10 minutes ( 2 second blocks )
   // [CHAINS.BSC]: 200, // 200 blocks is ~10 minutes ( 3 second blocks )
   // [CHAINS.ETH]: 46, // 46 blocks is ~10 minutes ( 13 second blocks )
   // [CHAINS.MATIC]: 46,
