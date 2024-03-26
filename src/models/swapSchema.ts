@@ -10,6 +10,7 @@ export interface ISwapEvent extends Document {
   // amountFTM?: number
   // amountSOL:
   amountPLS?: number
+  amountMNT?: number
   amountBNB?: number
   amount0In: number
   amount1In: number
@@ -20,6 +21,7 @@ export interface ISwapEvent extends Document {
   pairLiquidityETH?: number
   // pairLiquidityFTM?: number
   pairLiquidityPLS?: number
+  pairLiquidityMNT?: number
   pairLiquidityBNB?: number
   token0Address: string
   token1Address: string
@@ -33,6 +35,8 @@ export interface ISwapEvent extends Document {
   // token1PriceFTM?: number
   token0PricePLS?: number
   token1PricePLS?: number
+  token0PriceMNT?: number
+  token1PriceMNT?: number
   token0PriceBNB?: number
   token1PriceBNB?: number
   walletAddress: string
@@ -51,7 +55,7 @@ const SwapSchema = new mongoose.Schema<ISwapEvent>({
   amountETH: {
     type: Number,
     required: function (this: ISwapEvent) {
-      return parseInt(this.network) == 1
+      return parseInt(this.network) == 1 || parseInt(this.network) == 8453
     },
   },
   amountBNB: {
@@ -72,6 +76,12 @@ const SwapSchema = new mongoose.Schema<ISwapEvent>({
       return parseInt(this.network) == 369
     },
   },
+  amountMNT: {
+    type: Number,
+    required: function (this: ISwapEvent) {
+      return parseInt(this.network) == 5000
+    },
+  },
   amount0In: Number,
   amount1In: Number,
   amount0Out: Number,
@@ -81,7 +91,7 @@ const SwapSchema = new mongoose.Schema<ISwapEvent>({
   pairLiquidityETH: {
     type: Number,
     required: function (this: ISwapEvent) {
-      return parseInt(this.network) == 1
+      return parseInt(this.network) == 1 || parseInt(this.network) == 8453
     },
   },
   pairLiquidityBNB: {
@@ -102,6 +112,12 @@ const SwapSchema = new mongoose.Schema<ISwapEvent>({
       return parseInt(this.network) == 369
     },
   },
+  pairLiquidityMNT: {
+    type: Number,
+    required: function (this: ISwapEvent) {
+      return parseInt(this.network) == 5000
+    },
+  },
   token0Address: String,
   token1Address: String,
   token0Symbol: String,
@@ -111,7 +127,7 @@ const SwapSchema = new mongoose.Schema<ISwapEvent>({
   token0PriceETH: {
     type: Number,
     required: function (this: ISwapEvent) {
-      return parseInt(this.network) == 1
+      return parseInt(this.network) == 1 || parseInt(this.network) == 8453
     },
   },
   token0PriceBNB: {
@@ -132,10 +148,16 @@ const SwapSchema = new mongoose.Schema<ISwapEvent>({
       return parseInt(this.network) == 369
     },
   },
+  token0PriceMNT: {
+    type: Number,
+    required: function (this: ISwapEvent) {
+      return parseInt(this.network) == 5000
+    },
+  },
   token1PriceETH: {
     type: Number,
     required: function (this: ISwapEvent) {
-      return parseInt(this.network) == 1
+      return parseInt(this.network) == 1 || parseInt(this.network) == 8453
     },
   },
   token1PriceBNB: {
@@ -154,6 +176,12 @@ const SwapSchema = new mongoose.Schema<ISwapEvent>({
     type: Number,
     required: function (this: ISwapEvent) {
       return parseInt(this.network) == 369
+    },
+  },
+  token1PriceMNT: {
+    type: Number,
+    required: function (this: ISwapEvent) {
+      return parseInt(this.network) == 5000
     },
   },
   walletAddress: String,

@@ -16,6 +16,7 @@ Used to fetch the latest [Mints](../models/mint.md) by chain and exchange.
     - 56: BSC
     - 250: FTM
     - 369: PLS
+    - 5000: NATIVE
   - `exchange`: string
     - `paint`: PaintSwap
     - `spirit`: SpiritSwap

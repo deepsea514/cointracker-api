@@ -16,10 +16,12 @@ export interface IMintEvent extends Document {
   amountUSD: string
   amountETH?: number
   amountPLS?: number
+  amountMNT?: number
   amountBNB?: number
   pairLiquidityUSD: number
   pairLiquidityETH?: number
   pairLiquidityPLS?: number
+  pairLiquidityMNT?: number
   pairLiquidityBNB?: number
   token0PriceUSD: number
   token1PriceUSD: number
@@ -31,6 +33,8 @@ export interface IMintEvent extends Document {
   // token1PriceFTM?: number
   token0PricePLS?: number
   token1PricePLS?: number
+  token0PriceMNT?: number
+  token1PriceMNT?: number
   token0PriceBNB?: number
   token1PriceBNB?: number
   walletAddress: string
@@ -56,7 +60,7 @@ const MintSchema = new mongoose.Schema<IMintEvent>({
   amountETH: {
     type: Number,
     required: function (this: IMintEvent) {
-      return parseInt(this.network) == 1
+      return parseInt(this.network) == 1 || parseInt(this.network) == 8453
     },
   },
   amountBNB: {
@@ -77,11 +81,17 @@ const MintSchema = new mongoose.Schema<IMintEvent>({
       return parseInt(this.network) == 369
     },
   },
+  amountMNT: {
+    type: Number,
+    required: function (this: IMintEvent) {
+      return parseInt(this.network) == 5000
+    },
+  },
   pairLiquidityUSD: Number,
   pairLiquidityETH: {
     type: Number,
     required: function (this: IMintEvent) {
-      return parseInt(this.network) == 1
+      return parseInt(this.network) == 1 || parseInt(this.network) == 8453
     },
   },
   pairLiquidityBNB: {
@@ -102,11 +112,17 @@ const MintSchema = new mongoose.Schema<IMintEvent>({
       return parseInt(this.network) == 369
     },
   },
+  pairLiquidityMNT: {
+    type: Number,
+    required: function (this: IMintEvent) {
+      return parseInt(this.network) == 5000
+    },
+  },
   token0PriceUSD: Number,
   token0PriceETH: {
     type: Number,
     required: function (this: IMintEvent) {
-      return parseInt(this.network) == 1
+      return parseInt(this.network) == 1 || parseInt(this.network) == 8453
     },
   },
   token0PriceBNB: {
@@ -127,11 +143,17 @@ const MintSchema = new mongoose.Schema<IMintEvent>({
       return parseInt(this.network) == 369
     },
   },
+  token0PriceMNT: {
+    type: Number,
+    required: function (this: IMintEvent) {
+      return parseInt(this.network) == 5000
+    },
+  },
   token1PriceUSD: Number,
   token1PriceETH: {
     type: Number,
     required: function (this: IMintEvent) {
-      return parseInt(this.network) == 1
+      return parseInt(this.network) == 1 || parseInt(this.network) == 8453
     },
   },
   token1PriceBNB: {
@@ -150,6 +172,12 @@ const MintSchema = new mongoose.Schema<IMintEvent>({
     type: Number,
     required: function (this: IMintEvent) {
       return parseInt(this.network) == 369
+    },
+  },
+  token1PriceMNT: {
+    type: Number,
+    required: function (this: IMintEvent) {
+      return parseInt(this.network) == 5000
     },
   },
   walletAddress: String,
