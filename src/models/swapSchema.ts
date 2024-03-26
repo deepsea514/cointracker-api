@@ -8,6 +8,7 @@ export interface ISwapEvent extends Document {
   amountUSD: string
   amountETH?: number
   // amountFTM?: number
+  // amountSOL:
   amountPLS?: number
   amountBNB?: number
   amount0In: number
