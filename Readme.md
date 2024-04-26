@@ -2,7 +2,7 @@
 
 You can find the API specifications [here](specs/index.md)!
 
-## Diablo Tracker API
+## Aurora Tracker API (Formly Apex API)
 
 - Every exchange has a factory address/contract
 - Every time a swap occurs a 'transfer' even gets fired off that we can listen too
