@@ -44,7 +44,7 @@ export enum CHAINS {
   METIS = 1088,
 }
 
-export const SUBGRAPHS = {
+export const SUBGRAPHS: any = {
   // [`${CHAINS.ETH}`]: {
   //   [`${EXCHANGES.UNI_SWAP}`]: UNISWAP_CONFIG,
   //   [`${EXCHANGES.SUSHI_SWAP}`]: SUSHI_SWAP_ETH_CONFIG,
