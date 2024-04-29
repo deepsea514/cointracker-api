@@ -522,12 +522,14 @@ export const getExchange = (exchange: EXCHANGES, chain: CHAINS) => {
     // case EXCHANGES.SPOOKY_SWAP:
     // return result + '_SPOOKY_SWAP'
 
-    case EXCHANGES.FUSION_DEX:
-      return result + '_FUSION_DEX'
-    case EXCHANGES.PULSE_DEX:
-      return result + '_PULSE_DEX'
+    // case EXCHANGES.FUSION_DEX:
+    //   return result + '_FUSION_DEX'
+    // case EXCHANGES.PULSE_DEX:
+    //   return result + '_PULSE_DEX'
+    case EXCHANGES.HERCULES_DEX:
+      return result + '_HERCULES_DEX'
     default:
-      return result + `_${exchange}_SWAP`
+      return result + `_${exchange}_DEX`
   }
 }
 

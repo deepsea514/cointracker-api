@@ -6,7 +6,7 @@ services:
     ports:
       - 27017:27017
     environment:
-      MONGO_INITDB_ROOT_USERNAME: casperdefi
+      MONGO_INITDB_ROOT_USERNAME: aurora
       MONGO_INITDB_ROOT_PASSWORD: xTC83d93GmPVkKit
     volumes:
       - ./db_data:/data/db
@@ -25,9 +25,9 @@ services:
     depends_on:
       - mongodb
     environment:
-      ME_CONFIG_BASICAUTH_USERNAME: casperdefi
-      ME_CONFIG_BASICAUTH_PASSWORD: casperdefi@123
-      ME_CONFIG_MONGODB_ADMINUSERNAME: casperdefi
+      ME_CONFIG_BASICAUTH_USERNAME: aurora
+      ME_CONFIG_BASICAUTH_PASSWORD: aurora@123
+      ME_CONFIG_MONGODB_ADMINUSERNAME: aurora
       ME_CONFIG_MONGODB_ADMINPASSWORD: xTC83d93GmPVkKit
       ME_CONFIG_MONGODB_SERVER: mongodb
   tracker:
@@ -44,7 +44,7 @@ services:
       - 3000:3000
     environment:
       PORT: 3000
-      DB_USER: casperdefi
+      DB_USER: aurora
       DB_PASS: xTC83d93GmPVkKit
       DB_HOST: mongodb
       CACHE_HOST: redis
@@ -53,9 +53,10 @@ services:
       # BSC_URL: https://bsc-dataseed.binance.org/
       # FTM_URL: https://rpc.ankr.com/fantom/
       # ETH_URL: https://mainnet.infura.io/v3/
-      PLS_URL: https://rpc.pulsechain.com/
-      MNT_URL: https://rpc.mantle.xyz/
-      BASE_URL: https://mainnet.base.org/
+      # PLS_URL: https://rpc.pulsechain.com/
+      # MNT_URL: https://rpc.mantle.xyz/
+      # BASE_URL: https://mainnet.base.org/
+      METIS_URL: https://lb.nodies.app/v1/0fdd0b2f9bb84e8c85c3b81a94e2162e/
       JWT_SECRET: xTC83d93GmPVkKitxTC83d93GmPVkKitxTC83d93GmPVkKit
       JWT_EXPIRY: 1d
 volumes:

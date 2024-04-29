@@ -13,9 +13,10 @@ export const TOKENS = {
 // Chain-dynamic constants
 export const NETWORKS: IChainDetails<string> = {
   // [CHAINS.FTM]: 'ftm',
-  [CHAINS.PLS]: 'pls',
-  [CHAINS.MNT]: 'mnt',
-  [CHAINS.BASE]: 'base',
+  // [CHAINS.PLS]: 'pls',
+  // [CHAINS.MNT]: 'mnt',
+  // [CHAINS.BASE]: 'base',
+  [CHAINS.METIS]: 'metis',
   // [CHAINS.BSC]: 'bsc',
   // [CHAINS.ETH]: 'eth',
   // [CHAINS.MATIC]: 'matic',
@@ -24,9 +25,10 @@ export const NETWORKS: IChainDetails<string> = {
 // Chain-dynamic constants
 export const NETWORK_NAMES: IChainDetails<string> = {
   // [CHAINS.FTM]: 'Fantom Opera',
-  [CHAINS.PLS]: 'Pulse Chain',
-  [CHAINS.MNT]: 'Mantle Network',
-  [CHAINS.BASE]: 'Base Network',
+  // [CHAINS.PLS]: 'Pulse Chain',
+  // [CHAINS.MNT]: 'Mantle Network',
+  // [CHAINS.BASE]: 'Base Network',
+  [CHAINS.METIS]: 'Metis Network',
   // [CHAINS.BSC]: 'Binance Smart Chain',
   // [CHAINS.ETH]: 'Ethereum',
   // [CHAINS.MATIC]: 'Polygon',
@@ -35,9 +37,10 @@ export const NETWORK_NAMES: IChainDetails<string> = {
 
 export const DEFAULT_BLOCK_TIMES: IChainDetails<number> = {
   // [CHAINS.FTM]: 600, // 600 blocks is ~10 minutes ( 1 second blocks )
-  [CHAINS.PLS]: 200, // 200 blocks is ~10 minutes ( 3 second blocks )
-  [CHAINS.MNT]: 200, // 200 blocks is ~10 minutes ( 3 second blocks
-  [CHAINS.BASE]: 200, // 200 blocks is ~10 minutes ( 3 second blocks
+  // [CHAINS.PLS]: 200, // 200 blocks is ~10 minutes ( 3 second blocks )
+  // [CHAINS.MNT]: 200, // 200 blocks is ~10 minutes ( 3 second blocks
+  // [CHAINS.BASE]: 200, // 200 blocks is ~10 minutes ( 3 second blocks
+  [CHAINS.METIS]: 66, // 200 blocks is ~10 minutes ( 9 second blocks
   // [CHAINS.BSC]: 200, // 200 blocks is ~10 minutes ( 3 second blocks )
   // [CHAINS.ETH]: 46, // 46 blocks is ~10 minutes ( 13 second blocks )
   // [CHAINS.MATIC]: 46,
@@ -46,9 +49,10 @@ export const DEFAULT_BLOCK_TIMES: IChainDetails<number> = {
 
 export const RPC_URL: IChainDetails<string> = {
   // [CHAINS.FTM]: process.env.FTM_URL ?? 'https://rpc.ftm.tools/0be7111f-17ed-4498-b6f9-7afdd22a3488?cache=900',
-  [CHAINS.PLS]: process.env.PLS_URL ?? 'https://rpc.pulsechain.com/',
-  [CHAINS.MNT]: process.env.MNT_URL ?? 'https://rpc.mantle.xyz/',
-  [CHAINS.BASE]: process.env.BASE_URL ?? 'https://mainnet.base.org/',
+  // [CHAINS.PLS]: process.env.PLS_URL ?? 'https://rpc.pulsechain.com/',
+  // [CHAINS.MNT]: process.env.MNT_URL ?? 'https://rpc.mantle.xyz/',
+  // [CHAINS.BASE]: process.env.BASE_URL ?? 'https://mainnet.base.org/',
+  [CHAINS.METIS]: process.env.METIS_URL ?? 'https://lb.nodies.app/v1/0fdd0b2f9bb84e8c85c3b81a94e2162e/',
   // [CHAINS.BSC]: process.env.BSC_URL ?? 'https://bsc-dataseed.binance.org/',
   // [CHAINS.ETH]: process.env.ETH_URL ?? 'https://mainnet.infura.io/v3/',
   // [CHAINS.MATIC]: process.env.MATIC_URL ?? 'https://rpc-mainnet.matic.network',
@@ -57,9 +61,10 @@ export const RPC_URL: IChainDetails<string> = {
 
 export const WEB3_CLIENTS: IChainDetails<Web3> = {
   // [CHAINS.FTM]: new Web3(new Web3.providers.HttpProvider(RPC_URL[CHAINS.FTM])),
-  [CHAINS.PLS]: new Web3(new Web3.providers.HttpProvider(RPC_URL[CHAINS.PLS])),
-  [CHAINS.MNT]: new Web3(new Web3.providers.HttpProvider(RPC_URL[CHAINS.MNT])),
-  [CHAINS.BASE]: new Web3(new Web3.providers.HttpProvider(RPC_URL[CHAINS.BASE])),
+  // [CHAINS.PLS]: new Web3(new Web3.providers.HttpProvider(RPC_URL[CHAINS.PLS])),
+  // [CHAINS.MNT]: new Web3(new Web3.providers.HttpProvider(RPC_URL[CHAINS.MNT])),
+  // [CHAINS.BASE]: new Web3(new Web3.providers.HttpProvider(RPC_URL[CHAINS.BASE])),
+  [CHAINS.METIS]: new Web3(new Web3.providers.HttpProvider(RPC_URL[CHAINS.METIS])),
   // [CHAINS.BSC]: new Web3(new Web3.providers.HttpProvider(RPC_URL[CHAINS.BSC])),
   // [CHAINS.ETH]: new Web3(new Web3.providers.HttpProvider(RPC_URL[CHAINS.ETH])),
   // [CHAINS.MATIC]: new Web3(new Web3.providers.HttpProvider(RPC_URL[CHAINS.MATIC])),
@@ -77,20 +82,25 @@ export const BASE_TOKENS: IChainDetails<DEFAULT_CHAIN_TOKENS> = {
   //   STABLE: '0x04068da6c83afcfa0e13ba15a6696662335d5b75', // usdc
   //   FALLBACK: '0x5Cc61A78F164885776AA610fb0FE1257df78E59B', // spirit
   // },
-  [CHAINS.PLS]: {
-    NATIVE: '0xa1077a294dde1b09bb078844df40758a5d0f9a27', // wpls
-    STABLE: '0x15d38573d2feeb82e7ad5187ab8c1d52810b1f07', // usdc
-    FALLBACK: '0x95b303987a60c71504d99aa1b13b4da07b0790ab', // plsx
-  },
-  [CHAINS.MNT]: {
-    NATIVE: '0x78c1b0c915c4faa5fffa6cabf0219da63d7f4cb8', // wmnt
-    STABLE: '0x09bc4e0d864854c6afb6eb9a9cdf58ac190d0df9', // usdc
-    FALLBACK: '0x554388ec984278a3c5bff09e6192c20cdfca9f29', // uahm
-  },
-  [CHAINS.BASE]: {
-    NATIVE: '0x4200000000000000000000000000000000000006', // weth
-    STABLE: '0xeb466342c4d449bc9f53a865d5cb90586f405215', // axlusdc
-    FALLBACK: '0x6653dd4b92a0e5bf8ae570a98906d9d6fd2eec09', // rckt
+  // [CHAINS.PLS]: {
+  //   NATIVE: '0xa1077a294dde1b09bb078844df40758a5d0f9a27', // wpls
+  //   STABLE: '0x15d38573d2feeb82e7ad5187ab8c1d52810b1f07', // usdc
+  //   FALLBACK: '0x95b303987a60c71504d99aa1b13b4da07b0790ab', // plsx
+  // },
+  // [CHAINS.MNT]: {
+  //   NATIVE: '0x78c1b0c915c4faa5fffa6cabf0219da63d7f4cb8', // wmnt
+  //   STABLE: '0x09bc4e0d864854c6afb6eb9a9cdf58ac190d0df9', // usdc
+  //   FALLBACK: '0x554388ec984278a3c5bff09e6192c20cdfca9f29', // uahm
+  // },
+  // [CHAINS.BASE]: {
+  //   NATIVE: '0x4200000000000000000000000000000000000006', // weth
+  //   STABLE: '0xeb466342c4d449bc9f53a865d5cb90586f405215', // axlusdc
+  //   FALLBACK: '0x6653dd4b92a0e5bf8ae570a98906d9d6fd2eec09', // rckt
+  // },
+  [CHAINS.METIS]: {
+    NATIVE: '0x9E32b13ce7f2E80A01932B42553652E053D6ed8e', // metis
+    STABLE: '0xEA32A96608495e54156Ae48931A7c20f0dcc1a21', // m.usdc
+    FALLBACK: '0xbB1676046C36BCd2F6fD08d8f60672c7087d9aDF', // torch
   },
   // [CHAINS.BSC]: {
   //   NATIVE: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c', // bnb
@@ -174,26 +184,32 @@ export const FACTORIES: IChainDetails<FACTORY_DEFINITION[]> = {
   //     name: 'sushi',
   //   },
   // ],
-  [CHAINS.PLS]: [
+  // [CHAINS.PLS]: [
+  //   {
+  //     address: '0x1715a3E4A142d8b698131108995174F37aEBA10D', // pulsex V1
+  //     name: 'Diablo-PLSXV1',
+  //   },
+  //   {
+  //     address: '0x29eA7545DEf87022BAdc76323F373EA1e707C523', // pulsex V2
+  //     name: 'Diablo-PLSXV2',
+  //   },
+  // ],
+  // [CHAINS.MNT]: [
+  //   {
+  //     address: '0xE5020961fA51ffd3662CDf307dEf18F9a87Cce7c', // fusion v2
+  //     name: 'fusionx',
+  //   },
+  // ],
+  // [CHAINS.BASE]: [
+  //   {
+  //     address: '0x1B8128c3A1B7D20053D10763ff02466ca7FF99FC', // rocketswap v2
+  //     name: 'rocketswap',
+  //   },
+  // ],
+  [CHAINS.METIS]: [
     {
-      address: '0x1715a3E4A142d8b698131108995174F37aEBA10D', // pulsex V1
-      name: 'Diablo-PLSXV1',
-    },
-    {
-      address: '0x29eA7545DEf87022BAdc76323F373EA1e707C523', // pulsex V2
-      name: 'Diablo-PLSXV2',
-    },
-  ],
-  [CHAINS.MNT]: [
-    {
-      address: '0xE5020961fA51ffd3662CDf307dEf18F9a87Cce7c', // fusion v2
-      name: 'fusionx',
-    },
-  ],
-  [CHAINS.BASE]: [
-    {
-      address: '0x1B8128c3A1B7D20053D10763ff02466ca7FF99FC', // rocketswap v2
-      name: 'rocketswap',
+      address: '0xF38E7c7f8eA779e8A193B61f9155E6650CbAE095', // hercules v2
+      name: 'Hercules',
     },
   ],
 }
@@ -969,494 +985,494 @@ export const ERC20_ABI: AbiItem[] = [
   },
 ]
 
-export const UNISWAP_V3_FACTORY_ABI = [
-  { inputs: [], stateMutability: 'nonpayable', type: 'constructor' },
-  {
-    anonymous: false,
-    inputs: [
-      { indexed: true, internalType: 'uint24', name: 'fee', type: 'uint24' },
-      { indexed: true, internalType: 'int24', name: 'tickSpacing', type: 'int24' },
-    ],
-    name: 'FeeAmountEnabled',
-    type: 'event',
-  },
-  {
-    anonymous: false,
-    inputs: [
-      { indexed: true, internalType: 'address', name: 'oldOwner', type: 'address' },
-      { indexed: true, internalType: 'address', name: 'newOwner', type: 'address' },
-    ],
-    name: 'OwnerChanged',
-    type: 'event',
-  },
-  {
-    anonymous: false,
-    inputs: [
-      { indexed: true, internalType: 'address', name: 'token0', type: 'address' },
-      { indexed: true, internalType: 'address', name: 'token1', type: 'address' },
-      { indexed: true, internalType: 'uint24', name: 'fee', type: 'uint24' },
-      { indexed: false, internalType: 'int24', name: 'tickSpacing', type: 'int24' },
-      { indexed: false, internalType: 'address', name: 'pool', type: 'address' },
-    ],
-    name: 'PoolCreated',
-    type: 'event',
-  },
-  {
-    inputs: [
-      { internalType: 'address', name: 'tokenA', type: 'address' },
-      { internalType: 'address', name: 'tokenB', type: 'address' },
-      { internalType: 'uint24', name: 'fee', type: 'uint24' },
-    ],
-    name: 'createPool',
-    outputs: [{ internalType: 'address', name: 'pool', type: 'address' }],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      { internalType: 'uint24', name: 'fee', type: 'uint24' },
-      { internalType: 'int24', name: 'tickSpacing', type: 'int24' },
-    ],
-    name: 'enableFeeAmount',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [{ internalType: 'uint24', name: '', type: 'uint24' }],
-    name: 'feeAmountTickSpacing',
-    outputs: [{ internalType: 'int24', name: '', type: 'int24' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      { internalType: 'address', name: '', type: 'address' },
-      { internalType: 'address', name: '', type: 'address' },
-      { internalType: 'uint24', name: '', type: 'uint24' },
-    ],
-    name: 'getPool',
-    outputs: [{ internalType: 'address', name: '', type: 'address' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'owner',
-    outputs: [{ internalType: 'address', name: '', type: 'address' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'parameters',
-    outputs: [
-      { internalType: 'address', name: 'factory', type: 'address' },
-      { internalType: 'address', name: 'token0', type: 'address' },
-      { internalType: 'address', name: 'token1', type: 'address' },
-      { internalType: 'uint24', name: 'fee', type: 'uint24' },
-      { internalType: 'int24', name: 'tickSpacing', type: 'int24' },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [{ internalType: 'address', name: '_owner', type: 'address' }],
-    name: 'setOwner',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-]
+// export const UNISWAP_V3_FACTORY_ABI = [
+//   { inputs: [], stateMutability: 'nonpayable', type: 'constructor' },
+//   {
+//     anonymous: false,
+//     inputs: [
+//       { indexed: true, internalType: 'uint24', name: 'fee', type: 'uint24' },
+//       { indexed: true, internalType: 'int24', name: 'tickSpacing', type: 'int24' },
+//     ],
+//     name: 'FeeAmountEnabled',
+//     type: 'event',
+//   },
+//   {
+//     anonymous: false,
+//     inputs: [
+//       { indexed: true, internalType: 'address', name: 'oldOwner', type: 'address' },
+//       { indexed: true, internalType: 'address', name: 'newOwner', type: 'address' },
+//     ],
+//     name: 'OwnerChanged',
+//     type: 'event',
+//   },
+//   {
+//     anonymous: false,
+//     inputs: [
+//       { indexed: true, internalType: 'address', name: 'token0', type: 'address' },
+//       { indexed: true, internalType: 'address', name: 'token1', type: 'address' },
+//       { indexed: true, internalType: 'uint24', name: 'fee', type: 'uint24' },
+//       { indexed: false, internalType: 'int24', name: 'tickSpacing', type: 'int24' },
+//       { indexed: false, internalType: 'address', name: 'pool', type: 'address' },
+//     ],
+//     name: 'PoolCreated',
+//     type: 'event',
+//   },
+//   {
+//     inputs: [
+//       { internalType: 'address', name: 'tokenA', type: 'address' },
+//       { internalType: 'address', name: 'tokenB', type: 'address' },
+//       { internalType: 'uint24', name: 'fee', type: 'uint24' },
+//     ],
+//     name: 'createPool',
+//     outputs: [{ internalType: 'address', name: 'pool', type: 'address' }],
+//     stateMutability: 'nonpayable',
+//     type: 'function',
+//   },
+//   {
+//     inputs: [
+//       { internalType: 'uint24', name: 'fee', type: 'uint24' },
+//       { internalType: 'int24', name: 'tickSpacing', type: 'int24' },
+//     ],
+//     name: 'enableFeeAmount',
+//     outputs: [],
+//     stateMutability: 'nonpayable',
+//     type: 'function',
+//   },
+//   {
+//     inputs: [{ internalType: 'uint24', name: '', type: 'uint24' }],
+//     name: 'feeAmountTickSpacing',
+//     outputs: [{ internalType: 'int24', name: '', type: 'int24' }],
+//     stateMutability: 'view',
+//     type: 'function',
+//   },
+//   {
+//     inputs: [
+//       { internalType: 'address', name: '', type: 'address' },
+//       { internalType: 'address', name: '', type: 'address' },
+//       { internalType: 'uint24', name: '', type: 'uint24' },
+//     ],
+//     name: 'getPool',
+//     outputs: [{ internalType: 'address', name: '', type: 'address' }],
+//     stateMutability: 'view',
+//     type: 'function',
+//   },
+//   {
+//     inputs: [],
+//     name: 'owner',
+//     outputs: [{ internalType: 'address', name: '', type: 'address' }],
+//     stateMutability: 'view',
+//     type: 'function',
+//   },
+//   {
+//     inputs: [],
+//     name: 'parameters',
+//     outputs: [
+//       { internalType: 'address', name: 'factory', type: 'address' },
+//       { internalType: 'address', name: 'token0', type: 'address' },
+//       { internalType: 'address', name: 'token1', type: 'address' },
+//       { internalType: 'uint24', name: 'fee', type: 'uint24' },
+//       { internalType: 'int24', name: 'tickSpacing', type: 'int24' },
+//     ],
+//     stateMutability: 'view',
+//     type: 'function',
+//   },
+//   {
+//     inputs: [{ internalType: 'address', name: '_owner', type: 'address' }],
+//     name: 'setOwner',
+//     outputs: [],
+//     stateMutability: 'nonpayable',
+//     type: 'function',
+//   },
+// ]
 
-export const UNISWAP_V3_PAIR_ABI = [
-  { inputs: [], stateMutability: 'nonpayable', type: 'constructor' },
-  {
-    anonymous: false,
-    inputs: [
-      { indexed: true, internalType: 'address', name: 'owner', type: 'address' },
-      { indexed: true, internalType: 'int24', name: 'tickLower', type: 'int24' },
-      { indexed: true, internalType: 'int24', name: 'tickUpper', type: 'int24' },
-      { indexed: false, internalType: 'uint128', name: 'amount', type: 'uint128' },
-      { indexed: false, internalType: 'uint256', name: 'amount0', type: 'uint256' },
-      { indexed: false, internalType: 'uint256', name: 'amount1', type: 'uint256' },
-    ],
-    name: 'Burn',
-    type: 'event',
-  },
-  {
-    anonymous: false,
-    inputs: [
-      { indexed: true, internalType: 'address', name: 'owner', type: 'address' },
-      { indexed: false, internalType: 'address', name: 'recipient', type: 'address' },
-      { indexed: true, internalType: 'int24', name: 'tickLower', type: 'int24' },
-      { indexed: true, internalType: 'int24', name: 'tickUpper', type: 'int24' },
-      { indexed: false, internalType: 'uint128', name: 'amount0', type: 'uint128' },
-      { indexed: false, internalType: 'uint128', name: 'amount1', type: 'uint128' },
-    ],
-    name: 'Collect',
-    type: 'event',
-  },
-  {
-    anonymous: false,
-    inputs: [
-      { indexed: true, internalType: 'address', name: 'sender', type: 'address' },
-      { indexed: true, internalType: 'address', name: 'recipient', type: 'address' },
-      { indexed: false, internalType: 'uint128', name: 'amount0', type: 'uint128' },
-      { indexed: false, internalType: 'uint128', name: 'amount1', type: 'uint128' },
-    ],
-    name: 'CollectProtocol',
-    type: 'event',
-  },
-  {
-    anonymous: false,
-    inputs: [
-      { indexed: true, internalType: 'address', name: 'sender', type: 'address' },
-      { indexed: true, internalType: 'address', name: 'recipient', type: 'address' },
-      { indexed: false, internalType: 'uint256', name: 'amount0', type: 'uint256' },
-      { indexed: false, internalType: 'uint256', name: 'amount1', type: 'uint256' },
-      { indexed: false, internalType: 'uint256', name: 'paid0', type: 'uint256' },
-      { indexed: false, internalType: 'uint256', name: 'paid1', type: 'uint256' },
-    ],
-    name: 'Flash',
-    type: 'event',
-  },
-  {
-    anonymous: false,
-    inputs: [
-      { indexed: false, internalType: 'uint16', name: 'observationCardinalityNextOld', type: 'uint16' },
-      { indexed: false, internalType: 'uint16', name: 'observationCardinalityNextNew', type: 'uint16' },
-    ],
-    name: 'IncreaseObservationCardinalityNext',
-    type: 'event',
-  },
-  {
-    anonymous: false,
-    inputs: [
-      { indexed: false, internalType: 'uint160', name: 'sqrtPriceX96', type: 'uint160' },
-      { indexed: false, internalType: 'int24', name: 'tick', type: 'int24' },
-    ],
-    name: 'Initialize',
-    type: 'event',
-  },
-  {
-    anonymous: false,
-    inputs: [
-      { indexed: false, internalType: 'address', name: 'sender', type: 'address' },
-      { indexed: true, internalType: 'address', name: 'owner', type: 'address' },
-      { indexed: true, internalType: 'int24', name: 'tickLower', type: 'int24' },
-      { indexed: true, internalType: 'int24', name: 'tickUpper', type: 'int24' },
-      { indexed: false, internalType: 'uint128', name: 'amount', type: 'uint128' },
-      { indexed: false, internalType: 'uint256', name: 'amount0', type: 'uint256' },
-      { indexed: false, internalType: 'uint256', name: 'amount1', type: 'uint256' },
-    ],
-    name: 'Mint',
-    type: 'event',
-  },
-  {
-    anonymous: false,
-    inputs: [
-      { indexed: false, internalType: 'uint8', name: 'feeProtocol0Old', type: 'uint8' },
-      { indexed: false, internalType: 'uint8', name: 'feeProtocol1Old', type: 'uint8' },
-      { indexed: false, internalType: 'uint8', name: 'feeProtocol0New', type: 'uint8' },
-      { indexed: false, internalType: 'uint8', name: 'feeProtocol1New', type: 'uint8' },
-    ],
-    name: 'SetFeeProtocol',
-    type: 'event',
-  },
-  {
-    anonymous: false,
-    inputs: [
-      { indexed: true, internalType: 'address', name: 'sender', type: 'address' },
-      { indexed: true, internalType: 'address', name: 'recipient', type: 'address' },
-      { indexed: false, internalType: 'int256', name: 'amount0', type: 'int256' },
-      { indexed: false, internalType: 'int256', name: 'amount1', type: 'int256' },
-      { indexed: false, internalType: 'uint160', name: 'sqrtPriceX96', type: 'uint160' },
-      { indexed: false, internalType: 'uint128', name: 'liquidity', type: 'uint128' },
-      { indexed: false, internalType: 'int24', name: 'tick', type: 'int24' },
-    ],
-    name: 'Swap',
-    type: 'event',
-  },
-  {
-    inputs: [
-      { internalType: 'int24', name: 'tickLower', type: 'int24' },
-      { internalType: 'int24', name: 'tickUpper', type: 'int24' },
-      { internalType: 'uint128', name: 'amount', type: 'uint128' },
-    ],
-    name: 'burn',
-    outputs: [
-      { internalType: 'uint256', name: 'amount0', type: 'uint256' },
-      { internalType: 'uint256', name: 'amount1', type: 'uint256' },
-    ],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      { internalType: 'address', name: 'recipient', type: 'address' },
-      { internalType: 'int24', name: 'tickLower', type: 'int24' },
-      { internalType: 'int24', name: 'tickUpper', type: 'int24' },
-      { internalType: 'uint128', name: 'amount0Requested', type: 'uint128' },
-      { internalType: 'uint128', name: 'amount1Requested', type: 'uint128' },
-    ],
-    name: 'collect',
-    outputs: [
-      { internalType: 'uint128', name: 'amount0', type: 'uint128' },
-      { internalType: 'uint128', name: 'amount1', type: 'uint128' },
-    ],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      { internalType: 'address', name: 'recipient', type: 'address' },
-      { internalType: 'uint128', name: 'amount0Requested', type: 'uint128' },
-      { internalType: 'uint128', name: 'amount1Requested', type: 'uint128' },
-    ],
-    name: 'collectProtocol',
-    outputs: [
-      { internalType: 'uint128', name: 'amount0', type: 'uint128' },
-      { internalType: 'uint128', name: 'amount1', type: 'uint128' },
-    ],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'factory',
-    outputs: [{ internalType: 'address', name: '', type: 'address' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'fee',
-    outputs: [{ internalType: 'uint24', name: '', type: 'uint24' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'feeGrowthGlobal0X128',
-    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'feeGrowthGlobal1X128',
-    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      { internalType: 'address', name: 'recipient', type: 'address' },
-      { internalType: 'uint256', name: 'amount0', type: 'uint256' },
-      { internalType: 'uint256', name: 'amount1', type: 'uint256' },
-      { internalType: 'bytes', name: 'data', type: 'bytes' },
-    ],
-    name: 'flash',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [{ internalType: 'uint16', name: 'observationCardinalityNext', type: 'uint16' }],
-    name: 'increaseObservationCardinalityNext',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [{ internalType: 'uint160', name: 'sqrtPriceX96', type: 'uint160' }],
-    name: 'initialize',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'liquidity',
-    outputs: [{ internalType: 'uint128', name: '', type: 'uint128' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'maxLiquidityPerTick',
-    outputs: [{ internalType: 'uint128', name: '', type: 'uint128' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      { internalType: 'address', name: 'recipient', type: 'address' },
-      { internalType: 'int24', name: 'tickLower', type: 'int24' },
-      { internalType: 'int24', name: 'tickUpper', type: 'int24' },
-      { internalType: 'uint128', name: 'amount', type: 'uint128' },
-      { internalType: 'bytes', name: 'data', type: 'bytes' },
-    ],
-    name: 'mint',
-    outputs: [
-      { internalType: 'uint256', name: 'amount0', type: 'uint256' },
-      { internalType: 'uint256', name: 'amount1', type: 'uint256' },
-    ],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
-    name: 'observations',
-    outputs: [
-      { internalType: 'uint32', name: 'blockTimestamp', type: 'uint32' },
-      { internalType: 'int56', name: 'tickCumulative', type: 'int56' },
-      { internalType: 'uint160', name: 'secondsPerLiquidityCumulativeX128', type: 'uint160' },
-      { internalType: 'bool', name: 'initialized', type: 'bool' },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [{ internalType: 'uint32[]', name: 'secondsAgos', type: 'uint32[]' }],
-    name: 'observe',
-    outputs: [
-      { internalType: 'int56[]', name: 'tickCumulatives', type: 'int56[]' },
-      { internalType: 'uint160[]', name: 'secondsPerLiquidityCumulativeX128s', type: 'uint160[]' },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [{ internalType: 'bytes32', name: '', type: 'bytes32' }],
-    name: 'positions',
-    outputs: [
-      { internalType: 'uint128', name: 'liquidity', type: 'uint128' },
-      { internalType: 'uint256', name: 'feeGrowthInside0LastX128', type: 'uint256' },
-      { internalType: 'uint256', name: 'feeGrowthInside1LastX128', type: 'uint256' },
-      { internalType: 'uint128', name: 'tokensOwed0', type: 'uint128' },
-      { internalType: 'uint128', name: 'tokensOwed1', type: 'uint128' },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'protocolFees',
-    outputs: [
-      { internalType: 'uint128', name: 'token0', type: 'uint128' },
-      { internalType: 'uint128', name: 'token1', type: 'uint128' },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      { internalType: 'uint8', name: 'feeProtocol0', type: 'uint8' },
-      { internalType: 'uint8', name: 'feeProtocol1', type: 'uint8' },
-    ],
-    name: 'setFeeProtocol',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'slot0',
-    outputs: [
-      { internalType: 'uint160', name: 'sqrtPriceX96', type: 'uint160' },
-      { internalType: 'int24', name: 'tick', type: 'int24' },
-      { internalType: 'uint16', name: 'observationIndex', type: 'uint16' },
-      { internalType: 'uint16', name: 'observationCardinality', type: 'uint16' },
-      { internalType: 'uint16', name: 'observationCardinalityNext', type: 'uint16' },
-      { internalType: 'uint8', name: 'feeProtocol', type: 'uint8' },
-      { internalType: 'bool', name: 'unlocked', type: 'bool' },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      { internalType: 'int24', name: 'tickLower', type: 'int24' },
-      { internalType: 'int24', name: 'tickUpper', type: 'int24' },
-    ],
-    name: 'snapshotCumulativesInside',
-    outputs: [
-      { internalType: 'int56', name: 'tickCumulativeInside', type: 'int56' },
-      { internalType: 'uint160', name: 'secondsPerLiquidityInsideX128', type: 'uint160' },
-      { internalType: 'uint32', name: 'secondsInside', type: 'uint32' },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      { internalType: 'address', name: 'recipient', type: 'address' },
-      { internalType: 'bool', name: 'zeroForOne', type: 'bool' },
-      { internalType: 'int256', name: 'amountSpecified', type: 'int256' },
-      { internalType: 'uint160', name: 'sqrtPriceLimitX96', type: 'uint160' },
-      { internalType: 'bytes', name: 'data', type: 'bytes' },
-    ],
-    name: 'swap',
-    outputs: [
-      { internalType: 'int256', name: 'amount0', type: 'int256' },
-      { internalType: 'int256', name: 'amount1', type: 'int256' },
-    ],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [{ internalType: 'int16', name: '', type: 'int16' }],
-    name: 'tickBitmap',
-    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'tickSpacing',
-    outputs: [{ internalType: 'int24', name: '', type: 'int24' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [{ internalType: 'int24', name: '', type: 'int24' }],
-    name: 'ticks',
-    outputs: [
-      { internalType: 'uint128', name: 'liquidityGross', type: 'uint128' },
-      { internalType: 'int128', name: 'liquidityNet', type: 'int128' },
-      { internalType: 'uint256', name: 'feeGrowthOutside0X128', type: 'uint256' },
-      { internalType: 'uint256', name: 'feeGrowthOutside1X128', type: 'uint256' },
-      { internalType: 'int56', name: 'tickCumulativeOutside', type: 'int56' },
-      { internalType: 'uint160', name: 'secondsPerLiquidityOutsideX128', type: 'uint160' },
-      { internalType: 'uint32', name: 'secondsOutside', type: 'uint32' },
-      { internalType: 'bool', name: 'initialized', type: 'bool' },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'token0',
-    outputs: [{ internalType: 'address', name: '', type: 'address' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'token1',
-    outputs: [{ internalType: 'address', name: '', type: 'address' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-]
+// export const UNISWAP_V3_PAIR_ABI = [
+//   { inputs: [], stateMutability: 'nonpayable', type: 'constructor' },
+//   {
+//     anonymous: false,
+//     inputs: [
+//       { indexed: true, internalType: 'address', name: 'owner', type: 'address' },
+//       { indexed: true, internalType: 'int24', name: 'tickLower', type: 'int24' },
+//       { indexed: true, internalType: 'int24', name: 'tickUpper', type: 'int24' },
+//       { indexed: false, internalType: 'uint128', name: 'amount', type: 'uint128' },
+//       { indexed: false, internalType: 'uint256', name: 'amount0', type: 'uint256' },
+//       { indexed: false, internalType: 'uint256', name: 'amount1', type: 'uint256' },
+//     ],
+//     name: 'Burn',
+//     type: 'event',
+//   },
+//   {
+//     anonymous: false,
+//     inputs: [
+//       { indexed: true, internalType: 'address', name: 'owner', type: 'address' },
+//       { indexed: false, internalType: 'address', name: 'recipient', type: 'address' },
+//       { indexed: true, internalType: 'int24', name: 'tickLower', type: 'int24' },
+//       { indexed: true, internalType: 'int24', name: 'tickUpper', type: 'int24' },
+//       { indexed: false, internalType: 'uint128', name: 'amount0', type: 'uint128' },
+//       { indexed: false, internalType: 'uint128', name: 'amount1', type: 'uint128' },
+//     ],
+//     name: 'Collect',
+//     type: 'event',
+//   },
+//   {
+//     anonymous: false,
+//     inputs: [
+//       { indexed: true, internalType: 'address', name: 'sender', type: 'address' },
+//       { indexed: true, internalType: 'address', name: 'recipient', type: 'address' },
+//       { indexed: false, internalType: 'uint128', name: 'amount0', type: 'uint128' },
+//       { indexed: false, internalType: 'uint128', name: 'amount1', type: 'uint128' },
+//     ],
+//     name: 'CollectProtocol',
+//     type: 'event',
+//   },
+//   {
+//     anonymous: false,
+//     inputs: [
+//       { indexed: true, internalType: 'address', name: 'sender', type: 'address' },
+//       { indexed: true, internalType: 'address', name: 'recipient', type: 'address' },
+//       { indexed: false, internalType: 'uint256', name: 'amount0', type: 'uint256' },
+//       { indexed: false, internalType: 'uint256', name: 'amount1', type: 'uint256' },
+//       { indexed: false, internalType: 'uint256', name: 'paid0', type: 'uint256' },
+//       { indexed: false, internalType: 'uint256', name: 'paid1', type: 'uint256' },
+//     ],
+//     name: 'Flash',
+//     type: 'event',
+//   },
+//   {
+//     anonymous: false,
+//     inputs: [
+//       { indexed: false, internalType: 'uint16', name: 'observationCardinalityNextOld', type: 'uint16' },
+//       { indexed: false, internalType: 'uint16', name: 'observationCardinalityNextNew', type: 'uint16' },
+//     ],
+//     name: 'IncreaseObservationCardinalityNext',
+//     type: 'event',
+//   },
+//   {
+//     anonymous: false,
+//     inputs: [
+//       { indexed: false, internalType: 'uint160', name: 'sqrtPriceX96', type: 'uint160' },
+//       { indexed: false, internalType: 'int24', name: 'tick', type: 'int24' },
+//     ],
+//     name: 'Initialize',
+//     type: 'event',
+//   },
+//   {
+//     anonymous: false,
+//     inputs: [
+//       { indexed: false, internalType: 'address', name: 'sender', type: 'address' },
+//       { indexed: true, internalType: 'address', name: 'owner', type: 'address' },
+//       { indexed: true, internalType: 'int24', name: 'tickLower', type: 'int24' },
+//       { indexed: true, internalType: 'int24', name: 'tickUpper', type: 'int24' },
+//       { indexed: false, internalType: 'uint128', name: 'amount', type: 'uint128' },
+//       { indexed: false, internalType: 'uint256', name: 'amount0', type: 'uint256' },
+//       { indexed: false, internalType: 'uint256', name: 'amount1', type: 'uint256' },
+//     ],
+//     name: 'Mint',
+//     type: 'event',
+//   },
+//   {
+//     anonymous: false,
+//     inputs: [
+//       { indexed: false, internalType: 'uint8', name: 'feeProtocol0Old', type: 'uint8' },
+//       { indexed: false, internalType: 'uint8', name: 'feeProtocol1Old', type: 'uint8' },
+//       { indexed: false, internalType: 'uint8', name: 'feeProtocol0New', type: 'uint8' },
+//       { indexed: false, internalType: 'uint8', name: 'feeProtocol1New', type: 'uint8' },
+//     ],
+//     name: 'SetFeeProtocol',
+//     type: 'event',
+//   },
+//   {
+//     anonymous: false,
+//     inputs: [
+//       { indexed: true, internalType: 'address', name: 'sender', type: 'address' },
+//       { indexed: true, internalType: 'address', name: 'recipient', type: 'address' },
+//       { indexed: false, internalType: 'int256', name: 'amount0', type: 'int256' },
+//       { indexed: false, internalType: 'int256', name: 'amount1', type: 'int256' },
+//       { indexed: false, internalType: 'uint160', name: 'sqrtPriceX96', type: 'uint160' },
+//       { indexed: false, internalType: 'uint128', name: 'liquidity', type: 'uint128' },
+//       { indexed: false, internalType: 'int24', name: 'tick', type: 'int24' },
+//     ],
+//     name: 'Swap',
+//     type: 'event',
+//   },
+//   {
+//     inputs: [
+//       { internalType: 'int24', name: 'tickLower', type: 'int24' },
+//       { internalType: 'int24', name: 'tickUpper', type: 'int24' },
+//       { internalType: 'uint128', name: 'amount', type: 'uint128' },
+//     ],
+//     name: 'burn',
+//     outputs: [
+//       { internalType: 'uint256', name: 'amount0', type: 'uint256' },
+//       { internalType: 'uint256', name: 'amount1', type: 'uint256' },
+//     ],
+//     stateMutability: 'nonpayable',
+//     type: 'function',
+//   },
+//   {
+//     inputs: [
+//       { internalType: 'address', name: 'recipient', type: 'address' },
+//       { internalType: 'int24', name: 'tickLower', type: 'int24' },
+//       { internalType: 'int24', name: 'tickUpper', type: 'int24' },
+//       { internalType: 'uint128', name: 'amount0Requested', type: 'uint128' },
+//       { internalType: 'uint128', name: 'amount1Requested', type: 'uint128' },
+//     ],
+//     name: 'collect',
+//     outputs: [
+//       { internalType: 'uint128', name: 'amount0', type: 'uint128' },
+//       { internalType: 'uint128', name: 'amount1', type: 'uint128' },
+//     ],
+//     stateMutability: 'nonpayable',
+//     type: 'function',
+//   },
+//   {
+//     inputs: [
+//       { internalType: 'address', name: 'recipient', type: 'address' },
+//       { internalType: 'uint128', name: 'amount0Requested', type: 'uint128' },
+//       { internalType: 'uint128', name: 'amount1Requested', type: 'uint128' },
+//     ],
+//     name: 'collectProtocol',
+//     outputs: [
+//       { internalType: 'uint128', name: 'amount0', type: 'uint128' },
+//       { internalType: 'uint128', name: 'amount1', type: 'uint128' },
+//     ],
+//     stateMutability: 'nonpayable',
+//     type: 'function',
+//   },
+//   {
+//     inputs: [],
+//     name: 'factory',
+//     outputs: [{ internalType: 'address', name: '', type: 'address' }],
+//     stateMutability: 'view',
+//     type: 'function',
+//   },
+//   {
+//     inputs: [],
+//     name: 'fee',
+//     outputs: [{ internalType: 'uint24', name: '', type: 'uint24' }],
+//     stateMutability: 'view',
+//     type: 'function',
+//   },
+//   {
+//     inputs: [],
+//     name: 'feeGrowthGlobal0X128',
+//     outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+//     stateMutability: 'view',
+//     type: 'function',
+//   },
+//   {
+//     inputs: [],
+//     name: 'feeGrowthGlobal1X128',
+//     outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+//     stateMutability: 'view',
+//     type: 'function',
+//   },
+//   {
+//     inputs: [
+//       { internalType: 'address', name: 'recipient', type: 'address' },
+//       { internalType: 'uint256', name: 'amount0', type: 'uint256' },
+//       { internalType: 'uint256', name: 'amount1', type: 'uint256' },
+//       { internalType: 'bytes', name: 'data', type: 'bytes' },
+//     ],
+//     name: 'flash',
+//     outputs: [],
+//     stateMutability: 'nonpayable',
+//     type: 'function',
+//   },
+//   {
+//     inputs: [{ internalType: 'uint16', name: 'observationCardinalityNext', type: 'uint16' }],
+//     name: 'increaseObservationCardinalityNext',
+//     outputs: [],
+//     stateMutability: 'nonpayable',
+//     type: 'function',
+//   },
+//   {
+//     inputs: [{ internalType: 'uint160', name: 'sqrtPriceX96', type: 'uint160' }],
+//     name: 'initialize',
+//     outputs: [],
+//     stateMutability: 'nonpayable',
+//     type: 'function',
+//   },
+//   {
+//     inputs: [],
+//     name: 'liquidity',
+//     outputs: [{ internalType: 'uint128', name: '', type: 'uint128' }],
+//     stateMutability: 'view',
+//     type: 'function',
+//   },
+//   {
+//     inputs: [],
+//     name: 'maxLiquidityPerTick',
+//     outputs: [{ internalType: 'uint128', name: '', type: 'uint128' }],
+//     stateMutability: 'view',
+//     type: 'function',
+//   },
+//   {
+//     inputs: [
+//       { internalType: 'address', name: 'recipient', type: 'address' },
+//       { internalType: 'int24', name: 'tickLower', type: 'int24' },
+//       { internalType: 'int24', name: 'tickUpper', type: 'int24' },
+//       { internalType: 'uint128', name: 'amount', type: 'uint128' },
+//       { internalType: 'bytes', name: 'data', type: 'bytes' },
+//     ],
+//     name: 'mint',
+//     outputs: [
+//       { internalType: 'uint256', name: 'amount0', type: 'uint256' },
+//       { internalType: 'uint256', name: 'amount1', type: 'uint256' },
+//     ],
+//     stateMutability: 'nonpayable',
+//     type: 'function',
+//   },
+//   {
+//     inputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+//     name: 'observations',
+//     outputs: [
+//       { internalType: 'uint32', name: 'blockTimestamp', type: 'uint32' },
+//       { internalType: 'int56', name: 'tickCumulative', type: 'int56' },
+//       { internalType: 'uint160', name: 'secondsPerLiquidityCumulativeX128', type: 'uint160' },
+//       { internalType: 'bool', name: 'initialized', type: 'bool' },
+//     ],
+//     stateMutability: 'view',
+//     type: 'function',
+//   },
+//   {
+//     inputs: [{ internalType: 'uint32[]', name: 'secondsAgos', type: 'uint32[]' }],
+//     name: 'observe',
+//     outputs: [
+//       { internalType: 'int56[]', name: 'tickCumulatives', type: 'int56[]' },
+//       { internalType: 'uint160[]', name: 'secondsPerLiquidityCumulativeX128s', type: 'uint160[]' },
+//     ],
+//     stateMutability: 'view',
+//     type: 'function',
+//   },
+//   {
+//     inputs: [{ internalType: 'bytes32', name: '', type: 'bytes32' }],
+//     name: 'positions',
+//     outputs: [
+//       { internalType: 'uint128', name: 'liquidity', type: 'uint128' },
+//       { internalType: 'uint256', name: 'feeGrowthInside0LastX128', type: 'uint256' },
+//       { internalType: 'uint256', name: 'feeGrowthInside1LastX128', type: 'uint256' },
+//       { internalType: 'uint128', name: 'tokensOwed0', type: 'uint128' },
+//       { internalType: 'uint128', name: 'tokensOwed1', type: 'uint128' },
+//     ],
+//     stateMutability: 'view',
+//     type: 'function',
+//   },
+//   {
+//     inputs: [],
+//     name: 'protocolFees',
+//     outputs: [
+//       { internalType: 'uint128', name: 'token0', type: 'uint128' },
+//       { internalType: 'uint128', name: 'token1', type: 'uint128' },
+//     ],
+//     stateMutability: 'view',
+//     type: 'function',
+//   },
+//   {
+//     inputs: [
+//       { internalType: 'uint8', name: 'feeProtocol0', type: 'uint8' },
+//       { internalType: 'uint8', name: 'feeProtocol1', type: 'uint8' },
+//     ],
+//     name: 'setFeeProtocol',
+//     outputs: [],
+//     stateMutability: 'nonpayable',
+//     type: 'function',
+//   },
+//   {
+//     inputs: [],
+//     name: 'slot0',
+//     outputs: [
+//       { internalType: 'uint160', name: 'sqrtPriceX96', type: 'uint160' },
+//       { internalType: 'int24', name: 'tick', type: 'int24' },
+//       { internalType: 'uint16', name: 'observationIndex', type: 'uint16' },
+//       { internalType: 'uint16', name: 'observationCardinality', type: 'uint16' },
+//       { internalType: 'uint16', name: 'observationCardinalityNext', type: 'uint16' },
+//       { internalType: 'uint8', name: 'feeProtocol', type: 'uint8' },
+//       { internalType: 'bool', name: 'unlocked', type: 'bool' },
+//     ],
+//     stateMutability: 'view',
+//     type: 'function',
+//   },
+//   {
+//     inputs: [
+//       { internalType: 'int24', name: 'tickLower', type: 'int24' },
+//       { internalType: 'int24', name: 'tickUpper', type: 'int24' },
+//     ],
+//     name: 'snapshotCumulativesInside',
+//     outputs: [
+//       { internalType: 'int56', name: 'tickCumulativeInside', type: 'int56' },
+//       { internalType: 'uint160', name: 'secondsPerLiquidityInsideX128', type: 'uint160' },
+//       { internalType: 'uint32', name: 'secondsInside', type: 'uint32' },
+//     ],
+//     stateMutability: 'view',
+//     type: 'function',
+//   },
+//   {
+//     inputs: [
+//       { internalType: 'address', name: 'recipient', type: 'address' },
+//       { internalType: 'bool', name: 'zeroForOne', type: 'bool' },
+//       { internalType: 'int256', name: 'amountSpecified', type: 'int256' },
+//       { internalType: 'uint160', name: 'sqrtPriceLimitX96', type: 'uint160' },
+//       { internalType: 'bytes', name: 'data', type: 'bytes' },
+//     ],
+//     name: 'swap',
+//     outputs: [
+//       { internalType: 'int256', name: 'amount0', type: 'int256' },
+//       { internalType: 'int256', name: 'amount1', type: 'int256' },
+//     ],
+//     stateMutability: 'nonpayable',
+//     type: 'function',
+//   },
+//   {
+//     inputs: [{ internalType: 'int16', name: '', type: 'int16' }],
+//     name: 'tickBitmap',
+//     outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+//     stateMutability: 'view',
+//     type: 'function',
+//   },
+//   {
+//     inputs: [],
+//     name: 'tickSpacing',
+//     outputs: [{ internalType: 'int24', name: '', type: 'int24' }],
+//     stateMutability: 'view',
+//     type: 'function',
+//   },
+//   {
+//     inputs: [{ internalType: 'int24', name: '', type: 'int24' }],
+//     name: 'ticks',
+//     outputs: [
+//       { internalType: 'uint128', name: 'liquidityGross', type: 'uint128' },
+//       { internalType: 'int128', name: 'liquidityNet', type: 'int128' },
+//       { internalType: 'uint256', name: 'feeGrowthOutside0X128', type: 'uint256' },
+//       { internalType: 'uint256', name: 'feeGrowthOutside1X128', type: 'uint256' },
+//       { internalType: 'int56', name: 'tickCumulativeOutside', type: 'int56' },
+//       { internalType: 'uint160', name: 'secondsPerLiquidityOutsideX128', type: 'uint160' },
+//       { internalType: 'uint32', name: 'secondsOutside', type: 'uint32' },
+//       { internalType: 'bool', name: 'initialized', type: 'bool' },
+//     ],
+//     stateMutability: 'view',
+//     type: 'function',
+//   },
+//   {
+//     inputs: [],
+//     name: 'token0',
+//     outputs: [{ internalType: 'address', name: '', type: 'address' }],
+//     stateMutability: 'view',
+//     type: 'function',
+//   },
+//   {
+//     inputs: [],
+//     name: 'token1',
+//     outputs: [{ internalType: 'address', name: '', type: 'address' }],
+//     stateMutability: 'view',
+//     type: 'function',
+//   },
+// ]
 
 export default {
   UNISWAP_FACTORY_ABI,
-  UNISWAP_V3_FACTORY_ABI,
   UNISWAP_PAIR_ABI,
-  UNISWAP_V3_PAIR_ABI,
+  // UNISWAP_V3_FACTORY_ABI,
+  // UNISWAP_V3_PAIR_ABI,
   ERC20_ABI,
   RPC_URL,
   BASE_TOKENS,

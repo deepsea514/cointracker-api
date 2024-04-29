@@ -7,10 +7,11 @@
 // import { SPOOKY_SWAP_CONFIG } from './exchanges/ftm/spookyswap'
 // import { SUSHI_SWAP_CONFIG } from './exchanges/ftm/sushiswap'
 // import { ZOO_DEX_CONFIG } from './exchanges/ftm/zoodex'
-import { PULSE_DEX_CONFIG } from './exchanges/pls/pulsedex'
-import { PULSE_DEX2_CONFIG } from './exchanges/pls/pulsedex2'
-import { FUSION_DEX_CONFIG } from './exchanges/mnt/fusionx'
-import { ROCKET_SWAP_CONFIG } from './exchanges/base/rocketswap'
+// import { PULSE_DEX_CONFIG } from './exchanges/pls/pulsedex'
+// import { PULSE_DEX2_CONFIG } from './exchanges/pls/pulsedex2'
+// import { FUSION_DEX_CONFIG } from './exchanges/mnt/fusionx'
+// import { ROCKET_SWAP_CONFIG } from './exchanges/base/rocketswap'
+import { HERCULES_DEX_CONFIG } from './exchanges/metis/hercules'
 
 // Subgraph constants
 
@@ -23,10 +24,11 @@ export enum EXCHANGES {
   // PAINT_SWAP = 'paint', // FTM
   // ZOO_DEX = 'zoo', // FTM
   // SHIBA_SWAP = 'shiba', // FTM
-  PULSE_DEX = 'Diablo-PLSXV1', // PLS V1
-  PULSE_DEX2 = 'Diablo-PLSXV2', // PLS V2
-  FUSION_DEX = 'fusionx', // MNT
-  ROCKET_SWAP = 'rocketswap', // WETH
+  // PULSE_DEX = 'Diablo-PLSXV1', // PLS V1
+  // PULSE_DEX2 = 'Diablo-PLSXV2', // PLS V2
+  // FUSION_DEX = 'fusionx', // MNT
+  // ROCKET_SWAP = 'rocketswap', // WETH
+  HERCULES_DEX = 'Hercules',
 }
 
 export enum CHAINS {
@@ -35,10 +37,11 @@ export enum CHAINS {
   // FTM = 250,
   // MATIC = 137,
   // XDAI = 100,
-  PLS = 369,
-  PLS2 = 369,
-  MNT = 5000,
-  BASE = 8453,
+  // PLS = 369,
+  // PLS2 = 369,
+  // MNT = 5000,
+  // BASE = 8453,
+  METIS = 1088,
 }
 
 export const SUBGRAPHS = {
@@ -57,15 +60,18 @@ export const SUBGRAPHS = {
   //   [`${EXCHANGES.PAINT_SWAP}`]: PAINT_SWAP_CONFIG,
   //   [`${EXCHANGES.SHIBA_SWAP}`]: SHIBA_SWAP_CONFIG,
   // },
-  [`${CHAINS.PLS}`]: {
-    [`${EXCHANGES.PULSE_DEX}`]: PULSE_DEX_CONFIG,
-    [`${EXCHANGES.PULSE_DEX2}`]: PULSE_DEX2_CONFIG,
-  },
-  [`${CHAINS.MNT}`]: {
-    [`${EXCHANGES.FUSION_DEX}`]: FUSION_DEX_CONFIG,
-  },
-  [`${CHAINS.BASE}`]: {
-    [`${EXCHANGES.ROCKET_SWAP}`]: ROCKET_SWAP_CONFIG,
+  // [`${CHAINS.PLS}`]: {
+  //   [`${EXCHANGES.PULSE_DEX}`]: PULSE_DEX_CONFIG,
+  //   [`${EXCHANGES.PULSE_DEX2}`]: PULSE_DEX2_CONFIG,
+  // },
+  // [`${CHAINS.MNT}`]: {
+  //   [`${EXCHANGES.FUSION_DEX}`]: FUSION_DEX_CONFIG,
+  // },
+  // [`${CHAINS.BASE}`]: {
+  //   [`${EXCHANGES.ROCKET_SWAP}`]: ROCKET_SWAP_CONFIG,
+  // },
+  [`${CHAINS.METIS}`]: {
+    [`${EXCHANGES.HERCULES_DEX}`]: HERCULES_DEX_CONFIG,
   },
 }
 
