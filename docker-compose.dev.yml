@@ -29,7 +29,7 @@ services:
       ME_CONFIG_BASICAUTH_PASSWORD: aurora@123
       ME_CONFIG_MONGODB_ADMINUSERNAME: aurora
       ME_CONFIG_MONGODB_ADMINPASSWORD: xTC83d93GmPVkKit
-      ME_CONFIG_MONGODB_SERVER: mongo
+      ME_CONFIG_MONGODB_SERVER: mongodb
   tracker:
     image: node:16.5-alpine
     depends_on:
