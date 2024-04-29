@@ -52,7 +52,7 @@ export const RPC_URL: IChainDetails<string> = {
   // [CHAINS.PLS]: process.env.PLS_URL ?? 'https://rpc.pulsechain.com/',
   // [CHAINS.MNT]: process.env.MNT_URL ?? 'https://rpc.mantle.xyz/',
   // [CHAINS.BASE]: process.env.BASE_URL ?? 'https://mainnet.base.org/',
-  [CHAINS.METIS]: process.env.METIS_URL ?? 'https://lb.nodies.app/v1/0fdd0b2f9bb84e8c85c3b81a94e2162e/',
+  [CHAINS.METIS]: process.env.METIS_URL ?? 'https://andromeda.metis.io/?owner=1088/',
   // [CHAINS.BSC]: process.env.BSC_URL ?? 'https://bsc-dataseed.binance.org/',
   // [CHAINS.ETH]: process.env.ETH_URL ?? 'https://mainnet.infura.io/v3/',
   // [CHAINS.MATIC]: process.env.MATIC_URL ?? 'https://rpc-mainnet.matic.network',

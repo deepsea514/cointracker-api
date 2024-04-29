@@ -56,7 +56,7 @@ services:
       # PLS_URL: https://rpc.pulsechain.com/
       # MNT_URL: https://rpc.mantle.xyz/
       # BASE_URL: https://mainnet.base.org/
-      METIS_URL: https://lb.nodies.app/v1/0fdd0b2f9bb84e8c85c3b81a94e2162e/
+      METIS_URL: https://andromeda.metis.io/?owner=1088/
       JWT_SECRET: xTC83d93GmPVkKitxTC83d93GmPVkKitxTC83d93GmPVkKit
       JWT_EXPIRY: 1d
 volumes:
