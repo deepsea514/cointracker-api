@@ -52,7 +52,7 @@ export const RPC_URL: IChainDetails<string> = {
   // [CHAINS.PLS]: process.env.PLS_URL ?? 'https://rpc.pulsechain.com/',
   // [CHAINS.MNT]: process.env.MNT_URL ?? 'https://rpc.mantle.xyz/',
   // [CHAINS.BASE]: process.env.BASE_URL ?? 'https://mainnet.base.org/',
-  [CHAINS.METIS]: process.env.METIS_URL ?? 'https://andromeda.metis.io/?owner=1088/',
+  [CHAINS.METIS]: process.env.METIS_URL ?? 'https://lb.nodies.app/v1/0fdd0b2f9bb84e8c85c3b81a94e2162e',
   // [CHAINS.BSC]: process.env.BSC_URL ?? 'https://bsc-dataseed.binance.org/',
   // [CHAINS.ETH]: process.env.ETH_URL ?? 'https://mainnet.infura.io/v3/',
   // [CHAINS.MATIC]: process.env.MATIC_URL ?? 'https://rpc-mainnet.matic.network',
@@ -98,7 +98,7 @@ export const BASE_TOKENS: IChainDetails<DEFAULT_CHAIN_TOKENS> = {
   //   FALLBACK: '0x6653dd4b92a0e5bf8ae570a98906d9d6fd2eec09', // rckt
   // },
   [CHAINS.METIS]: {
-    NATIVE: '0x9E32b13ce7f2E80A01932B42553652E053D6ed8e', // metis
+    NATIVE: '0x75cb093E4D61d2A2e65D8e0BBb01DE8d89b53481', // metis
     STABLE: '0xEA32A96608495e54156Ae48931A7c20f0dcc1a21', // m.usdc
     FALLBACK: '0xbB1676046C36BCd2F6fD08d8f60672c7087d9aDF', // torch
   },
