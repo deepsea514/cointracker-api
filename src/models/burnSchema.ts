@@ -14,29 +14,13 @@ export interface IBurnEvent extends Document {
   amount0: number
   amount1: number
   amountUSD: string
-  amountETH?: number
-  amountPLS?: number
-  amountMNT?: number
-  amountBNB?: number
+  amountMETIS?: number
   pairLiquidityUSD: number
-  pairLiquidityETH?: number
-  pairLiquidityPLS?: number
-  pairLiquidityMNT?: number
-  pairLiquidityBNB?: number
+  pairLiquidityMETIS?: number
   token0PriceUSD: number
   token1PriceUSD: number
-  token0PriceETH?: number
-  token1PriceETH?: number
-  // amountFTM?: number
-  // pairLiquidityFTM?: number
-  // token0PriceFTM?: number
-  // token1PriceFTM?: number
-  token0PricePLS?: number
-  token1PricePLS?: number
-  token0PriceMNT?: number
-  token1PriceMNT?: number
-  token0PriceBNB?: number
-  token1PriceBNB?: number
+  token0PriceMETIS?: number
+  token1PriceMETIS?: number
   walletAddress: string
   walletCategory: string
   AMM: string
@@ -57,127 +41,31 @@ const BurnSchema = new mongoose.Schema<IBurnEvent>({
   amount0: Number,
   amount1: Number,
   amountUSD: String,
-  amountETH: {
+  amountMETIS: {
     type: Number,
     required: function (this: IBurnEvent) {
-      return parseInt(this.network) == 1 || parseInt(this.network) == 8453
-    },
-  },
-  amountBNB: {
-    type: Number,
-    required: function (this: IBurnEvent) {
-      return parseInt(this.network) == 56
-    },
-  },
-  // amountFTM: {
-  //   type: Number,
-  //   required: function (this: IBurnEvent) {
-  //     return parseInt(this.network) == 250
-  //   },
-  // },
-  amountPLS: {
-    type: Number,
-    required: function (this: IBurnEvent) {
-      return parseInt(this.network) == 369
-    },
-  },
-  amountMNT: {
-    type: Number,
-    required: function (this: IBurnEvent) {
-      return parseInt(this.network) == 5000
+      return parseInt(this.network) == 1088
     },
   },
   pairLiquidityUSD: Number,
-  pairLiquidityETH: {
+  pairLiquidityMETIS: {
     type: Number,
     required: function (this: IBurnEvent) {
-      return parseInt(this.network) == 1 || parseInt(this.network) == 8453
-    },
-  },
-  pairLiquidityBNB: {
-    type: Number,
-    required: function (this: IBurnEvent) {
-      return parseInt(this.network) == 56
-    },
-  },
-  // pairLiquidityFTM: {
-  //   type: Number,
-  //   required: function (this: IBurnEvent) {
-  //     return parseInt(this.network) == 250
-  //   },
-  // },
-  pairLiquidityPLS: {
-    type: Number,
-    required: function (this: IBurnEvent) {
-      return parseInt(this.network) == 369
-    },
-  },
-  pairLiquidityMNT: {
-    type: Number,
-    required: function (this: IBurnEvent) {
-      return parseInt(this.network) == 5000
+      return parseInt(this.network) == 1088
     },
   },
   token0PriceUSD: Number,
-  token0PriceETH: {
+  token0PriceMETIS: {
     type: Number,
     required: function (this: IBurnEvent) {
-      return parseInt(this.network) == 1 || parseInt(this.network) == 8453
-    },
-  },
-  token0PriceBNB: {
-    type: Number,
-    required: function (this: IBurnEvent) {
-      return parseInt(this.network) == 56
-    },
-  },
-  // token0PriceFTM: {
-  //   type: Number,
-  //   required: function (this: IBurnEvent) {
-  //     return parseInt(this.network) == 250
-  //   },
-  // },
-  token0PricePLS: {
-    type: Number,
-    required: function (this: IBurnEvent) {
-      return parseInt(this.network) == 369
-    },
-  },
-  token0PriceMNT: {
-    type: Number,
-    required: function (this: IBurnEvent) {
-      return parseInt(this.network) == 5000
+      return parseInt(this.network) == 1088
     },
   },
   token1PriceUSD: Number,
-  token1PriceETH: {
+  token1PriceMETIS: {
     type: Number,
     required: function (this: IBurnEvent) {
-      return parseInt(this.network) == 1 || parseInt(this.network) == 8453
-    },
-  },
-  token1PriceBNB: {
-    type: Number,
-    required: function (this: IBurnEvent) {
-      return parseInt(this.network) == 56
-    },
-  },
-  // token1PriceFTM: {
-  //   type: Number,
-  //   required: function (this: IBurnEvent) {
-  //     return parseInt(this.network) == 250
-  //   },
-  // },
-  token1PricePLS: {
-    type: Number,
-    required: function (this: IBurnEvent) {
-      return parseInt(this.network) == 369
-    },
-  },
-  token1PriceMNT: {
-    type: Number,
-    required: function (this: IBurnEvent) {
-      return parseInt(this.network) == 5000
+      return parseInt(this.network) == 1088
     },
   },
   walletAddress: String,

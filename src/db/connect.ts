@@ -4,7 +4,7 @@ export const connect = () => {
   const user = process.env.DB_USER
   const pass = process.env.DB_PASS
   const host = process.env.DB_HOST
-  const uri = `mongodb://${user}:${pass}@${host}` // connect to local mongodb for dev and docker service for production
+  const uri = `mongodb://admin:password@mongodb:27017?retryWrites=true&w=majority` // connect to local mongodb for dev and docker service for production
 
   return mongoose
     .connect(uri)

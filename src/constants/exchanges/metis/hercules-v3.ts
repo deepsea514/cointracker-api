@@ -1,14 +1,14 @@
 import { gql, GraphQLClient } from 'graphql-request'
 
-export const ROCKET_SWAP_CONFIG = {
-  URL: 'https://api.studio.thegraph.com/query/50519/rocketswap/version/latest',
-  CLIENT: new GraphQLClient('https://api.studio.thegraph.com/query/50519/rocketswap/version/latest', {
+export const HERCULES_DEX_V3_CONFIG = {
+  URL: 'https://metisapi.0xgraph.xyz/subgraphs/name/cryptoalgebra/analytics ',
+  CLIENT: new GraphQLClient('https://metisapi.0xgraph.xyz/subgraphs/name/cryptoalgebra/analytics ', {
     headers: { 'content-type': 'application/graphql' },
   }),
   QUERIES: {
     PAIRS: gql`
       query Pair($token: String!) {
-        pair0: pairs(where: { token0: $token }) {
+        pair0: pools(where: { token0: $token }) {
           pairAddress: id
           token0 {
             address: id
@@ -22,7 +22,7 @@ export const ROCKET_SWAP_CONFIG = {
           createdAtBlockNumber
         }
 
-        pair1: pairs(where: { token1: $token }) {
+        pair1: pools(where: { token1: $token }) {
           pairAddress: id
           token0 {
             address: id
@@ -41,33 +41,36 @@ export const ROCKET_SWAP_CONFIG = {
       query Token($first: Int) {
         bundle(id: 1) {
           id
-          chainPrice: ethPrice
+          chainPrice: maticPriceUSD
         }
         tokens(first: $first, orderBy: txCount, orderDirection: desc) {
           address: id
           symbol
           name
           decimals
-          volume: tradeVolume
-          volumeUSD: tradeVolumeUSD
+          volume
+          volumeUSD
           txCount
-          liquidity: totalLiquidity
-          derivedETH
+          feesUSD
+          liquidity: totalValueLocked
+          derivedETH: derivedMatic
           dayData: tokenDayData(orderBy: date, orderDirection: desc, first: 2) {
-            txCount: dailyTxns
-            volume: dailyVolumeToken
-            liquidity: totalLiquidityToken
+            volume
+            feesUSD
+            liquidity: totalValueLocked
+            open
+            high
+            low
+            close
           }
 
           sevenDayData: tokenDayData(orderBy: date, orderDirection: desc, first: 7) {
-            txCount: dailyTxns
-            volume: dailyVolumeToken
-            volumeUSD: dailyVolumeUSD
-            volumeETH: dailyVolumeETH
-            liquidity: totalLiquidityToken
-            liquidityETH: totalLiquidityETH
-            liquidityUSD: totalLiquidityUSD
+            volume
+            volumeUSD
+            liquidity: totalValueLocked
+            liquidityUSD: totalValueLockedUSD
             priceUSD
+            feesUSD
             date
           }
         }
@@ -77,17 +80,18 @@ export const ROCKET_SWAP_CONFIG = {
       query Token($first: Int) {
         bundle(id: 1) {
           id
-          chainPrice: ethPrice
+          chainPrice: ethPriceUSD
         }
         tokens(first: $first, orderBy: txCount, orderDirection: desc) {
           address: id
           symbol
           name
           decimals
-          volume: tradeVolume
-          volumeUSD: tradeVolumeUSD
+          volume
+          volumeUSD
           txCount
-          liquidity: totalLiquidity
+          liquidity: totalValueLocked
+          feesUSD
           derivedETH
         }
       }
@@ -96,35 +100,34 @@ export const ROCKET_SWAP_CONFIG = {
       query Token($address: ID!, $pair: ID!, $baseTokens: [ID!]!) {
         bundle(id: 1) {
           id
-          chainPrice: ethPrice
+          chainPrice: maticPriceUSD
         }
 
-        nativePairDayDatas: pairDayDatas(
+        nativePairDayDatas: poolDayDatas(
           orderBy: date
           orderDirection: desc
-          where: { token0_in: $baseTokens, token1_in: $baseTokens }
+          where: { pool_: { token0: $baseTokens, token1: $baseTokens } }
           first: 2
         ) {
-          token0 {
-            address: id
+          pool {
+            token0 {
+              address: id
+            }
+            token1 {
+              address: id
+            }
           }
-          reserve0
-          reserve1
-          token1 {
-            address: id
-          }
+          token0Price
+          token1Price
         }
 
-        pairDayDatas(orderBy: date, orderDirection: desc, where: { pairAddress: $pair }, first: 2) {
-          reserve0
-          reserve1
+        pairDayDatas: poolDayDatas(orderBy: date, orderDirection: desc, where: { pool: $pair }, first: 2) {
+          token0Price
+          token1Price
         }
 
-        pair(id: $pair) {
+        pair: pool(id: $pair) {
           id
-          reserve0
-          reserve1
-          reserveUSD
           token0Price
           token1Price
           token0 {
@@ -143,26 +146,24 @@ export const ROCKET_SWAP_CONFIG = {
           symbol
           name
           decimals
-          volume: tradeVolume
-          volumeUSD: tradeVolumeUSD
+          volume
+          volumeUSD
+          totalSupply
           txCount
-          liquidity: totalLiquidity
-          derivedETH
+          liquidity: totalValueLocked
+          derivedETH: derivedMatic
           dayData: tokenDayData(orderBy: date, orderDirection: desc, first: 2) {
-            txCount: dailyTxns
-            volume: dailyVolumeToken
-            liquidity: totalLiquidityToken
+            volume
+            liquidity: totalValueLocked
           }
 
           sevenDayData: tokenDayData(orderBy: date, orderDirection: desc, first: 7) {
-            txCount: dailyTxns
-            volume: dailyVolumeToken
-            volumeUSD: dailyVolumeUSD
-            volumeETH: dailyVolumeETH
-            liquidity: totalLiquidityToken
-            liquidityETH: totalLiquidityETH
-            liquidityUSD: totalLiquidityUSD
+            volume
+            volumeUSD
+            liquidity: totalValueLocked
+            liquidityUSD: totalValueLockedUSD
             priceUSD
+            feesUSD
             date
           }
         }
@@ -171,25 +172,23 @@ export const ROCKET_SWAP_CONFIG = {
     TOKEN_7_DAY_DATA: gql`
       query Token($address: String!) {
         sevenDayData: tokenDayDatas(where: { token: $address }, orderBy: date, orderDirection: desc, first: 7) {
-          txCount: dailyTxns
-          volume: dailyVolumeToken
-          volumeUSD: dailyVolumeUSD
-          volumeETH: dailyVolumeETH
-          liquidity: totalLiquidityToken
-          liquidityETH: totalLiquidityETH
-          liquidityUSD: totalLiquidityUSD
+          # txCount: dailyTxns
+          volume
+          volumeUSD
+          # volumeETH: dailyVolumeETH
+          liquidity: totalValueLocked
+          # liquidityETH: totalLiquidityETH
+          liquidityUSD: totalValueLockedUSD
           priceUSD
+          feesUSD
           date
         }
       }
     `,
     TOKENS_HISTORICAL: gql`
       query GetSwaps($first: Int!, $skip: Int!, $pair: ID!, $timestamp_lte: BigInt!, $timestamp_gte: BigInt!) {
-        pair(id: $pair) {
+        pair: pool(id: $pair) {
           id
-          reserve0
-          reserve1
-          reserveUSD
           token0Price
           token1Price
           token0 {
@@ -209,7 +208,7 @@ export const ROCKET_SWAP_CONFIG = {
           skip: $skip
           orderBy: timestamp
           orderDirection: desc
-          where: { pair: $pair, timestamp_lte: $timestamp_lte, timestamp_gte: $timestamp_gte }
+          where: { pool: $pair, timestamp_lte: $timestamp_lte, timestamp_gte: $timestamp_gte }
         ) {
           transaction {
             id
@@ -217,13 +216,12 @@ export const ROCKET_SWAP_CONFIG = {
             timestamp
           }
           id
-          amount0In
-          amount0Out
-          amount1In
-          amount1Out
+          amount0
+          amount1
+          price
           amountUSD
-          to
-          from
+          to: recipient
+          from: origin
           sender
         }
       }
@@ -241,39 +239,39 @@ export const ROCKET_SWAP_CONFIG = {
       query Mint($first: Int, $pairs: [ID!]!) {
         bundle(id: 1) {
           id
-          chainPrice: ethPrice
+          chainPrice: ethPriceUSD
         }
-        mints(first: $first, orderBy: timestamp, orderDirection: desc, where: { pair_in: $pairs }) {
+        mints(first: $first, orderBy: timestamp, orderDirection: desc, where: { pool_in: $pairs }) {
           transaction {
             id
             blockNumber
             timestamp
           }
-          pair {
+          pair: pool {
             token0 {
               address: id
               symbol
               name
               decimals
-              volume: tradeVolume
-              volumeUSD: tradeVolumeUSD
+              volume
+              volumeUSD
               txCount
-              liquidity: totalLiquidity
+              liquidity: totalValueLocked
               derivedETH
               dayData: tokenDayData(orderBy: date, orderDirection: desc, first: 2) {
-                txCount: dailyTxns
-                volume: dailyVolumeToken
-                liquidity: totalLiquidityToken
+                # txCount: dailyTxns
+                volume
+                liquidity: totalValueLocked
               }
 
               sevenDayData: tokenDayData(orderBy: date, orderDirection: desc, first: 7) {
-                txCount: dailyTxns
-                volume: dailyVolumeToken
-                volumeUSD: dailyVolumeUSD
-                volumeETH: dailyVolumeETH
-                liquidity: totalLiquidityToken
-                liquidityETH: totalLiquidityETH
-                liquidityUSD: totalLiquidityUSD
+                # txCount: dailyTxns
+                volume
+                volumeUSD
+                # volumeETH: dailyVolumeETH
+                liquidity: totalValueLocked
+                # liquidityETH: totalLiquidityETH
+                liquidityUSD: totalValueLockedUSD
                 priceUSD
                 date
               }
@@ -283,33 +281,33 @@ export const ROCKET_SWAP_CONFIG = {
               symbol
               name
               decimals
-              volume: tradeVolume
-              volumeUSD: tradeVolumeUSD
+              volume
+              volumeUSD
               txCount
-              liquidity: totalLiquidity
+              liquidity: totalValueLocked
               derivedETH
               dayData: tokenDayData(orderBy: date, orderDirection: desc, first: 2) {
-                txCount: dailyTxns
-                volume: dailyVolumeToken
-                liquidity: totalLiquidityToken
+                # txCount: dailyTxns
+                volume
+                liquidity: totalValueLocked
               }
 
               sevenDayData: tokenDayData(orderBy: date, orderDirection: desc, first: 7) {
-                txCount: dailyTxns
-                volume: dailyVolumeToken
-                volumeUSD: dailyVolumeUSD
-                volumeETH: dailyVolumeETH
-                liquidity: totalLiquidityToken
-                liquidityETH: totalLiquidityETH
-                liquidityUSD: totalLiquidityUSD
+                # txCount: dailyTxns
+                volume
+                volumeUSD
+                # volumeETH: dailyVolumeETH
+                liquidity: totalValueLocked
+                # liquidityETH: totalLiquidityETH
+                liquidityUSD: totalValueLockedUSD
                 priceUSD
                 date
               }
             }
             id
-            reserve0
-            reserve1
-            reserveUSD
+            reserve0: totalValueLockedToken0
+            reserve1: totalValueLockedToken1
+            reserveUSD: totalValueLockedUSD
             token0Price
             token1Price
             volumeToken0
@@ -320,7 +318,7 @@ export const ROCKET_SWAP_CONFIG = {
           amount0
           amount1
           amountUSD
-          to
+          to: origin
           sender
         }
       }
@@ -329,7 +327,7 @@ export const ROCKET_SWAP_CONFIG = {
       query Mint($first: Int) {
         bundle(id: 1) {
           id
-          chainPrice: ethPrice
+          chainPrice: ethPriceUSD
         }
         mints(first: $first, orderBy: timestamp, orderDirection: desc) {
           transaction {
@@ -337,31 +335,31 @@ export const ROCKET_SWAP_CONFIG = {
             blockNumber
             timestamp
           }
-          pair {
+          pair: pool {
             token0 {
               address: id
               symbol
               name
               decimals
-              volume: tradeVolume
-              volumeUSD: tradeVolumeUSD
+              volume
+              volumeUSD
               txCount
-              liquidity: totalLiquidity
+              liquidity: totalValueLocked
               derivedETH
               dayData: tokenDayData(orderBy: date, orderDirection: desc, first: 2) {
-                txCount: dailyTxns
-                volume: dailyVolumeToken
-                liquidity: totalLiquidityToken
+                # txCount: dailyTxns
+                volume
+                liquidity: totalValueLocked
               }
 
               sevenDayData: tokenDayData(orderBy: date, orderDirection: desc, first: 7) {
-                txCount: dailyTxns
-                volume: dailyVolumeToken
-                volumeUSD: dailyVolumeUSD
-                volumeETH: dailyVolumeETH
-                liquidity: totalLiquidityToken
-                liquidityETH: totalLiquidityETH
-                liquidityUSD: totalLiquidityUSD
+                # txCount: dailyTxns
+                volume
+                volumeUSD
+                # volumeETH: dailyVolumeETH
+                liquidity: totalValueLocked
+                # liquidityETH: totalLiquidityETH
+                liquidityUSD: totalValueLockedUSD
                 priceUSD
                 date
               }
@@ -371,33 +369,33 @@ export const ROCKET_SWAP_CONFIG = {
               symbol
               name
               decimals
-              volume: tradeVolume
-              volumeUSD: tradeVolumeUSD
+              volume
+              volumeUSD
               txCount
-              liquidity: totalLiquidity
+              liquidity: totalValueLocked
               derivedETH
               dayData: tokenDayData(orderBy: date, orderDirection: desc, first: 2) {
-                txCount: dailyTxns
-                volume: dailyVolumeToken
-                liquidity: totalLiquidityToken
+                # txCount: dailyTxns
+                volume
+                liquidity: totalValueLocked
               }
 
               sevenDayData: tokenDayData(orderBy: date, orderDirection: desc, first: 7) {
-                txCount: dailyTxns
-                volume: dailyVolumeToken
-                volumeUSD: dailyVolumeUSD
-                volumeETH: dailyVolumeETH
-                liquidity: totalLiquidityToken
-                liquidityETH: totalLiquidityETH
-                liquidityUSD: totalLiquidityUSD
+                # txCount: dailyTxns
+                volume
+                volumeUSD
+                # volumeETH: dailyVolumeETH
+                liquidity: totalValueLocked
+                # liquidityETH: totalLiquidityETH
+                liquidityUSD: totalValueLockedUSD
                 priceUSD
                 date
               }
             }
             id
-            reserve0
-            reserve1
-            reserveUSD
+            reserve0: totalValueLockedToken0
+            reserve1: totalValueLockedToken1
+            reserveUSD: totalValueLockedUSD
             token0Price
             token1Price
             volumeToken0
@@ -408,7 +406,7 @@ export const ROCKET_SWAP_CONFIG = {
           amount0
           amount1
           amountUSD
-          to
+          to: origin
           sender
         }
       }
@@ -417,39 +415,39 @@ export const ROCKET_SWAP_CONFIG = {
       query Swaps($first: Int, $pairs: [ID!]!) {
         bundle(id: 1) {
           id
-          chainPrice: ethPrice
+          chainPrice: ethPriceUSD
         }
-        swaps(first: $first, orderBy: timestamp, orderDirection: desc, where: { pair_in: $pairs }) {
+        swaps(first: $first, orderBy: timestamp, orderDirection: desc, where: { pool_in: $pairs }) {
           transaction {
             id
             blockNumber
             timestamp
           }
-          pair {
+          pair: pool {
             token0 {
               address: id
               symbol
               name
               decimals
-              volume: tradeVolume
-              volumeUSD: tradeVolumeUSD
+              volume
+              volumeUSD
               txCount
-              liquidity: totalLiquidity
+              liquidity: totalValueLocked
               derivedETH
               dayData: tokenDayData(orderBy: date, orderDirection: desc, first: 2) {
-                txCount: dailyTxns
-                volume: dailyVolumeToken
-                liquidity: totalLiquidityToken
+                # txCount: dailyTxns
+                volume
+                liquidity: totalValueLocked
               }
 
               sevenDayData: tokenDayData(orderBy: date, orderDirection: desc, first: 7) {
-                txCount: dailyTxns
-                volume: dailyVolumeToken
-                volumeUSD: dailyVolumeUSD
-                volumeETH: dailyVolumeETH
-                liquidity: totalLiquidityToken
-                liquidityETH: totalLiquidityETH
-                liquidityUSD: totalLiquidityUSD
+                # txCount: dailyTxns
+                volume
+                volumeUSD
+                # volumeETH: dailyVolumeETH
+                liquidity: totalValueLocked
+                # liquidityETH: totalLiquidityETH
+                liquidityUSD: totalValueLockedUSD
                 priceUSD
                 date
               }
@@ -459,33 +457,33 @@ export const ROCKET_SWAP_CONFIG = {
               symbol
               name
               decimals
-              volume: tradeVolume
-              volumeUSD: tradeVolumeUSD
+              volume
+              volumeUSD
               txCount
-              liquidity: totalLiquidity
+              liquidity: totalValueLocked
               derivedETH
               dayData: tokenDayData(orderBy: date, orderDirection: desc, first: 2) {
-                txCount: dailyTxns
-                volume: dailyVolumeToken
-                liquidity: totalLiquidityToken
+                # txCount: dailyTxns
+                volume
+                liquidity: totalValueLocked
               }
 
               sevenDayData: tokenDayData(orderBy: date, orderDirection: desc, first: 7) {
-                txCount: dailyTxns
-                volume: dailyVolumeToken
-                volumeUSD: dailyVolumeUSD
-                volumeETH: dailyVolumeETH
-                liquidity: totalLiquidityToken
-                liquidityETH: totalLiquidityETH
-                liquidityUSD: totalLiquidityUSD
+                # txCount: dailyTxns
+                volume
+                volumeUSD
+                # volumeETH: dailyVolumeETH
+                liquidity: totalValueLocked
+                # liquidityETH: totalLiquidityETH
+                liquidityUSD: totalValueLockedUSD
                 priceUSD
                 date
               }
             }
             id
-            reserve0
-            reserve1
-            reserveUSD
+            reserve0: totalValueLockedToken0
+            reserve1: totalValueLockedToken1
+            reserveUSD: totalValueLockedUSD
             token0Price
             token1Price
             volumeToken0
@@ -493,13 +491,13 @@ export const ROCKET_SWAP_CONFIG = {
             volumeUSD
           }
           id
-          amount0In
-          amount0Out
-          amount1In
-          amount1Out
+          amount0In: amount0
+          # amount0Out
+          amount1In: amount1
+          # amount1Out
           amountUSD
-          to
-          from
+          to: recipient
+          from: origin
           sender
         }
       }
@@ -508,7 +506,7 @@ export const ROCKET_SWAP_CONFIG = {
       query Swaps($first: Int) {
         bundle(id: 1) {
           id
-          chainPrice: ethPrice
+          chainPrice: ethPriceUSD
         }
         swaps(first: $first) {
           id
@@ -517,40 +515,40 @@ export const ROCKET_SWAP_CONFIG = {
             blockNumber
             timestamp
           }
-          pair {
-            id
+          pair: pool {
             token0 {
               address: id
               symbol
+              name
               decimals
-              totalSupply
-              volume: tradeVolume
-              volumeUSD: tradeVolumeUSD
+              volume
+              volumeUSD
               txCount
-              liquidity: totalLiquidity
+              liquidity: totalValueLocked
               derivedETH
             }
             token1 {
               address: id
               symbol
+              name
               decimals
-              totalSupply
-              volume: tradeVolume
-              volumeUSD: tradeVolumeUSD
+              volume
+              volumeUSD
               txCount
-              liquidity: totalLiquidity
+              liquidity: totalValueLocked
               derivedETH
             }
+            id
             token0Price
             token1Price
             volumeToken0
             volumeToken1
             volumeUSD
           }
-          amount0In
-          amount0Out
-          amount1Out
-          amount1In
+          amount0In: amount0
+          # amount0Out
+          # amount1Out
+          amount1In: amount1
           amountUSD
         }
       }
@@ -560,40 +558,39 @@ export const ROCKET_SWAP_CONFIG = {
       query Burns($first: Int, $pairs: [ID!]!) {
         bundle(id: 1) {
           id
-          chainPrice: ethPrice
+          chainPrice: ethPriceUSD
         }
-        burns(first: $first, orderBy: timestamp, orderDirection: desc, where: { pair_in: $pairs }) {
+        burns(first: $first, orderBy: timestamp, orderDirection: desc, where: { pool_in: $pairs }) {
           transaction {
             id
             blockNumber
             timestamp
           }
-          pair {
-            id
+          pair: pool {
             token0 {
               address: id
               symbol
               name
               decimals
-              volume: tradeVolume
-              volumeUSD: tradeVolumeUSD
+              volume
+              volumeUSD
               txCount
-              liquidity: totalLiquidity
+              liquidity: totalValueLocked
               derivedETH
               dayData: tokenDayData(orderBy: date, orderDirection: desc, first: 2) {
-                txCount: dailyTxns
-                volume: dailyVolumeToken
-                liquidity: totalLiquidityToken
+                # txCount: dailyTxns
+                volume
+                liquidity: totalValueLocked
               }
 
               sevenDayData: tokenDayData(orderBy: date, orderDirection: desc, first: 7) {
-                txCount: dailyTxns
-                volume: dailyVolumeToken
-                volumeUSD: dailyVolumeUSD
-                volumeETH: dailyVolumeETH
-                liquidity: totalLiquidityToken
-                liquidityETH: totalLiquidityETH
-                liquidityUSD: totalLiquidityUSD
+                # txCount: dailyTxns
+                volume
+                volumeUSD
+                # volumeETH: dailyVolumeETH
+                liquidity: totalValueLocked
+                # liquidityETH: totalLiquidityETH
+                liquidityUSD: totalValueLockedUSD
                 priceUSD
                 date
               }
@@ -603,33 +600,33 @@ export const ROCKET_SWAP_CONFIG = {
               symbol
               name
               decimals
-              volume: tradeVolume
-              volumeUSD: tradeVolumeUSD
+              volume
+              volumeUSD
               txCount
-              liquidity: totalLiquidity
+              liquidity: totalValueLocked
               derivedETH
               dayData: tokenDayData(orderBy: date, orderDirection: desc, first: 2) {
-                txCount: dailyTxns
-                volume: dailyVolumeToken
-                liquidity: totalLiquidityToken
+                # txCount: dailyTxns
+                volume
+                liquidity: totalValueLocked
               }
 
               sevenDayData: tokenDayData(orderBy: date, orderDirection: desc, first: 7) {
-                txCount: dailyTxns
-                volume: dailyVolumeToken
-                volumeUSD: dailyVolumeUSD
-                volumeETH: dailyVolumeETH
-                liquidity: totalLiquidityToken
-                liquidityETH: totalLiquidityETH
-                liquidityUSD: totalLiquidityUSD
+                # txCount: dailyTxns
+                volume
+                volumeUSD
+                # volumeETH: dailyVolumeETH
+                liquidity: totalValueLocked
+                # liquidityETH: totalLiquidityETH
+                liquidityUSD: totalValueLockedUSD
                 priceUSD
                 date
               }
             }
             id
-            reserve0
-            reserve1
-            reserveUSD
+            reserve0: totalValueLockedToken0
+            reserve1: totalValueLockedToken1
+            reserveUSD: totalValueLockedUSD
             token0Price
             token1Price
             volumeToken0
@@ -640,8 +637,8 @@ export const ROCKET_SWAP_CONFIG = {
           amount0
           amount1
           amountUSD
-          to
-          sender
+          to: origin
+          sender: owner
         }
       }
     `,
@@ -649,7 +646,7 @@ export const ROCKET_SWAP_CONFIG = {
       query Burns($first: Int) {
         bundle(id: 1) {
           id
-          chainPrice: ethPrice
+          chainPrice: ethPriceUSD
         }
         burns(first: $first) {
           id
@@ -658,30 +655,30 @@ export const ROCKET_SWAP_CONFIG = {
             blockNumber
             timestamp
           }
-          pair {
-            id
+          pair: pool {
             token0 {
               address: id
               symbol
+              name
               decimals
-              totalSupply
-              volume: tradeVolume
-              volumeUSD: tradeVolumeUSD
+              volume
+              volumeUSD
               txCount
-              liquidity: totalLiquidity
+              liquidity: totalValueLocked
               derivedETH
             }
             token1 {
               address: id
               symbol
+              name
               decimals
-              totalSupply
-              volume: tradeVolume
-              volumeUSD: tradeVolumeUSD
+              volume
+              volumeUSD
               txCount
-              liquidity: totalLiquidity
+              liquidity: totalValueLocked
               derivedETH
             }
+            id
             token0Price
             token1Price
             volumeToken0
@@ -691,21 +688,21 @@ export const ROCKET_SWAP_CONFIG = {
           amount0
           amount1
           amountUSD
-          to
-          sender
+          to: origin
+          sender: owner
         }
       }
     `,
     FACTORY: gql`
       query Factories {
-        rocketswap: rocketswapFactories(first: 1) {
+        Hercules-V3: factories(first: 1) {
           id
-          totalPairs: pairCount
+          totalPairs: poolCount
           totalTransactions: txCount
           totalVolumeUSD
           totalVolumeETH
-          totalLiquidityETH
-          totalLiquidityUSD
+          totalLiquidityETH: totalValueLockedETH
+          totalLiquidityUSD: totalValueLockedUSD
         }
       }
     `,

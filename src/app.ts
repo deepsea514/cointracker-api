@@ -14,7 +14,7 @@ app.use(morgan('dev'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 
-app.use('/v1/', indexRouter)
+app.use('/api/', indexRouter)
 app.use('*', pageNotFoundHandler)
 app.use(errorHandler)
 

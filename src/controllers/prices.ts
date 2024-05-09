@@ -26,7 +26,7 @@ const getPricing = asyncHandler(async (req: Request, res: Response, next: NextFu
 // TODO: The function should be named accordingly and be used in a route like /tokens/:id/swaps
 const getHistoricalPricing = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
   // TODO: Normalize incoming address (& validate checksum?)
-  const { from, to, address, chainId = 250 } = req.query
+  const { from, to, address, chainId = 1088 } = req.query
 
   const chain = getChainConfiguration(chainId as ChainId)
 

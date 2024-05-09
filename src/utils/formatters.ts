@@ -1,6 +1,7 @@
 import {
   ERC20_ABI,
   FACTORIES,
+  HERCULES_FACTORY_ABI_V3,
   UNISWAP_FACTORY_ABI,
   UNISWAP_FACTORY_ABI_V3,
   UNISWAP_PAIR_ABI,
@@ -16,19 +17,21 @@ import { getPairDetails } from './web3/prices'
 
 async function fetchNativePrice(chain: IChainConfiguration, exchangeName: string) {
   const isV3 = exchangeName.includes('V3')
+  const isHerculesV3 = exchangeName.includes('Hercules-V3')
   const factory = FACTORIES[chain.chainId as CHAINS].find((a: any) => a.name === exchangeName)
   if (!factory) {
     throw new BadRequestError('Invalid configuration error.')
   }
 
   const details = await getPairDetails(
-    isV3 ? (UNISWAP_FACTORY_ABI_V3 as AbiItem[]) : (UNISWAP_FACTORY_ABI as AbiItem[]),
+    isHerculesV3 ? (HERCULES_FACTORY_ABI_V3 as AbiItem[]) : isV3 ? (UNISWAP_FACTORY_ABI_V3 as AbiItem[]) : (UNISWAP_FACTORY_ABI as AbiItem[]),
     isV3 ? (UNISWAP_PAIR_ABI_V3 as AbiItem[]) : (UNISWAP_PAIR_ABI as AbiItem[]),
     ERC20_ABI as AbiItem[],
     [chain.tokens.NATIVE, chain.tokens.STABLE],
     chain,
     factory.address,
     isV3,
+    isHerculesV3
   )
 
   const token0IsNative = compareAddress(details.tokens.token0.options.address, chain.tokens.NATIVE, chain.web3)
@@ -256,7 +259,7 @@ export const formatSwaps = async ({
 
 // TODO: add network
 const getNativeSymbol = (chainId: CHAINS) => {
-  return chainId == CHAINS.MNT ? 'MNT' : chainId == CHAINS.PLS ? 'PLS' : 'ETH'
+  return chainId == CHAINS.METIS ? 'METIS' : 'ETH' //TODO: update if adding chains
 }
 
 export const formatToken = async ({
@@ -277,6 +280,7 @@ export const formatToken = async ({
   exchange: string
 }) => {
   const isV3 = exchange.includes('V3')
+  const isHerculesV3 = exchange.includes('Hercules-V3')
   const tokenIsNative = (token: string) => compareAddress(token, chain.tokens.NATIVE, chain.web3)
 
   const token0IsNative = tokenIsNative(pair?.token0?.address)
@@ -304,8 +308,8 @@ export const formatToken = async ({
   const priceUSD = nativeIsDesiredToken
     ? nativePrice
     : token0IsNative
-    ? pair?.token0Price * nativePrice ?? null
-    : pair?.token1Price * nativePrice ?? null
+      ? pair?.token0Price * nativePrice ?? null
+      : pair?.token1Price * nativePrice ?? null
 
   const priceETH = priceUSD / nativePrice
   const volume24h = token.dayData[0]?.volume ?? null
@@ -315,32 +319,38 @@ export const formatToken = async ({
   const liquidity = token.dayData[0]?.liquidity ?? null
   const liquidityHistoric = token.dayData[1]?.liquidity ?? null
 
-  const currentNativePrice = getTokenRelativePrice(
-    base0IsNative,
-    isV3 ? nativePairDayDatas[0]?.pool?.reserve0 : nativePairDayDatas[0]?.reserve0,
-    isV3 ? nativePairDayDatas[0]?.pool?.reserve1 : nativePairDayDatas[0]?.reserve1,
-  )
-  const historicNativePrice = getTokenRelativePrice(
-    base0IsNative,
-    isV3 ? nativePairDayDatas[1]?.pool?.reserve0 : nativePairDayDatas[1]?.reserve0,
-    isV3 ? nativePairDayDatas[1]?.pool?.reserve1 : nativePairDayDatas[1]?.reserve1,
-  )
+  const currentNativePrice = (isV3 || isHerculesV3) ?
+    (base0IsNative ? nativePairDayDatas[0]?.token0Price : nativePairDayDatas[0]?.token1Price)
+    : getTokenRelativePrice(
+      base0IsNative,
+      nativePairDayDatas[0]?.reserve0,
+      nativePairDayDatas[0]?.reserve1,
+    )
+  const historicNativePrice = (isV3 || isHerculesV3) ?
+    (base0IsNative ? nativePairDayDatas[1]?.token0Price : nativePairDayDatas[1]?.token1Price)
+    : getTokenRelativePrice(
+      base0IsNative,
+      nativePairDayDatas[1]?.reserve0,
+      nativePairDayDatas[1]?.reserve1,
+    )
 
   // Current & Historic token Price in FTM
   const currentTokenPrice = nativeIsDesiredToken
-    ? currentNativePrice
-    : getTokenRelativePrice(
+    ? currentNativePrice : (isV3 || isHerculesV3) ?
+      (base0IsNative ? pairDayDatas[0]?.token0Price : pairDayDatas[0]?.token1Price)
+      : getTokenRelativePrice(
         token0IsNative,
-        isV3 ? pairDayDatas[0]?.pool?.reserve0 : pairDayDatas[0]?.reserve0,
-        isV3 ? pairDayDatas[0]?.pool?.reserve1 : pairDayDatas[0]?.reserve1,
+        pairDayDatas[0]?.reserve0,
+        pairDayDatas[0]?.reserve1,
       )
 
   const historicTokenPrice = nativeIsDesiredToken
-    ? historicNativePrice
-    : getTokenRelativePrice(
+    ? historicNativePrice : (isV3 || isHerculesV3) ?
+      (base0IsNative ? pairDayDatas[1]?.token0Price : pairDayDatas[1]?.token1Price)
+      : getTokenRelativePrice(
         token0IsNative,
-        isV3 ? pairDayDatas[1]?.pool?.reserve0 : pairDayDatas[1]?.reserve0,
-        isV3 ? pairDayDatas[1]?.pool?.reserve1 : pairDayDatas[1]?.reserve1,
+        pairDayDatas[1]?.reserve0,
+        pairDayDatas[1]?.reserve1,
       )
 
   const currentPriceUSD = nativeIsDesiredToken ? currentNativePrice : currentTokenPrice / currentNativePrice
@@ -386,7 +396,7 @@ export const formatToken = async ({
     liquidityUSD: liquidity ? (liquidity * priceUSD).toString() : null,
     [`liquidity${native}`]: liquidity ? (liquidity * priceETH).toString() : null,
     liquidityChange24h: liquidity && liquidityHistoric ? (liquidity / liquidityHistoric - 1).toString() : null,
-    logoURI: `https://mljmnqnfdxzrsriincip.supabase.co/storage/v1/object/public/token-images/${token?.address}.png`, // TODO: we need images still, maybe we can get the from FTMscan or covalent
+    logoURI: `https://kyqhshdiyozjbozuqyye.supabase.co/storage/v1/object/public/token-icons/${token?.address}.png`, // TODO: we need images still, maybe we can get the from FTMscan or covalent
     priceUSD: priceUSD.toString() ?? null,
     [`price${native}`]: priceETH.toString() ?? null,
     priceChange24h,

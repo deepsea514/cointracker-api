@@ -15,79 +15,18 @@ server.listen(PORT, async () => {
   connect().then(async () => {
     ensureDBIndexesExist()
     console.log(`${new Date().toISOString()}: Start filling tokens to the DB.`)
-    // for (const exchange of [
-    //   EXCHANGES.PAINT_SWAP,
-    //   EXCHANGES.SHIBA_SWAP,
-    //   EXCHANGES.ZOO_DEX,
-    //   EXCHANGES.SUSHI_SWAP,
-    //   EXCHANGES.SPIRIT_SWAP,
-    //   EXCHANGES.SPOOKY_SWAP,
-    // ]) {
-    //   try {
-    //     console.log(`${new Date().toISOString()}: Starting backfill for ${exchange.toUpperCase()}`)
-    //     await fillDbWithTokens(CHAINS.FTM, exchange)
-    //   } catch {
-    //     console.log(`${new Date().toISOString()}: Failed to complete ${exchange.toUpperCase()}`)
-    //   } finally {
-    //     console.log(`${new Date().toISOString()}: Completed ${exchange.toUpperCase()} successfully`)
-    //   }
-    // }
     // TODO: add dexes
 
-    for (const exchange of [EXCHANGES.FUSIONX_V2, EXCHANGES.FUSIONX_V3]) {
+    for (const exchange of [EXCHANGES.HERCULES_DEX_V2, EXCHANGES.HERCULES_DEX_V3]) {
       try {
         console.log(`${new Date().toISOString()}: Starting backfill for ${exchange.toUpperCase()}`)
-        await fillDbWithTokens(CHAINS.MNT, exchange)
+        await fillDbWithTokens(CHAINS.METIS, exchange)
       } catch {
         console.log(`${new Date().toISOString()}: Failed to complete ${exchange.toUpperCase()}`)
       } finally {
         console.log(`${new Date().toISOString()}: Completed ${exchange.toUpperCase()} successfully`)
       }
     }
-
-    for (const exchange of [EXCHANGES.ROCKET_SWAP]) {
-      try {
-        console.log(`${new Date().toISOString()}: Starting backfill for ${exchange.toUpperCase()}`)
-        await fillDbWithTokens(CHAINS.BASE, exchange)
-      } catch {
-        console.log(`${new Date().toISOString()}: Failed to complete ${exchange.toUpperCase()}`)
-      } finally {
-        console.log(`${new Date().toISOString()}: Completed ${exchange.toUpperCase()} successfully`)
-      }
-    }
-
-    for (const exchange of [EXCHANGES.PULSEX_V1, EXCHANGES.PULSEX_V2]) {
-      try {
-        console.log(`${new Date().toISOString()}: Starting backfill for ${exchange.toUpperCase()}`)
-        await fillDbWithTokens(CHAINS.PLS, exchange)
-      } catch {
-        console.log(`${new Date().toISOString()}: Failed to complete ${exchange.toUpperCase()}`)
-      } finally {
-        console.log(`${new Date().toISOString()}: Completed ${exchange.toUpperCase()} successfully`)
-      }
-    }
-
-    // for (const exchange of [EXCHANGES.PANCAKE_SWAP]) {
-    //   try {
-    //     console.log(`${new Date().toISOString()}: Starting backfill for ${exchange.toUpperCase()}`)
-    //     await fillDbWithTokens(CHAINS.BSC, exchange)
-    //   } catch {
-    //     console.log(`${new Date().toISOString()}: Failed to complete ${exchange.toUpperCase()}`)
-    //   } finally {
-    //     console.log(`${new Date().toISOString()}: Completed ${exchange.toUpperCase()} successfully`)
-    //   }
-    // }
-
-    // for (const exchange of [EXCHANGES.SUSHI_SWAP]) {
-    //   try {
-    //     console.log(`${new Date().toISOString()}: Starting backfill for ${exchange.toUpperCase()}`)
-    //     await fillDbWithTokens(CHAINS.ETH, exchange)
-    //   } catch {
-    //     console.log(`${new Date().toISOString()}: Failed to complete ${exchange.toUpperCase()}`)
-    //   } finally {
-    //     console.log(`${new Date().toISOString()}: Completed ${exchange.toUpperCase()} successfully`)
-    //   }
-    // }
 
     console.log(`${new Date().toISOString()}: STARTING CRON AFTER BACKFILL`)
     // cron.schedule('*/2 * * * *', CronJob)

@@ -1,37 +1,35 @@
-version: '3.2'
+version: '3.3'
 services:
   mongodb:
-    image: mongo:5.0.0-focal
+    image: mongo:5.0-focal
     restart: always
     ports:
       - 27017:27017
     environment:
-      MONGO_INITDB_ROOT_USERNAME: casperdefi
-      MONGO_INITDB_ROOT_PASSWORD: xTC83d93GmPVkKit
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
     volumes:
       - ./db_data:/data/db
   redis:
-    image: redis:6.2.4-alpine
+    image: redis:6.2.14-alpine
     restart: always
     ports:
       - 6379:6379
     volumes:
       - ./cache_data:/data/cache
   mongo_view:
-    image: mongo-express
+    image: mongo-express:1.0-18-alpine3.18
     restart: always
     ports:
       - 8081:8081
     depends_on:
       - mongodb
     environment:
-      ME_CONFIG_BASICAUTH_USERNAME: casperdefi
-      ME_CONFIG_BASICAUTH_PASSWORD: casperdefi@123
-      ME_CONFIG_MONGODB_ADMINUSERNAME: casperdefi
-      ME_CONFIG_MONGODB_ADMINPASSWORD: xTC83d93GmPVkKit
+      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: password
       ME_CONFIG_MONGODB_SERVER: mongodb
   tracker:
-    image: node:16.5-alpine
+    image: node:16.20.2-alpine3.18
     depends_on:
       - redis
       - mongodb
@@ -44,18 +42,13 @@ services:
       - 3000:3000
     environment:
       PORT: 3000
-      DB_USER: casperdefi
-      DB_PASS: xTC83d93GmPVkKit
+      DB_USER: admin
+      DB_PASS: password
       DB_HOST: mongodb
       CACHE_HOST: redis
       CACHE_PORT: 6379
       # CACHE_EXPIRATION: 1800
-      # BSC_URL: https://bsc-dataseed.binance.org/
-      # FTM_URL: https://rpc.ankr.com/fantom/
-      # ETH_URL: https://mainnet.infura.io/v3/
-      PLS_URL: https://rpc.pulsechain.com/
-      MNT_URL: https://rpc.mantle.xyz/
-      BASE_URL: https://rpc.ankr.com/base/19441518f0c67589bfaa9b52f253edd895b90229912293af06a079af3a601e06/
+      METIS_URL: https://lb.nodies.app/v1/0fdd0b2f9bb84e8c85c3b81a94e2162e
       JWT_SECRET: xTC83d93GmPVkKitxTC83d93GmPVkKitxTC83d93GmPVkKit
       JWT_EXPIRY: 1d
 volumes:

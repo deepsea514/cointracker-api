@@ -2,7 +2,7 @@
 
 You can find the API specifications [here](specs/index.md)!
 
-## Diablo Tracker API
+## Aurora Tracker API (Formly Apex API)
 
 - Every exchange has a factory address/contract
 - Every time a swap occurs a 'transfer' even gets fired off that we can listen too
@@ -47,7 +47,7 @@ A list of goals for the API.
 // Goal: users will paste contract address and choose the chain, it will present live data about that token.
 
 // TODO: Users can fetch historical pricing for tokens within a specified chain
-
+// TODO: Add Solana Support
 // TODO: Users can fetch a list of available chains -> URL/chains
 // TODO: Users can fetch a list of tokens within a chain -> URL/tokens?chain=ethereum
 // @droidomon I don't think this one is really achievable onchain, since there are so many tokens

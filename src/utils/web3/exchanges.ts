@@ -9,6 +9,7 @@ import {
   RPC_URL,
   BASE_TOKENS,
   WEB3_CLIENTS,
+  HERCULES_FACTORY_ABI_V3,
 } from '../../constants/web3_constants'
 import { CHAINS, SUBGRAPHS } from '../../constants/constants'
 import { gql } from 'graphql-request'
@@ -22,8 +23,9 @@ export async function findMostLiquidExchange(address: string, chainId: CHAINS) {
   const exchanges = await Promise.all(
     FACTORIES[chainId].map(async (exchange) => {
       const isV3 = exchange.name.includes('V3')
+      const isHerculesV3 = exchange.name.includes('Hercules-V3')
       const contract = web3Helper.getContract(
-        isV3 ? (UNISWAP_FACTORY_ABI_V3 as AbiItem[]) : (UNISWAP_FACTORY_ABI as AbiItem[]),
+        isHerculesV3 ? (HERCULES_FACTORY_ABI_V3 as AbiItem[]) : isV3 ? (UNISWAP_FACTORY_ABI_V3 as AbiItem[]) : (UNISWAP_FACTORY_ABI as AbiItem[]),
         exchange.address,
         web3,
       )
@@ -35,7 +37,7 @@ export async function findMostLiquidExchange(address: string, chainId: CHAINS) {
       return {
         ...exchange,
         contract,
-        pair: await web3Helper.getPairAddress(address, otherTokenAddress, contract, isV3),
+        pair: await web3Helper.getPairAddress(address, otherTokenAddress, contract, isV3, isHerculesV3),
       }
     }),
   )
@@ -50,8 +52,8 @@ export async function findMostLiquidExchange(address: string, chainId: CHAINS) {
 
       const { pair: pairData } = isV3
         ? await subgraphHelper.getDataByQuery({
-            client: subgraph.CLIENT,
-            query: gql`
+          client: subgraph.CLIENT,
+          query: gql`
               query getPairData($pair: ID!) {
                 pair: pool(id: $pair) {
                   reserve0: totalValueLockedToken0
@@ -65,11 +67,11 @@ export async function findMostLiquidExchange(address: string, chainId: CHAINS) {
                 }
               }
             `,
-            variables: { pair: exchange.pair.toLowerCase() },
-          })
+          variables: { pair: exchange.pair.toLowerCase() },
+        })
         : await subgraphHelper.getDataByQuery({
-            client: subgraph.CLIENT,
-            query: gql`
+          client: subgraph.CLIENT,
+          query: gql`
               query getPairData($pair: ID!) {
                 pair(id: $pair) {
                   reserve0
@@ -83,8 +85,8 @@ export async function findMostLiquidExchange(address: string, chainId: CHAINS) {
                 }
               }
             `,
-            variables: { pair: exchange.pair.toLowerCase() },
-          })
+          variables: { pair: exchange.pair.toLowerCase() },
+        })
       if (!pairData) {
         return {
           name: exchange.name,

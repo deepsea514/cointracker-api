@@ -20,7 +20,7 @@ import { getOrSetCache } from '../../cache/redis'
 import { findMostLiquidExchange } from '../../utils/web3/cacheHelpers'
 import { getExchangeDetailsByName } from '../../utils/dataHelpers'
 import Token from '../../models/tokenSchema'
-import { UNISWAP_FACTORY_ABI, UNISWAP_FACTORY_ABI_V3 } from '../../constants/web3_constants'
+import { HERCULES_FACTORY_ABI_V3, UNISWAP_FACTORY_ABI, UNISWAP_FACTORY_ABI_V3 } from '../../constants/web3_constants'
 import { formatToken } from '../../utils/formatters'
 import { gql } from 'graphql-request'
 import { getTokenById } from '../../utils/token'
@@ -42,9 +42,10 @@ export const getTokenByAddress = async (
   if (!subgraph) throw new BadRequestError('Invalid configuration error.')
 
   const isV3 = exchangeDetails.name.includes('V3')
+  const isHerculesV3 = exchangeDetails.name.includes('Hercules-V3')
 
   const contract = web3Helper.getContract(
-    isV3 ? (UNISWAP_FACTORY_ABI_V3 as AbiItem[]) : (UNISWAP_FACTORY_ABI as AbiItem[]),
+    isHerculesV3 ? (HERCULES_FACTORY_ABI_V3 as AbiItem[]) : isV3 ? (UNISWAP_FACTORY_ABI_V3 as AbiItem[]) : (UNISWAP_FACTORY_ABI as AbiItem[]),
     exchangeDetails.address,
     chain.web3,
   )
@@ -65,8 +66,8 @@ export const getTokenByAddress = async (
 
   pair = compareAddress(address, chain.tokens.NATIVE, chain.web3)
     ? stableNativePair?.pairAddress ??
-      (await web3Helper.getPairAddress(chain.tokens.STABLE, chain.tokens.NATIVE, contract, isV3))
-    : tokenNativePair?.pairAddress ?? (await web3Helper.getPairAddress(address, chain.tokens.NATIVE, contract, isV3))
+    (await web3Helper.getPairAddress(chain.tokens.STABLE, chain.tokens.NATIVE, contract, isV3, isHerculesV3))
+    : tokenNativePair?.pairAddress ?? (await web3Helper.getPairAddress(address, chain.tokens.NATIVE, contract, isV3, isHerculesV3))
   const tokenData = await getOrSetCache(
     `${chainId}/tokens?chainId=${chainId}&exchange=${exchange}&address=${address}`,
     async () => {
@@ -273,6 +274,7 @@ async function getRecentCandles(
   )
 
   const isV3 = exchange.includes('V3')
+  const isHerculesV3 = exchange.includes('Hercules-V3')
 
   const data = await getOrSetCache(
     `tokens/historical?chainId=${chainId}&exchange=${exchange}&from=${startTime}&to=${endTime}&token0=${token0}&token1=${token1}`,
@@ -286,6 +288,7 @@ async function getRecentCandles(
         startTime,
         endTime,
         isV3,
+        isHerculesV3,
       )
       if (!baseData) {
         console.log('NO DATA FOUND', {
@@ -323,23 +326,23 @@ async function getRecentCandles(
   // Fetch the exact reserves at that point in time
   const initialReserves = isV3
     ? await subgraphHelper.getDataByQuery({
-        client: subgraph.CLIENT,
-        query: gql`
+      client: subgraph.CLIENT,
+      query: gql`
           query GetReservesAtBlock($pair: ID!, $block: Int!) {
             pair: pool(id: $pair, block: { number: $block }) {
-              reserve0: totalValueLockedToken0
-              reserve1: totalValueLockedToken1
+              token0Price
+              token1Price
             }
           }
         `,
-        variables: {
-          pair: data.pair.id.toLowerCase(),
-          block: Number(data.swaps[0].transaction.blockNumber),
-        },
-      })
+      variables: {
+        pair: data.pair.id.toLowerCase(),
+        block: Number(data.swaps[0].transaction.blockNumber),
+      },
+    })
     : await subgraphHelper.getDataByQuery({
-        client: subgraph.CLIENT,
-        query: gql`
+      client: subgraph.CLIENT,
+      query: gql`
           query GetReservesAtBlock($pair: ID!, $block: Int!) {
             pair(id: $pair, block: { number: $block }) {
               reserve0
@@ -347,11 +350,11 @@ async function getRecentCandles(
             }
           }
         `,
-        variables: {
-          pair: data.pair.id.toLowerCase(),
-          block: Number(data.swaps[0].transaction.blockNumber),
-        },
-      })
+      variables: {
+        pair: data.pair.id.toLowerCase(),
+        block: Number(data.swaps[0].transaction.blockNumber),
+      },
+    })
 
   return getCandlestickFromSwaps(
     data.pair,
@@ -531,35 +534,12 @@ export const getTokenHistoricalFromDB = async (
 export const getExchange = (exchange: EXCHANGES, chain: CHAINS) => {
   let result = chain.toString().toUpperCase()
   switch (exchange) {
-    // case EXCHANGES.UNI_SWAP:
-    //   return result + '_UNISWAP'
-    // case EXCHANGES.PANCAKE_SWAP:
-    //   return result + '_PANCAKE_SWAP'
-    // case EXCHANGES.SPIRIT_SWAP:
-    //   return result + '_SPIRIT_SWAP'
-    // case EXCHANGES.SUSHI_SWAP:
-    //   return result + '_SUSHI_SWAP'
-    // case EXCHANGES.PAINT_SWAP:
-    //   return result + '_PAINT_SWAP'
-    // case EXCHANGES.ZOO_DEX:
-    //   return result + '_ZOO_SWAP'
-    // case EXCHANGES.SHIBA_SWAP:
-    //   return result + '_SHIBA_SWAP'
-    // case EXCHANGES.SPOOKY_SWAP:
-    // return result + '_SPOOKY_SWAP'
-
-    case EXCHANGES.FUSIONX_V2:
-      return result + '_FUSIONX_V2'
-    case EXCHANGES.FUSIONX_V3:
-      return result + '_FUSIONX_V3'
-    case EXCHANGES.PULSEX_V1:
-      return result + '_PULSEX_V1'
-    case EXCHANGES.PULSEX_V2:
-      return result + '_PULSEX_V2'
-    case EXCHANGES.ROCKET_SWAP:
-      return result + '_ROCKET_SWAP'
+    case EXCHANGES.HERCULES_DEX_V2:
+      return result + '_HERCULES_DEX_V2'
+    case EXCHANGES.HERCULES_DEX_V3:
+      return result + '_HERCULES_DEX_V3'
     default:
-      return result + `_${exchange}_SWAP`
+      return result + `_${exchange}_DEX`
   }
 }
 

@@ -158,7 +158,7 @@ export function chunkIntervalSwapData(
         // to just leave this out though?
         if (previousSwap) {
           prices[timeSlotEnd].swaps.push({
-            open: previousSwap.close,
+            open: previousSwap.open,
             close: previousSwap.close,
             reserve0: previousSwap.reserve0,
             reserve1: previousSwap.reserve1,
@@ -230,6 +230,8 @@ type PairReserves = {
   pair: {
     reserve0: number
     reserve1: number
+    token0Price?: number
+    token1Price?: number
   }
 }
 

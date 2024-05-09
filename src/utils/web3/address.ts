@@ -19,6 +19,7 @@ export const getPairAddress = async (
   secondAddress: string,
   factoryContract: Contract,
   isV3: boolean,
+  isHerculesV3: boolean,
 ): Promise<string> => {
   if (isV3) {
     const feeTiers = [100, 500, 2500, 10000]
@@ -35,6 +36,8 @@ export const getPairAddress = async (
       }
     }
     return result
+  } else if (isHerculesV3) {
+    return await factoryContract.methods.poolByPair(firstAddress, secondAddress).call()
   } else {
     return await factoryContract.methods.getPair(firstAddress, secondAddress).call()
   }
