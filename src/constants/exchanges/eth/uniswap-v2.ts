@@ -102,7 +102,7 @@ export const UNISWAP_V2_CONFIG = {
         nativePairDayDatas: pairDayDatas(
           orderBy: date
           orderDirection: desc
-          where: { token0: $baseTokens, token1: $baseTokens }
+          where: { token0_in: $baseTokens, token1_in: $baseTokens }
           first: 2
         ) {
           token0 {

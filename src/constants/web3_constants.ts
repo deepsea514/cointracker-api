@@ -27,7 +27,7 @@ export const DEFAULT_BLOCK_TIMES: IChainDetails<number> = {
 }
 
 export const RPC_URL: IChainDetails<string> = {
-  [CHAINS.ETH]: process.env.ETH_URL ?? 'https://eth-mainnet.public.blastapi.io',
+  [CHAINS.ETH]: process.env.ETH_URL ?? 'https://mainnet.infura.io/v3/81a5a3168d3548eeaa18eef07e209eb3',
   [CHAINS.METIS]: process.env.METIS_URL ?? 'https://lb.nodies.app/v1/0fdd0b2f9bb84e8c85c3b81a94e2162e',
 }
 
@@ -44,7 +44,7 @@ interface DEFAULT_CHAIN_TOKENS {
 export const BASE_TOKENS: IChainDetails<DEFAULT_CHAIN_TOKENS> = {
   [CHAINS.ETH]: {
     NATIVE: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2', // weth
-    STABLE: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48', // usdc
+    STABLE: '0xdac17f958d2ee523a2206206994597c13d831ec7', // usdt
     FALLBACK: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2', // weth
   },
   [CHAINS.METIS]: {

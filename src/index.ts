@@ -28,16 +28,16 @@ server.listen(PORT, async () => {
       }
     }
 
-    for (const exchange of [EXCHANGES.HERCULES_V2]) {
-      try {
-        console.log(`${new Date().toISOString()}: Starting backfill for ${exchange.toUpperCase()}`)
-        await fillDbWithTokens(CHAINS.METIS, exchange)
-      } catch {
-        console.log(`${new Date().toISOString()}: Failed to complete ${exchange.toUpperCase()}`)
-      } finally {
-        console.log(`${new Date().toISOString()}: Completed ${exchange.toUpperCase()} successfully`)
-      }
-    }
+    // for (const exchange of [EXCHANGES.HERCULES_V2]) {
+    //   try {
+    //     console.log(`${new Date().toISOString()}: Starting backfill for ${exchange.toUpperCase()}`)
+    //     await fillDbWithTokens(CHAINS.METIS, exchange)
+    //   } catch {
+    //     console.log(`${new Date().toISOString()}: Failed to complete ${exchange.toUpperCase()}`)
+    //   } finally {
+    //     console.log(`${new Date().toISOString()}: Completed ${exchange.toUpperCase()} successfully`)
+    //   }
+    // }
 
     console.log(`${new Date().toISOString()}: STARTING CRON AFTER BACKFILL`)
     // cron.schedule('*/2 * * * *', CronJob)

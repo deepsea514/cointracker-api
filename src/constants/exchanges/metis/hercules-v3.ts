@@ -106,7 +106,7 @@ export const HERCULES_V3_CONFIG = {
         nativePairDayDatas: poolDayDatas(
           orderBy: date
           orderDirection: desc
-          where: { pool_: { token0: $baseTokens, token1: $baseTokens } }
+          where: { pool_: { token0_in: $baseTokens, token1_in: $baseTokens } }
           first: 2
         ) {
           pool {
