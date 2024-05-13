@@ -17,7 +17,18 @@ server.listen(PORT, async () => {
     console.log(`${new Date().toISOString()}: Start filling tokens to the DB.`)
     // TODO: add dexes
 
-    for (const exchange of [EXCHANGES.HERCULES_DEX_V2, EXCHANGES.HERCULES_DEX_V3]) {
+    for (const exchange of [EXCHANGES.UNISWAP_V2]) {
+      try {
+        console.log(`${new Date().toISOString()}: Starting backfill for ${exchange.toUpperCase()}`)
+        await fillDbWithTokens(CHAINS.ETH, exchange)
+      } catch {
+        console.log(`${new Date().toISOString()}: Failed to complete ${exchange.toUpperCase()}`)
+      } finally {
+        console.log(`${new Date().toISOString()}: Completed ${exchange.toUpperCase()} successfully`)
+      }
+    }
+
+    for (const exchange of [EXCHANGES.HERCULES_V2]) {
       try {
         console.log(`${new Date().toISOString()}: Starting backfill for ${exchange.toUpperCase()}`)
         await fillDbWithTokens(CHAINS.METIS, exchange)

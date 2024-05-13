@@ -28,15 +28,14 @@ export const getPairDetails = async (
   chain: IChainConfiguration,
   factoryAddress: string,
   isV3: boolean,
-  isHerculesV3: boolean,
 ) => {
   const factoryContract = await getContract(factoryAbi, factoryAddress, chain.web3)
 
-  const pairAddress = await getPairAddress(tokenAddresses[0], tokenAddresses[1], factoryContract, isV3, isHerculesV3)
+  const pairAddress = await getPairAddress(tokenAddresses[0], tokenAddresses[1], factoryContract, isV3)
 
   const pairContract = getContract(pairAbi, pairAddress, chain.web3)
 
-  if (isV3 || isHerculesV3) {
+  if (isV3) {
     const [_reserve0, _reserve1, tokens] = await Promise.all([
       getBalanceOf(tokenAddresses[0], pairAddress, chain.web3),
       getBalanceOf(tokenAddresses[1], pairAddress, chain.web3),

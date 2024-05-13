@@ -1,8 +1,8 @@
 import { gql, GraphQLClient } from 'graphql-request'
 
-export const HERCULES_DEX_V3_CONFIG = {
-  URL: 'https://metisapi.0xgraph.xyz/subgraphs/name/cryptoalgebra/analytics ',
-  CLIENT: new GraphQLClient('https://metisapi.0xgraph.xyz/subgraphs/name/cryptoalgebra/analytics ', {
+export const HERCULES_V3_CONFIG = {
+  URL: 'https://metisapi.0xgraph.xyz/subgraphs/name/cryptoalgebra/analytics',
+  CLIENT: new GraphQLClient('https://metisapi.0xgraph.xyz/subgraphs/name/cryptoalgebra/analytics', {
     headers: { 'content-type': 'application/graphql' },
   }),
   QUERIES: {

@@ -34,13 +34,15 @@ export async function fetchPaginatedDataFromWeb3({ startingBlock, subgraph, from
     // Roughly 30 minutes of transactions
     // 1 ftm block = 1 second
     // 1 bsc block = 3 seconds
-    // 1 eth block = 13 seconds
-    const BLOCKS_PER_REQUEST_PER_CHAIN = {
-      // [`${CHAINS.ETH}`]: 280,
+    // 1 eth block = 12 seconds
+    //TODO: change values
+    const BLOCKS_PER_REQUEST_PER_CHAIN: any = {
+      [`${CHAINS.ETH}`]: 300,
+      [`${CHAINS.METIS}`]: 400,
       // [`${CHAINS.BSC}`]: 1200,
-      [`${CHAINS.PLS}`]: 1200,
-      [`${CHAINS.MNT}`]: 1200,
-      [`${CHAINS.BASE}`]: 1200,
+      // [`${CHAINS.PLS}`]: 1200,
+      // [`${CHAINS.MNT}`]: 1200,
+      // [`${CHAINS.BASE}`]: 1200,
       // [`${CHAINS.FTM}`]: 3600,
     }
 

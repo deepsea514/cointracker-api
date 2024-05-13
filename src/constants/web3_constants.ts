@@ -12,22 +12,27 @@ export const TOKENS = {
 
 // Chain-dynamic constants
 export const NETWORKS: IChainDetails<string> = {
+  [CHAINS.ETH]: 'eth',
   [CHAINS.METIS]: 'metis',
 }
 // Chain-dynamic constants
 export const NETWORK_NAMES: IChainDetails<string> = {
-  [CHAINS.METIS]: 'Metis Network',
+  [CHAINS.ETH]: 'Ethereum Mainnet',
+  [CHAINS.METIS]: 'Metis Andromeda Mainnet',
 }
 
 export const DEFAULT_BLOCK_TIMES: IChainDetails<number> = {
+  [CHAINS.ETH]: 50, // 46 blocks is ~10 minutes ( 12 second blocks )
   [CHAINS.METIS]: 66, // 200 blocks is ~10 minutes ( 9 second blocks )
 }
 
 export const RPC_URL: IChainDetails<string> = {
+  [CHAINS.ETH]: process.env.ETH_URL ?? 'https://eth-mainnet.public.blastapi.io',
   [CHAINS.METIS]: process.env.METIS_URL ?? 'https://lb.nodies.app/v1/0fdd0b2f9bb84e8c85c3b81a94e2162e',
 }
 
 export const WEB3_CLIENTS: IChainDetails<Web3> = {
+  [CHAINS.ETH]: new Web3(new Web3.providers.HttpProvider(RPC_URL[CHAINS.ETH])),
   [CHAINS.METIS]: new Web3(new Web3.providers.HttpProvider(RPC_URL[CHAINS.METIS])),
 }
 
@@ -37,10 +42,15 @@ interface DEFAULT_CHAIN_TOKENS {
   FALLBACK: string
 }
 export const BASE_TOKENS: IChainDetails<DEFAULT_CHAIN_TOKENS> = {
+  [CHAINS.ETH]: {
+    NATIVE: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2', // weth
+    STABLE: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48', // usdc
+    FALLBACK: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2', // weth
+  },
   [CHAINS.METIS]: {
-    NATIVE: '0x75cb093E4D61d2A2e65D8e0BBb01DE8d89b53481', // wMetis
-    STABLE: '0xEA32A96608495e54156Ae48931A7c20f0dcc1a21', // m.usdc
-    FALLBACK: '0xbB1676046C36BCd2F6fD08d8f60672c7087d9aDF', // torch
+    NATIVE: '0x75cb093e4d61d2a2e65d8e0bbb01de8d89b53481', // wMetis
+    STABLE: '0xea32a96608495e54156ae48931a7c20f0dcc1a21', // m.usdc
+    FALLBACK: '0x75cb093e4d61d2a2e65d8e0bbb01de8d89b53481', // torch
   },
 }
 
@@ -50,6 +60,16 @@ interface FACTORY_DEFINITION {
 }
 
 export const FACTORIES: IChainDetails<FACTORY_DEFINITION[]> = {
+  [CHAINS.ETH]: [
+    {
+      address: '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f', // uniswap v2
+      name: 'Uniswap-V2',
+    },
+    {
+      address: '0x1F98431c8aD98523631AE4a59f267346ea31F984', // uniswap v3
+      name: 'Uniswap-V3',
+    },
+  ],
   [CHAINS.METIS]: [
     {
       address: '0xF38E7c7f8eA779e8A193B61f9155E6650CbAE095', // hercules v2
@@ -1746,8 +1766,8 @@ export const HERCULES_FACTORY_ABI_V3 = [
 
 export default {
   UNISWAP_FACTORY_ABI,
-  UNISWAP_FACTORY_ABI_V3,
   UNISWAP_PAIR_ABI,
+  UNISWAP_FACTORY_ABI_V3,
   UNISWAP_PAIR_ABI_V3,
   HERCULES_FACTORY_ABI_V3,
   ERC20_ABI,

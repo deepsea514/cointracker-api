@@ -42,10 +42,8 @@ export const getTokenByAddress = async (
   if (!subgraph) throw new BadRequestError('Invalid configuration error.')
 
   const isV3 = exchangeDetails.name.includes('V3')
-  const isHerculesV3 = exchangeDetails.name.includes('Hercules-V3')
 
-  const contract = web3Helper.getContract(
-    isHerculesV3 ? (HERCULES_FACTORY_ABI_V3 as AbiItem[]) : isV3 ? (UNISWAP_FACTORY_ABI_V3 as AbiItem[]) : (UNISWAP_FACTORY_ABI as AbiItem[]),
+  const contract = web3Helper.getContract(isV3 ? (UNISWAP_FACTORY_ABI_V3 as AbiItem[]) : (UNISWAP_FACTORY_ABI as AbiItem[]),
     exchangeDetails.address,
     chain.web3,
   )
@@ -66,8 +64,8 @@ export const getTokenByAddress = async (
 
   pair = compareAddress(address, chain.tokens.NATIVE, chain.web3)
     ? stableNativePair?.pairAddress ??
-    (await web3Helper.getPairAddress(chain.tokens.STABLE, chain.tokens.NATIVE, contract, isV3, isHerculesV3))
-    : tokenNativePair?.pairAddress ?? (await web3Helper.getPairAddress(address, chain.tokens.NATIVE, contract, isV3, isHerculesV3))
+    (await web3Helper.getPairAddress(chain.tokens.STABLE, chain.tokens.NATIVE, contract, isV3))
+    : tokenNativePair?.pairAddress ?? (await web3Helper.getPairAddress(address, chain.tokens.NATIVE, contract, isV3))
   const tokenData = await getOrSetCache(
     `${chainId}/tokens?chainId=${chainId}&exchange=${exchange}&address=${address}`,
     async () => {
@@ -274,8 +272,6 @@ async function getRecentCandles(
   )
 
   const isV3 = exchange.includes('V3')
-  const isHerculesV3 = exchange.includes('Hercules-V3')
-
   const data = await getOrSetCache(
     `tokens/historical?chainId=${chainId}&exchange=${exchange}&from=${startTime}&to=${endTime}&token0=${token0}&token1=${token1}`,
     async () => {
@@ -288,7 +284,6 @@ async function getRecentCandles(
         startTime,
         endTime,
         isV3,
-        isHerculesV3,
       )
       if (!baseData) {
         console.log('NO DATA FOUND', {
@@ -534,12 +529,16 @@ export const getTokenHistoricalFromDB = async (
 export const getExchange = (exchange: EXCHANGES, chain: CHAINS) => {
   let result = chain.toString().toUpperCase()
   switch (exchange) {
-    case EXCHANGES.HERCULES_DEX_V2:
-      return result + '_HERCULES_DEX_V2'
-    case EXCHANGES.HERCULES_DEX_V3:
-      return result + '_HERCULES_DEX_V3'
+    case EXCHANGES.UNISWAP_V2:
+      return result + '_UNISWAP_V2'
+    case EXCHANGES.UNISWAP_V3:
+      return result + '_UNISWAP_V3'
+    case EXCHANGES.HERCULES_V2:
+      return result + '_HERCULES_V2'
+    case EXCHANGES.HERCULES_V3:
+      return result + '_HERCULES_V3'
     default:
-      return result + `_${exchange}_DEX`
+      return result + `_${exchange}`
   }
 }
 

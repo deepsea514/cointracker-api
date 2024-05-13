@@ -15,16 +15,20 @@ export interface IToken {
   decimals: number
   volume24h: number
   volume24hUSD: number
+  volume24hETH?: number
   volume24hMETIS?: number
   volumeChange24h: number
   liquidityUSD: number
+  liquidityETH?: number
   liquidityMETIS?: number
   liquidityChange24h: number
   logoURI: string
   priceUSD: number
+  priceETH?: number
   priceMETIS?: number
   priceChange24h: number
   priceUSDChange24h: number
+  priceETHChange24h?: number
   priceMETISChange24h?: number
   timestamp: number
   blockNumber: number
@@ -47,6 +51,12 @@ const TokenSchema = new mongoose.Schema<IToken>(
     decimals: Number,
     volume24h: Number,
     volume24hUSD: Number,
+    volume24hETH: {
+      type: Number,
+      required: function (this: IToken) {
+        return parseInt(this.network) == 1088
+      },
+    },
     volume24hMETIS: {
       type: Number,
       required: function (this: IToken) {
@@ -55,6 +65,12 @@ const TokenSchema = new mongoose.Schema<IToken>(
     },
     volumeChange24h: Number,
     liquidityUSD: Number,
+    liquidityETH: {
+      type: Number,
+      required: function (this: IToken) {
+        return parseInt(this.network) == 1088
+      },
+    },
     liquidityMETIS: {
       type: Number,
       required: function (this: IToken) {
@@ -64,6 +80,12 @@ const TokenSchema = new mongoose.Schema<IToken>(
     liquidityChange24h: Number,
     logoURI: String,
     priceUSD: Number,
+    priceETH: {
+      type: Number,
+      required: function (this: IToken) {
+        return parseInt(this.network) == 1088
+      },
+    },
     priceMETIS: {
       type: Number,
       required: function (this: IToken) {
@@ -72,6 +94,12 @@ const TokenSchema = new mongoose.Schema<IToken>(
     },
     priceChange24h: Number,
     priceUSDChange24h: Number,
+    priceETHChange24h: {
+      type: Number,
+      required: function (this: IToken) {
+        return parseInt(this.network) == 1088
+      },
+    },
     priceMETISChange24h: {
       type: Number,
       required: function (this: IToken) {

@@ -23,9 +23,7 @@ export async function findMostLiquidExchange(address: string, chainId: CHAINS) {
   const exchanges = await Promise.all(
     FACTORIES[chainId].map(async (exchange) => {
       const isV3 = exchange.name.includes('V3')
-      const isHerculesV3 = exchange.name.includes('Hercules-V3')
-      const contract = web3Helper.getContract(
-        isHerculesV3 ? (HERCULES_FACTORY_ABI_V3 as AbiItem[]) : isV3 ? (UNISWAP_FACTORY_ABI_V3 as AbiItem[]) : (UNISWAP_FACTORY_ABI as AbiItem[]),
+      const contract = web3Helper.getContract(isV3 ? (UNISWAP_FACTORY_ABI_V3 as AbiItem[]) : (UNISWAP_FACTORY_ABI as AbiItem[]),
         exchange.address,
         web3,
       )
@@ -37,7 +35,7 @@ export async function findMostLiquidExchange(address: string, chainId: CHAINS) {
       return {
         ...exchange,
         contract,
-        pair: await web3Helper.getPairAddress(address, otherTokenAddress, contract, isV3, isHerculesV3),
+        pair: await web3Helper.getPairAddress(address, otherTokenAddress, contract, isV3),
       }
     }),
   )

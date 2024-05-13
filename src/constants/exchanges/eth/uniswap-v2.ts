@@ -1,8 +1,8 @@
 import { gql, GraphQLClient } from 'graphql-request'
 
-export const HERCULES_V2_CONFIG = {
-  URL: 'http://metisapi.0xgraph.xyz:8000/subgraphs/name/amm_subgraph_metis',
-  CLIENT: new GraphQLClient('http://metisapi.0xgraph.xyz:8000/subgraphs/name/amm_subgraph_metis', {
+export const UNISWAP_V2_CONFIG = {
+  URL: 'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2',
+  CLIENT: new GraphQLClient('https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2', {
     headers: { 'content-type': 'application/graphql' },
   }),
   QUERIES: {
@@ -108,11 +108,11 @@ export const HERCULES_V2_CONFIG = {
           token0 {
             address: id
           }
-          reserve0
-          reserve1
           token1 {
             address: id
           }
+          reserve0
+          reserve1
         }
 
         pairDayDatas(orderBy: date, orderDirection: desc, where: { pairAddress: $pair }, first: 2) {
@@ -166,21 +166,6 @@ export const HERCULES_V2_CONFIG = {
             priceUSD
             date
           }
-        }
-      }
-    `,
-    TOKEN_7_DAY_DATA: gql`
-      query Token($address: String!) {
-        sevenDayData: tokenDayDatas(where: { token: $address }, orderBy: date, orderDirection: desc, first: 7) {
-          txCount: dailyTxns
-          volume: dailyVolumeToken
-          volumeUSD: dailyVolumeUSD
-          volumeETH: dailyVolumeETH
-          liquidity: totalLiquidityToken
-          liquidityETH: totalLiquidityETH
-          liquidityUSD: totalLiquidityUSD
-          priceUSD
-          date
         }
       }
     `,
@@ -699,7 +684,7 @@ export const HERCULES_V2_CONFIG = {
     `,
     FACTORY: gql`
       query Factories {
-        Hercules-V2: uniswapFactories(first: 1) {
+        Uniswap-V2: uniswapFactories(first: 1) {
           id
           totalPairs: pairCount
           totalTransactions: txCount

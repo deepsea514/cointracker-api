@@ -91,17 +91,15 @@ export async function fetchTokenHistoricalDataBetweenTimeStamps(
   from: number,
   to: number,
   isV3: boolean,
-  isHerculesV3: boolean,
 ) {
   // Use Web3 to get the chains NATIVE-STABLE pair address & contract
   // Pair is used in the graphql query, but the contract isn't used unless
   // we need to fetch further data with web3
-  const factoryContract = web3Helper.getContract(
-    isHerculesV3 ? (HERCULES_FACTORY_ABI_V3 as AbiItem[]) : isV3 ? (UNISWAP_FACTORY_ABI_V3 as AbiItem[]) : (UNISWAP_FACTORY_ABI as AbiItem[]),
+  const factoryContract = web3Helper.getContract(isV3 ? (UNISWAP_FACTORY_ABI_V3 as AbiItem[]) : (UNISWAP_FACTORY_ABI as AbiItem[]),
     factory,
     chain.web3,
   )
-  const tokenNativePair = (await web3Helper.getPairAddress(token0, token1, factoryContract, isV3, isHerculesV3)).toLowerCase()
+  const tokenNativePair = (await web3Helper.getPairAddress(token0, token1, factoryContract, isV3)).toLowerCase()
   // can only get a maximum of 1000 from the subgraph at a time (may return less)
   // we need to get the full 1000 since we can't know how many tx took place per block/time-frame
   const limit = 1000
