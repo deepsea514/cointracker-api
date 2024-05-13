@@ -41,7 +41,7 @@ services:
       CACHE_HOST: redis
       CACHE_PORT: 6379
       # CACHE_EXPIRATION: 1800
-      ETH_URL: https://eth-mainnet.g.alchemy.com/v2/KMEr8Jf3KuVVwoH1vFMTCYLXABGAczOl
+      ETH_URL: https://eth-mainnet.public.blastapi.io
       METIS_URL: https://lb.nodies.app/v1/0fdd0b2f9bb84e8c85c3b81a94e2162e
       JWT_SECRET: xTC83d93GmPVkKitxTC83d93GmPVkKitxTC83d93GmPVkKit
       JWT_EXPIRY: 1d

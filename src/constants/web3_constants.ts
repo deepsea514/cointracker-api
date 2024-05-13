@@ -27,7 +27,7 @@ export const DEFAULT_BLOCK_TIMES: IChainDetails<number> = {
 }
 
 export const RPC_URL: IChainDetails<string> = {
-  [CHAINS.ETH]: process.env.ETH_URL ?? 'https://eth-mainnet.g.alchemy.com/v2/KMEr8Jf3KuVVwoH1vFMTCYLXABGAczOl',
+  [CHAINS.ETH]: process.env.ETH_URL ?? 'https://eth-mainnet.public.blastapi.io',
   [CHAINS.METIS]: process.env.METIS_URL ?? 'https://lb.nodies.app/v1/0fdd0b2f9bb84e8c85c3b81a94e2162e',
 }
 
