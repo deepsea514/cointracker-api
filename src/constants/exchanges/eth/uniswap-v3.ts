@@ -41,7 +41,7 @@ export const UNISWAP_V3_CONFIG = {
       query Token($first: Int) {
         bundle(id: 1) {
           id
-          chainPrice: maticPriceUSD
+          chainPrice: ethPriceUSD
         }
         tokens(first: $first, orderBy: txCount, orderDirection: desc) {
           address: id
@@ -53,15 +53,11 @@ export const UNISWAP_V3_CONFIG = {
           txCount
           feesUSD
           liquidity: totalValueLocked
-          derivedETH: derivedMatic
+          derivedETH
           dayData: tokenDayData(orderBy: date, orderDirection: desc, first: 2) {
             volume
             feesUSD
             liquidity: totalValueLocked
-            open
-            high
-            low
-            close
           }
 
           sevenDayData: tokenDayData(orderBy: date, orderDirection: desc, first: 7) {
@@ -100,7 +96,7 @@ export const UNISWAP_V3_CONFIG = {
       query Token($address: ID!, $pair: ID!, $baseTokens: [ID!]!) {
         bundle(id: 1) {
           id
-          chainPrice: maticPriceUSD
+          chainPrice: ethPriceUSD
         }
 
         nativePairDayDatas: poolDayDatas(
@@ -151,7 +147,7 @@ export const UNISWAP_V3_CONFIG = {
           totalSupply
           txCount
           liquidity: totalValueLocked
-          derivedETH: derivedMatic
+          derivedETH
           dayData: tokenDayData(orderBy: date, orderDirection: desc, first: 2) {
             volume
             liquidity: totalValueLocked

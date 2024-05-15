@@ -31,7 +31,7 @@ export const getPairDetails = async (
 ) => {
   const factoryContract = await getContract(factoryAbi, factoryAddress, chain.web3)
 
-  const pairAddress = await getPairAddress(tokenAddresses[0], tokenAddresses[1], factoryContract, isV3)
+  const pairAddress = await getPairAddress(tokenAddresses[0], tokenAddresses[1], factoryContract, isV3, chain.chainId)
 
   const pairContract = getContract(pairAbi, pairAddress, chain.web3)
 

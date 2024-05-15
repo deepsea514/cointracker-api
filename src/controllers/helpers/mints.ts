@@ -54,7 +54,7 @@ export const getTokenMints = async (
     exchangeDetails.address,
     chain.web3,
   )
-  const pair = await web3Helper.getPairAddress(address, chain.tokens.NATIVE, contract, isV3)
+  const pair = await web3Helper.getPairAddress(address, chain.tokens.NATIVE, contract, isV3, chainId)
 
   const mintsData = await getOrSetCache(
     `mints?address=${address}&chainId=${chainId}&exchange=${exchangeDetails.name}&limit=${limit}`,

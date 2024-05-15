@@ -99,7 +99,7 @@ export async function fetchTokenHistoricalDataBetweenTimeStamps(
     factory,
     chain.web3,
   )
-  const tokenNativePair = (await web3Helper.getPairAddress(token0, token1, factoryContract, isV3)).toLowerCase()
+  const tokenNativePair = (await web3Helper.getPairAddress(token0, token1, factoryContract, isV3, chain.chainId)).toLowerCase()
   // can only get a maximum of 1000 from the subgraph at a time (may return less)
   // we need to get the full 1000 since we can't know how many tx took place per block/time-frame
   const limit = 1000

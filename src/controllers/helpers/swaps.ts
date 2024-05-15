@@ -56,8 +56,8 @@ export const getTokenSwaps = async (
     exchangeDetails.address,
     chain.web3,
   )
-  const stablePair = await web3Helper.getPairAddress(address, chain.tokens.STABLE, contract, isV3)
-  const nativePair = await web3Helper.getPairAddress(address, chain.tokens.NATIVE, contract, isV3)
+  const stablePair = await web3Helper.getPairAddress(address, chain.tokens.STABLE, contract, isV3, chainId)
+  const nativePair = await web3Helper.getPairAddress(address, chain.tokens.NATIVE, contract, isV3, chainId)
   let pairs: string[] = []
   if (address.toLowerCase() === chain.tokens.STABLE.toLowerCase()) pairs.push(nativePair.toLowerCase())
   else if (address.toLowerCase() === chain.tokens.NATIVE.toLowerCase()) pairs.push(stablePair.toLowerCase())

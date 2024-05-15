@@ -97,6 +97,7 @@ const getHistoricalPricing = async (
     chain.tokens.STABLE,
     factoryContract,
     isV3,
+    chain.chainId
   )
 
   const baseContract = web3Helper.getContract(pairAbi, basePairAddress, chain.web3)
@@ -124,7 +125,7 @@ const getHistoricalPricing = async (
     return getBaseNativeCoinHistoricalPricing(baseHistory, token, chain.web3)
   }
 
-  const pairAddress = await web3Helper.getPairAddress(tokenAddress, chain.tokens.NATIVE, factoryContract, isV3)
+  const pairAddress = await web3Helper.getPairAddress(tokenAddress, chain.tokens.NATIVE, factoryContract, isV3, chain.chainId)
 
   const pairContract = web3Helper.getContract(pairAbi, pairAddress, chain.web3)
 

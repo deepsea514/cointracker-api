@@ -54,7 +54,7 @@ export const getTokenBurns = async (
     exchangeDetails.address,
     chain.web3,
   )
-  const pair = await web3Helper.getPairAddress(address, chain.tokens.NATIVE, contract, isV3)
+  const pair = await web3Helper.getPairAddress(address, chain.tokens.NATIVE, contract, isV3, chainId)
 
   const burnsData = await getOrSetCache(
     `burns?address=${address}&chainId=${chainId}&exchange=${exchangeDetails.name}&limit=${limit}`,

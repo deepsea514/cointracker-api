@@ -2,6 +2,7 @@ import Web3 from 'web3'
 import web3Helper from '../../utils/web3/helpers'
 import subgraphHelper from '../subgraph/subgraph'
 import { AbiItem } from 'web3-utils'
+import { getBalanceOf } from './tokens'
 import {
   FACTORIES,
   UNISWAP_FACTORY_ABI,
@@ -35,7 +36,7 @@ export async function findMostLiquidExchange(address: string, chainId: CHAINS) {
       return {
         ...exchange,
         contract,
-        pair: await web3Helper.getPairAddress(address, otherTokenAddress, contract, isV3),
+        pair: await web3Helper.getPairAddress(address, otherTokenAddress, contract, isV3, chainId),
       }
     }),
   )
@@ -54,8 +55,7 @@ export async function findMostLiquidExchange(address: string, chainId: CHAINS) {
           query: gql`
               query getPairData($pair: ID!) {
                 pair: pool(id: $pair) {
-                  reserve0: totalValueLockedToken0
-                  reserve1: totalValueLockedToken1
+                  liquidity
                   token0 {
                     id
                   }
@@ -94,13 +94,18 @@ export async function findMostLiquidExchange(address: string, chainId: CHAINS) {
         }
       }
 
+      const [_reserve0, _reserve1] = await Promise.all([
+        getBalanceOf(pairData.token0.id, exchange.pair.toLowerCase(), web3),
+        getBalanceOf(pairData.token1.id, exchange.pair.toLowerCase(), web3),
+      ])
+
       const token0IsDesired = compareAddress(pairData.token0.id, address, web3)
 
       return {
         name: exchange.name,
         address: exchange.address,
         pair: exchange.pair,
-        liquidity: token0IsDesired ? +pairData.reserve0 : +pairData.reserve1,
+        liquidity: token0IsDesired ? +_reserve0 : +_reserve1,
       }
     }),
   )

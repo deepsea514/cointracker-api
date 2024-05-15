@@ -64,8 +64,8 @@ export const getTokenByAddress = async (
 
   pair = compareAddress(address, chain.tokens.NATIVE, chain.web3)
     ? stableNativePair?.pairAddress ??
-    (await web3Helper.getPairAddress(chain.tokens.STABLE, chain.tokens.NATIVE, contract, isV3))
-    : tokenNativePair?.pairAddress ?? (await web3Helper.getPairAddress(address, chain.tokens.NATIVE, contract, isV3))
+    (await web3Helper.getPairAddress(chain.tokens.STABLE, chain.tokens.NATIVE, contract, isV3, chainId))
+    : tokenNativePair?.pairAddress ?? (await web3Helper.getPairAddress(address, chain.tokens.NATIVE, contract, isV3, chainId))
   const tokenData = await getOrSetCache(
     `${chainId}/tokens?chainId=${chainId}&exchange=${exchange}&address=${address}`,
     async () => {
