@@ -105,7 +105,7 @@ export async function findMostLiquidExchange(address: string, chainId: CHAINS) {
         name: exchange.name,
         address: exchange.address,
         pair: exchange.pair,
-        liquidity: token0IsDesired ? +_reserve0 : +_reserve1,
+        liquidity: token0IsDesired ? (isV3 ? +_reserve0 : +pairData.reserve0) : (isV3 ? +_reserve1 : +pairData.reserve1),
       }
     }),
   )
