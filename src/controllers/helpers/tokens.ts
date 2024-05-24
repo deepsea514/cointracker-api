@@ -1,31 +1,28 @@
-import { CHAINS, EXCHANGES, SUBGRAPHS } from '../../constants/constants'
-import subgraphHelper from '../../utils/subgraph/subgraph'
-import { BadRequestError, InsufficientDataError, ResourceNotFoundError } from '../../utils/CustomErrors'
-import { getChainConfiguration, IChainConfiguration } from '../../utils/chain/chainConfiguration'
-import { compareAddress } from '../../utils/web3/address'
-import web3Helper from '../../utils/web3/helpers'
+import { gql } from 'graphql-request'
 import { AbiItem } from 'web3-utils'
+import { getOrSetCache } from '../../cache/redis'
+import { CHAINS, EXCHANGES, SUBGRAPHS } from '../../constants/constants'
+import { UNISWAP_FACTORY_ABI, UNISWAP_FACTORY_ABI_V3 } from '../../constants/web3_constants'
+import History, { IHistory } from '../../models/historySchema'
+import Pair from '../../models/pairSchema'
+import { BadRequestError, InsufficientDataError, ResourceNotFoundError } from '../../utils/CustomErrors'
 import {
+  ICandleStickData,
+  IRawPairData,
   calculateReservesAndPrice,
   calculateTimeSlots,
   chunkIntervalSwapData,
   getCandlestickData,
-  ICandleStickData,
-  IRawPairData,
-  IRawSwapData,
-  // IRawSwapDataV3,
 } from '../../utils/candlestickCharts'
-import { fetchTokenHistoricalDataBetweenTimeStamps } from '../../utils/subgraph/dataFetchHelper'
-import { getOrSetCache } from '../../cache/redis'
-import { findMostLiquidExchange } from '../../utils/web3/cacheHelpers'
+import { IChainConfiguration, getChainConfiguration } from '../../utils/chain/chainConfiguration'
 import { getExchangeDetailsByName } from '../../utils/dataHelpers'
-import Token from '../../models/tokenSchema'
-import { HERCULES_FACTORY_ABI_V3, UNISWAP_FACTORY_ABI, UNISWAP_FACTORY_ABI_V3 } from '../../constants/web3_constants'
 import { formatToken } from '../../utils/formatters'
-import { gql } from 'graphql-request'
+import { fetchTokenHistoricalDataBetweenTimeStamps } from '../../utils/subgraph/dataFetchHelper'
+import subgraphHelper from '../../utils/subgraph/subgraph'
 import { getTokenById } from '../../utils/token'
-import Pair from '../../models/pairSchema'
-import History, { IHistory } from '../../models/historySchema'
+import { compareAddress } from '../../utils/web3/address'
+import { findMostLiquidExchange } from '../../utils/web3/cacheHelpers'
+import web3Helper from '../../utils/web3/helpers'
 
 export const getTokenByAddress = async (
   chainId: CHAINS,
@@ -43,7 +40,8 @@ export const getTokenByAddress = async (
 
   const isV3 = exchangeDetails.name.includes('V3')
 
-  const contract = web3Helper.getContract(isV3 ? (UNISWAP_FACTORY_ABI_V3 as AbiItem[]) : (UNISWAP_FACTORY_ABI as AbiItem[]),
+  const contract = web3Helper.getContract(
+    isV3 ? (UNISWAP_FACTORY_ABI_V3 as AbiItem[]) : (UNISWAP_FACTORY_ABI as AbiItem[]),
     exchangeDetails.address,
     chain.web3,
   )
@@ -64,8 +62,15 @@ export const getTokenByAddress = async (
 
   pair = compareAddress(address, chain.tokens.NATIVE, chain.web3)
     ? stableNativePair?.pairAddress ??
-    (await web3Helper.getPairAddress(chain.tokens.STABLE, chain.tokens.NATIVE, contract, isV3, chainId))
-    : tokenNativePair?.pairAddress ?? (await web3Helper.getPairAddress(address, chain.tokens.NATIVE, contract, isV3, chainId))
+      (await web3Helper.getPairAddress(chain.tokens.STABLE, chain.tokens.NATIVE, contract, isV3, chainId))
+    : tokenNativePair?.pairAddress ??
+      (await web3Helper.getPairAddress(address, chain.tokens.NATIVE, contract, isV3, chainId))
+
+  if (!pair) {
+    console.log(`Cannot Find Pair Address for ${address}`)
+    return null
+  }
+
   const tokenData = await getOrSetCache(
     `${chainId}/tokens?chainId=${chainId}&exchange=${exchange}&address=${address}`,
     async () => {
@@ -109,14 +114,15 @@ export const getTokens = async (chainId: CHAINS, exchange: EXCHANGES, limit: num
         query: subgraph.QUERIES.TOKENS,
         variables: { first: limit },
       })
-      console.log('GETTING QUERIES')
       // TODO: I can't get all the volume24h/liquidity24h/price24h from the original query, so unfortunately
       // we need to make multiple queries here to get all that information. luckily caching!
       return await Promise.all(
-        data.tokens.map((token: any) => {
-          // console.log(token.address)
-          return getTokenByAddress(chainId, exchange, token.address, cache)
-        }),
+        data.tokens
+          .map((token: any) => {
+            // console.log(token.address)
+            return getTokenByAddress(chainId, exchange, token.address, cache)
+          })
+          .filter((token: any) => token !== null),
       )
     },
     cache,
@@ -321,8 +327,8 @@ async function getRecentCandles(
   // Fetch the exact reserves at that point in time
   const initialReserves = isV3
     ? await subgraphHelper.getDataByQuery({
-      client: subgraph.CLIENT,
-      query: gql`
+        client: subgraph.CLIENT,
+        query: gql`
           query GetReservesAtBlock($pair: ID!, $block: Int!) {
             pair: pool(id: $pair, block: { number: $block }) {
               token0Price
@@ -330,14 +336,14 @@ async function getRecentCandles(
             }
           }
         `,
-      variables: {
-        pair: data.pair.id.toLowerCase(),
-        block: Number(data.swaps[0].transaction.blockNumber),
-      },
-    })
+        variables: {
+          pair: data.pair.id.toLowerCase(),
+          block: Number(data.swaps[0].transaction.blockNumber),
+        },
+      })
     : await subgraphHelper.getDataByQuery({
-      client: subgraph.CLIENT,
-      query: gql`
+        client: subgraph.CLIENT,
+        query: gql`
           query GetReservesAtBlock($pair: ID!, $block: Int!) {
             pair(id: $pair, block: { number: $block }) {
               reserve0
@@ -345,11 +351,11 @@ async function getRecentCandles(
             }
           }
         `,
-      variables: {
-        pair: data.pair.id.toLowerCase(),
-        block: Number(data.swaps[0].transaction.blockNumber),
-      },
-    })
+        variables: {
+          pair: data.pair.id.toLowerCase(),
+          block: Number(data.swaps[0].transaction.blockNumber),
+        },
+      })
 
   return getCandlestickFromSwaps(
     data.pair,

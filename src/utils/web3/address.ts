@@ -1,14 +1,11 @@
+import { BigNumber } from 'ethers'
 import Web3 from 'web3'
 import { Contract } from 'web3-eth-contract'
 import { AbiItem } from 'web3-utils'
-import { BigNumber } from 'ethers'
 import { CHAINS } from '../../constants/constants'
-import { getContract } from './contracts'
+import { RPC_URL, UNISWAP_PAIR_ABI_V3 } from '../../constants/web3_constants'
 import { BadRequestError } from '../CustomErrors'
-import {
-  RPC_URL,
-  UNISWAP_PAIR_ABI_V3,
-} from '../../constants/web3_constants'
+import { getContract } from './contracts'
 
 export const checksumAddress = (address: string, web3: Web3): string => {
   try {
@@ -37,8 +34,8 @@ export const getPairAddress = async (
       }),
     )
 
-    let maxLiquidity = BigNumber.from(0);
-    let maxLiquidityPool;
+    let maxLiquidity = BigNumber.from(0)
+    let maxLiquidityPool
 
     for (const pool of pools) {
       if (pool !== '0x0000000000000000000000000000000000000000') {
@@ -46,15 +43,13 @@ export const getPairAddress = async (
           const web3 = new Web3(new Web3.providers.HttpProvider(RPC_URL[chainId]))
           const pairContract = getContract(UNISWAP_PAIR_ABI_V3 as AbiItem[], pool, web3)
           const liquidity = await pairContract.methods.liquidity().call()
+          const liquidityBig = BigNumber.from(liquidity)
 
-          if (liquidity.gt(maxLiquidity)) {
-            maxLiquidity = liquidity;
-            maxLiquidityPool = pool;
+          if (liquidityBig.gt(maxLiquidity)) {
+            maxLiquidity = liquidityBig
+            maxLiquidityPool = pool
           }
-        }
-        catch (error) {
-
-        }
+        } catch (error) {}
       }
     }
     return maxLiquidityPool

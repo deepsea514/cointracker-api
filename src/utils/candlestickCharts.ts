@@ -1,6 +1,5 @@
 import Big from 'big.js'
 import { CHAINS, EXCHANGES } from '../constants/constants'
-import { InsufficientDataError } from './CustomErrors'
 
 export interface ISwapDataset {
   open: Big
@@ -80,8 +79,8 @@ export function formatSwap(
   return {
     // price of token0 relative to token1
     // TODO: this assumes token1 is FTM (or native token)
-    open: token0IsNative ? openReserve0.div(openReserve1) : openReserve1.div(openReserve0),
-    close: token0IsNative ? reserve0.div(reserve1) : reserve1.div(reserve0),
+    open: token0IsNative ? openReserve1.div(openReserve0) : openReserve0.div(openReserve1),
+    close: token0IsNative ? reserve1.div(reserve0) : reserve0.div(reserve1),
     reserve0,
     reserve1,
     block,

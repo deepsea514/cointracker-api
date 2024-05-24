@@ -1,11 +1,11 @@
 import fs from 'fs'
 import path from 'path'
-import { getTokenHistorical, getExchange, getTokens } from '../controllers/helpers/tokens'
 import { CHAINS, EXCHANGES, SUBGRAPHS } from '../constants/constants'
-import Token, { IToken } from '../models/tokenSchema'
-import History, { IHistory } from '../models/historySchema'
-import { logTime, logAddresses, logFetchTokenError, logSubgraphError } from './logging'
 import { getPairsByTokenFromSubgraph } from '../controllers/helpers/pairs'
+import { getExchange, getTokenHistorical, getTokens } from '../controllers/helpers/tokens'
+import History, { IHistory } from '../models/historySchema'
+import Token, { IToken } from '../models/tokenSchema'
+import { logAddresses, logFetchTokenError, logSubgraphError, logTime } from './logging'
 
 export const fillDbWithTokens = async (ch: CHAINS, ex: EXCHANGES) => {
   if (!fs.existsSync(path.join(process.cwd(), '.logs'))) fs.mkdirSync(path.join(process.cwd(), '.logs'))
@@ -25,7 +25,7 @@ export const fillDbWithTokens = async (ch: CHAINS, ex: EXCHANGES) => {
     do {
       // Get top 100 tokens from graphql
       try {
-        fetchedTokens = await getTokens(ch as CHAINS, ex as EXCHANGES, 100, false) // don't cache this request
+        fetchedTokens = await getTokens(ch as CHAINS, ex as EXCHANGES, 10, false) // don't cache this request
         shouldRetry = false
       } catch (err: any) {
         shouldRetry = ++retries < MAX_RETRIES ? true : false
@@ -86,6 +86,7 @@ export const fillDbWithTokens = async (ch: CHAINS, ex: EXCHANGES) => {
     const months = 1
     const from = new Date().setMonth(new Date().getMonth() - months) // From some months ago (3 months)
     const to = new Date().getTime() // to now!
+
     for (let i = 0; i < newTokens.length; i++) {
       console.log(`Token #${i} of ${newTokens.length}`)
 

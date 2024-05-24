@@ -1,6 +1,5 @@
-import mongoose, { Document } from 'mongoose'
-import { isDataView } from 'util/types'
-import History, { IHistory } from './historySchema'
+import mongoose from 'mongoose'
+import { IHistory } from './historySchema'
 
 export interface IToken {
   tokenId: string
@@ -54,7 +53,7 @@ const TokenSchema = new mongoose.Schema<IToken>(
     volume24hETH: {
       type: Number,
       required: function (this: IToken) {
-        return parseInt(this.network) == 1088
+        return parseInt(this.network) == 1
       },
     },
     volume24hMETIS: {
@@ -68,7 +67,7 @@ const TokenSchema = new mongoose.Schema<IToken>(
     liquidityETH: {
       type: Number,
       required: function (this: IToken) {
-        return parseInt(this.network) == 1088
+        return parseInt(this.network) == 1
       },
     },
     liquidityMETIS: {
@@ -83,7 +82,7 @@ const TokenSchema = new mongoose.Schema<IToken>(
     priceETH: {
       type: Number,
       required: function (this: IToken) {
-        return parseInt(this.network) == 1088
+        return parseInt(this.network) == 1
       },
     },
     priceMETIS: {
@@ -97,7 +96,7 @@ const TokenSchema = new mongoose.Schema<IToken>(
     priceETHChange24h: {
       type: Number,
       required: function (this: IToken) {
-        return parseInt(this.network) == 1088
+        return parseInt(this.network) == 1
       },
     },
     priceMETISChange24h: {
