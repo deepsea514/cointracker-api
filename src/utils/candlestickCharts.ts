@@ -171,24 +171,10 @@ export function getCandlestickData(
     const high = Math.max(...block.swaps.flatMap((s: any) => [s.open.toNumber(), s.close.toNumber()])) ?? 0
     // lowest price
     const low = Math.min(...block.swaps.flatMap((s: any) => [s.open.toNumber(), s.close.toNumber()])) ?? 0
-    // open price (lowest block number & lowest timestamp from group)
-    const open =
-      (block.swaps as any)
-        .find(
-          (swap: any) =>
-            swap.block === Math.min(...block.swaps.map((s: any) => s.block)) &&
-            swap.timestamp === Math.min(...block.swaps.map((s: any) => s.timestamp)),
-        )
-        ?.open.toNumber() ?? null
-    // close price (highest block number & highest timestamp from group)
-    const close =
-      (block.swaps as any)
-        .find(
-          (swap: any) =>
-            swap.block === Math.max(...block.swaps.map((s: any) => s.block)) &&
-            swap.timestamp === Math.max(...block.swaps.map((s: any) => s.timestamp)),
-        )
-        ?.close.toNumber() ?? null
+    // open price will be the close price of previous candle
+    const open = block.swaps[0]?.close.toNumber() ?? null
+    // close price is the last close
+    const close = block.swaps[block.swaps.length - 1]?.close.toNumber() ?? null
 
     const volume = block.swaps.reduce((acc, cur) => acc + (token0IsNative ? cur.volume0 : cur.volume1), 0) // TODO: check which is native (not token0)
 
@@ -223,9 +209,7 @@ export function calculateReservesAndPrice(
   token0IsNative: boolean,
   isV3: boolean,
 ) {
-  // Get the first swap to calculate the current reserves balance
-  const _firstRaw = swaps.shift()
-  if (!_firstRaw) {
+  if (!swaps.length) {
     return []
   }
 
@@ -246,12 +230,15 @@ export function calculateReservesAndPrice(
         +swap.transaction.timestamp,
         +swap.amount0,
         +swap.amount1,
-        true,
+        isV3,
       )
     })
 
     return formattedSwaps.reverse()
   }
+
+  // Get the first swap to calculate the current reserves balance
+  const _firstRaw = swaps.shift()
   // Format the first swap into ISwapDataset
   const first = formatSwap(
     token0IsNative,
@@ -263,7 +250,7 @@ export function calculateReservesAndPrice(
     +_firstRaw.transaction.timestamp,
     +_firstRaw.amount0In + +_firstRaw.amount0Out,
     +_firstRaw.amount1In + +_firstRaw.amount1Out,
-    true,
+    isV3,
   )
 
   // Begin collecting the swaps, working backwards
@@ -283,7 +270,7 @@ export function calculateReservesAndPrice(
         +swap.transaction.timestamp,
         +swap.amount0In + +swap.amount0Out,
         +swap.amount1In + +swap.amount1Out,
-        true,
+        isV3,
       ),
     )
   }

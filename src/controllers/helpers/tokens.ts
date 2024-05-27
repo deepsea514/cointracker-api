@@ -217,7 +217,6 @@ function getCandlestickFromSwaps(
   tokenId: string,
 ) {
   const isV3 = exchange.includes('V3')
-
   const formattedSwaps = calculateReservesAndPrice(pair, swaps, initialReserves, token0IsNative, isV3)
   if (!formattedSwaps.length) return []
   const [start, end] = calculateTimeSlots(
@@ -240,6 +239,7 @@ function mergeCandles(candles: ICandleStickData[], base: ICandleStickData[]): IC
     if (!_base.length || !candle?.start || !_base?.[0].start) {
       break
     }
+
     usdCandles.push({
       AMM: candle.AMM,
       network: candle.network,
