@@ -524,10 +524,10 @@ export const getTokenHistoricalFromDB = async (
 
   if (!token) throw new ResourceNotFoundError(`Token with address ${address} was not found on exchange ${exchange}`)
   // make sure that the token being returned is sorted by timestamp
-  token?.history?.sort(function (x, y) {
-    // This part makes sure that the history is sorted before it is added to the db
-    return y.timestamp - x.timestamp
-  })
+  // token?.history?.sort(function (x, y) {
+  //   // This part makes sure that the history is sorted before it is added to the db
+  //   return y.timestamp - x.timestamp
+  // })
   // console.log(`About to fail?`)
 
   // console.log(token?.history, token?.history_length)

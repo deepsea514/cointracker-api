@@ -1,5 +1,5 @@
-import Token, { IToken } from '../models/tokenSchema'
 import { getOrSetCache } from '../cache/redis'
+import Token, { IToken } from '../models/tokenSchema'
 
 export const getTokenById = async (
   tokenId: string,
@@ -18,6 +18,7 @@ export const getTokenById = async (
             $gte: from !== undefined ? from / 1000 : (new Date().getTime() / 1000 - months * 30 * 24 * 60 * 60) >> 0,
           },
         },
+        options: { sort: { timestamp: 1 } },
       })
     },
     true,
