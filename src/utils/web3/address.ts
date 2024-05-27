@@ -3,7 +3,7 @@ import Web3 from 'web3'
 import { Contract } from 'web3-eth-contract'
 import { AbiItem } from 'web3-utils'
 import { CHAINS } from '../../constants/constants'
-import { RPC_URL, UNISWAP_PAIR_ABI_V3 } from '../../constants/web3_constants'
+import { RPC_URL, TOKENS, UNISWAP_PAIR_ABI_V3 } from '../../constants/web3_constants'
 import { BadRequestError } from '../CustomErrors'
 import { getContract } from './contracts'
 
@@ -35,10 +35,10 @@ export const getPairAddress = async (
     )
 
     let maxLiquidity = BigNumber.from(0)
-    let maxLiquidityPool
+    let maxLiquidityPool = TOKENS.ZERO
 
     for (const pool of pools) {
-      if (pool !== '0x0000000000000000000000000000000000000000') {
+      if (pool !== TOKENS.ZERO) {
         try {
           const web3 = new Web3(new Web3.providers.HttpProvider(RPC_URL[chainId]))
           const pairContract = getContract(UNISWAP_PAIR_ABI_V3 as AbiItem[], pool, web3)

@@ -220,7 +220,11 @@ function getCandlestickFromSwaps(
 
   const formattedSwaps = calculateReservesAndPrice(pair, swaps, initialReserves, token0IsNative, isV3)
   if (!formattedSwaps.length) return []
-  const [start, end] = calculateTimeSlots(formattedSwaps[0].timestamp, timeFrameSeconds)
+  const [start, end] = calculateTimeSlots(
+    formattedSwaps[0].timestamp,
+    formattedSwaps[formattedSwaps.length - 1].timestamp,
+    timeFrameSeconds,
+  )
   const prices = chunkIntervalSwapData(start, end, formattedSwaps, timeFrameSeconds)
   return getCandlestickData(prices, token0IsNative, chain, exchange, tokenId)
 }
@@ -498,7 +502,7 @@ export const getTokenHistorical = async (
   const final = mergeCandles(candleRecent, baseCandles) // convert to usd
   const history = final.reduce(reduceCandlestickToTradingView, [])
 
-  let result = await History.insertMany(history)
+  await History.insertMany(history)
 
   return history
 }

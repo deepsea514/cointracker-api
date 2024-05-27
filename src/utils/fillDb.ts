@@ -25,7 +25,7 @@ export const fillDbWithTokens = async (ch: CHAINS, ex: EXCHANGES) => {
     do {
       // Get top 100 tokens from graphql
       try {
-        fetchedTokens = await getTokens(ch as CHAINS, ex as EXCHANGES, 10, false) // don't cache this request
+        fetchedTokens = await getTokens(ch as CHAINS, ex as EXCHANGES, 100, false) // don't cache this request
         shouldRetry = false
       } catch (err: any) {
         shouldRetry = ++retries < MAX_RETRIES ? true : false
@@ -83,7 +83,7 @@ export const fillDbWithTokens = async (ch: CHAINS, ex: EXCHANGES) => {
     newTokensAddresses = newTokensAddresses.slice(0, newTokensAddresses.length - 2) + '\n'
     logAddresses('newTokens', newTokensAddresses, ex)
     console.log('DONE PREPARING. >> SAVING TOKENS NOW')
-    const months = 1
+    const months = 3
     const from = new Date().setMonth(new Date().getMonth() - months) // From some months ago (3 months)
     const to = new Date().getTime() // to now!
 

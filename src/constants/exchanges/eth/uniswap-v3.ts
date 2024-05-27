@@ -8,32 +8,37 @@ export const UNISWAP_V3_CONFIG = {
   QUERIES: {
     PAIRS: gql`
       query Pair($token: String!) {
-        pair0: pools(where: { token0: $token }) {
+        pair0: pools(where: { token0: $token }, orderBy: volumeUSD, orderDirection: desc) {
           pairAddress: id
           token0 {
             address: id
+            name
             symbol
           }
           token1 {
             address: id
+            name
             symbol
           }
           createdAtTimestamp
           createdAtBlockNumber
+          feeTier
         }
-
-        pair1: pools(where: { token1: $token }) {
+        pair1: pools(where: { token1: $token }, orderBy: volumeUSD, orderDirection: desc) {
           pairAddress: id
           token0 {
             address: id
+            name
             symbol
           }
           token1 {
             address: id
+            name
             symbol
           }
           createdAtTimestamp
           createdAtBlockNumber
+          feeTier
         }
       }
     `,
@@ -214,11 +219,11 @@ export const UNISWAP_V3_CONFIG = {
           id
           amount0
           amount1
-          price
           amountUSD
           to: recipient
           from: origin
           sender
+          sqrtPriceX96
         }
       }
     `,

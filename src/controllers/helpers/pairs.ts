@@ -1,4 +1,3 @@
-import { gql } from 'graphql-request'
 import { CHAINS, EXCHANGES, SUBGRAPHS } from '../../constants/constants'
 import Pair, { IPair } from '../../models/pairSchema'
 import { BadRequestError } from '../../utils/CustomErrors'
@@ -37,7 +36,7 @@ export const getPairsByTokenFromSubgraph = async (address: string, chainId: CHAI
     const newPair: IPair = {
       id: `${newPairs[i].pairAddress}_${getExchange(exchange, chainId)}`,
       pairAddress: newPairs[i]?.pairAddress,
-      token0Symbol: newPairs[i]?.token0?.symbol,
+      token0Symbol: newPairs[i]?.token0?.symbol || newPairs[i]?.token0?.name,
       token0Address: newPairs[i]?.token0?.address,
       token1Symbol: newPairs[i]?.token1?.symbol,
       token1Address: newPairs[i]?.token1?.address,
@@ -45,9 +44,13 @@ export const getPairsByTokenFromSubgraph = async (address: string, chainId: CHAI
       createdAtTimestamp: `${parseInt(newPairs[i]?.createdAtTimestamp) * 1000}`,
       network: chainId,
       AMM: exchange,
+      fee: newPairs[i]?.feeTier || '',
     }
-    await Pair.create(newPair)
-    // console.log(pair)
+    try {
+      await Pair.create(newPair)
+    } catch (error) {
+      console.log(`Cannot Create a Pair: ${JSON.stringify(newPair)}`)
+    }
   }
 }
 

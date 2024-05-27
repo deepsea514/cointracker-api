@@ -11,6 +11,7 @@ export interface IPair {
   createdAtBlock: string
   network: number
   AMM: string
+  fee: string
 }
 
 const PairSchema = new mongoose.Schema<IPair>({
@@ -49,6 +50,10 @@ const PairSchema = new mongoose.Schema<IPair>({
   AMM: {
     type: String,
     required: true,
+  },
+  fee: {
+    type: String,
+    required: false,
   },
 })
 

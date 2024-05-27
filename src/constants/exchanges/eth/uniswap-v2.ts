@@ -8,7 +8,7 @@ export const UNISWAP_V2_CONFIG = {
   QUERIES: {
     PAIRS: gql`
       query Pair($token: String!) {
-        pair0: pairs(where: { token0: $token }) {
+        pair0: pairs(where: { token0: $token }, orderBy: volumeUSD, orderDirection: desc) {
           pairAddress: id
           token0 {
             address: id
@@ -21,8 +21,7 @@ export const UNISWAP_V2_CONFIG = {
           createdAtTimestamp
           createdAtBlockNumber
         }
-
-        pair1: pairs(where: { token1: $token }) {
+        pair1: pairs(where: { token1: $token }, orderBy: volumeUSD, orderDirection: desc) {
           pairAddress: id
           token0 {
             address: id

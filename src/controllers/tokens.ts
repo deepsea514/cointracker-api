@@ -1,12 +1,12 @@
 import { NextFunction, Request, Response } from 'express'
+import { CHAINS, EXCHANGES } from '../constants/constants'
 import asyncHandler from '../middleware/asyncHandler'
 import JsonResponse from '../utils/JsonResponse'
-import tokensHelper from './helpers/tokens'
-import swapsHelper from './helpers/swaps'
-import mintsHelper from './helpers/mints'
-import burnsHelper from './helpers/burns'
-import { CHAINS, EXCHANGES } from '../constants/constants'
 import { getChainConfiguration } from '../utils/chain/chainConfiguration'
+import burnsHelper from './helpers/burns'
+import mintsHelper from './helpers/mints'
+import swapsHelper from './helpers/swaps'
+import tokensHelper from './helpers/tokens'
 
 export const getTokens = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
   const chainId = req.query.chainId as unknown as CHAINS
