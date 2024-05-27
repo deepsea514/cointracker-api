@@ -1,11 +1,11 @@
 import fs from 'fs'
 import path from 'path'
-import { getTokenHistorical, getExchange, getTokens } from '../controllers/helpers/tokens'
 import { CHAINS, EXCHANGES, SUBGRAPHS } from '../constants/constants'
-import Token, { IToken } from '../models/tokenSchema'
-import History, { IHistory } from '../models/historySchema'
-import { logTime, logAddresses, logFetchTokenError, logSubgraphError } from './logging'
 import { getPairsByTokenFromSubgraph } from '../controllers/helpers/pairs'
+import { getExchange, getTokenHistorical, getTokens } from '../controllers/helpers/tokens'
+import History, { IHistory } from '../models/historySchema'
+import Token, { IToken } from '../models/tokenSchema'
+import { logAddresses, logFetchTokenError, logSubgraphError, logTime } from './logging'
 
 export const fillDbWithTokens = async (ch: CHAINS, ex: EXCHANGES) => {
   if (!fs.existsSync(path.join(process.cwd(), '.logs'))) fs.mkdirSync(path.join(process.cwd(), '.logs'))
@@ -83,9 +83,10 @@ export const fillDbWithTokens = async (ch: CHAINS, ex: EXCHANGES) => {
     newTokensAddresses = newTokensAddresses.slice(0, newTokensAddresses.length - 2) + '\n'
     logAddresses('newTokens', newTokensAddresses, ex)
     console.log('DONE PREPARING. >> SAVING TOKENS NOW')
-    const months = 1
+    const months = 3
     const from = new Date().setMonth(new Date().getMonth() - months) // From some months ago (3 months)
     const to = new Date().getTime() // to now!
+
     for (let i = 0; i < newTokens.length; i++) {
       console.log(`Token #${i} of ${newTokens.length}`)
 

@@ -1,12 +1,13 @@
 import 'dotenv/config'
-import server from './server'
+import { CHAINS, EXCHANGES } from './constants/constants'
 import { connect } from './db/connect'
+import History from './models/historySchema'
+import Pair from './models/pairSchema'
+import Token from './models/tokenSchema'
+import server from './server'
 import { CronJob } from './utils/cron'
 import { fillDbWithTokens } from './utils/fillDb'
-import { CHAINS, EXCHANGES } from './constants/constants'
-import History from './models/historySchema'
-import Token from './models/tokenSchema'
-import Pair from './models/pairSchema'
+
 const PORT = process.env.PORT || 3000
 
 server.listen(PORT, async () => {
@@ -17,7 +18,7 @@ server.listen(PORT, async () => {
     console.log(`${new Date().toISOString()}: Start filling tokens to the DB.`)
     // TODO: add dexes
 
-    for (const exchange of [EXCHANGES.UNISWAP_V2]) {
+    for (const exchange of [EXCHANGES.UNISWAP_V3]) {
       try {
         console.log(`${new Date().toISOString()}: Starting backfill for ${exchange.toUpperCase()}`)
         await fillDbWithTokens(CHAINS.ETH, exchange)

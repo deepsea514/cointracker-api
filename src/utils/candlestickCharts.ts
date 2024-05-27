@@ -1,6 +1,5 @@
 import Big from 'big.js'
 import { CHAINS, EXCHANGES } from '../constants/constants'
-import { InsufficientDataError } from './CustomErrors'
 
 export interface ISwapDataset {
   open: Big
@@ -76,12 +75,25 @@ export function formatSwap(
   timestamp: number,
   volume0: number,
   volume1: number,
+  isV3: boolean,
 ): ISwapDataset {
+  if (isV3) {
+    return {
+      open: token0IsNative ? openReserve1 : openReserve0,
+      close: token0IsNative ? openReserve1 : openReserve0,
+      reserve0,
+      reserve1,
+      block,
+      timestamp,
+      volume0,
+      volume1,
+    }
+  }
   return {
     // price of token0 relative to token1
     // TODO: this assumes token1 is FTM (or native token)
-    open: token0IsNative ? openReserve0.div(openReserve1) : openReserve1.div(openReserve0),
-    close: token0IsNative ? reserve0.div(reserve1) : reserve1.div(reserve0),
+    open: token0IsNative ? openReserve1.div(openReserve0) : openReserve0.div(openReserve1),
+    close: token0IsNative ? reserve1.div(reserve0) : reserve0.div(reserve1),
     reserve0,
     reserve1,
     block,
@@ -91,11 +103,11 @@ export function formatSwap(
   }
 }
 
-export function calculateTimeSlots(timestamp: number, interval: number): [number, number] {
+export function calculateTimeSlots(startTimestamp: number, endTimestamp: number, interval: number): [number, number] {
   const now = new Date().getTime()
-  let timeSlot = Math.min(timestamp + interval - (timestamp % interval), now - (now % interval)) // Complete the minute using current time as maximum
-  let nextTime = timeSlot - interval // work backwards minute by minute
-  return [nextTime, timeSlot]
+  let startTimeSlot = Math.min(startTimestamp + interval - (startTimestamp % interval), now - (now % interval)) // Complete the minute using current time as maximum
+  let endTimeSlot = Math.min(endTimestamp + interval - (endTimestamp % interval), now - (now % interval)) // Complete the minute using current time as maximum
+  return [startTimeSlot, endTimeSlot]
 }
 
 export function chunkIntervalSwapData(
@@ -106,72 +118,41 @@ export function chunkIntervalSwapData(
 ): IIntervalSwapData {
   const prices: IIntervalSwapData = {}
 
-  // This loop goes ever <<TIME_INTERVAL>> and calculates price/details
-  for (const [index, swap] of Object.entries(formattedSwaps)) {
-    const previousSwap = Number(index) > 0 ? formattedSwaps[Number(index) - 1] : null
-    if (swap.timestamp > timeSlotEnd) {
-      // Incomplete Blocks, ignore, we will get next time
-      // Maybe we want to show these as the get processed?
-      // but for this script I just dropped them to simplify
-      continue
+  let swapIndex = 0
+  for (timeSlotStart += timeFrameSeconds; timeSlotStart < timeSlotEnd; timeSlotStart += timeFrameSeconds) {
+    const previousSwap = swapIndex > 1 ? formattedSwaps[swapIndex - 1] : null
+
+    prices[timeSlotStart] = {
+      time: new Date(timeSlotStart * 1000),
+      startTime: timeSlotStart - timeFrameSeconds,
+      endTime: timeSlotStart - 0.001,
+      block: 0,
+      swaps: [], // record all swaps that fall in this timeframe here
     }
 
-    // not equal to. equal to will fall into the next batch
-    if (!prices[timeSlotEnd]) {
-      prices[timeSlotEnd] = {
-        // save names working (backwards, so endTime is now, and startTime is 1 minute ago
-        // for processing, startTime is now, and endTime is 1 minute ago
-        time: new Date(timeSlotEnd * 1000),
-        startTime: timeSlotStart,
-        endTime: timeSlotEnd - 0.001,
-        block: swap.block,
-        swaps: [], // record all swaps that fall in this timeframe here
-      }
+    if (previousSwap) {
+      prices[timeSlotStart].swaps.push({
+        open: previousSwap.open,
+        close: previousSwap.close,
+        reserve0: previousSwap.reserve0,
+        reserve1: previousSwap.reserve1,
+        block: previousSwap.block,
+        timestamp: previousSwap.timestamp, // just pick the average if the time interval
+        volume0: 0,
+        volume1: 0,
+      })
+
+      prices[timeSlotStart].block = previousSwap.block
     }
 
-    if (swap.timestamp > timeSlotStart && swap.timestamp <= timeSlotEnd) {
-      prices[timeSlotEnd].swaps.push(swap)
-      continue
+    if (swapIndex >= formattedSwaps.length) continue
+
+    while (formattedSwaps[swapIndex].timestamp < timeSlotStart) {
+      const swap = formattedSwaps[swapIndex]
+      prices[timeSlotStart].swaps.push(swap)
+      prices[timeSlotStart].block = swap.block
+      swapIndex++
     }
-
-    // Use a do-while since for some minutes we have no swap data, but we still want to
-    // create an entry for these minutes. this will run through all the backwards minutes
-    // until we get to one with a swap again
-    do {
-      // update bracket times (time frames) to grab the next minute back
-      timeSlotEnd = timeSlotStart
-      timeSlotStart = timeSlotEnd - timeFrameSeconds
-
-      // see above
-      prices[timeSlotEnd] = {
-        time: new Date(timeSlotEnd * 1000),
-        startTime: timeSlotStart, // add a second so that a swap can't get into two time slots
-        endTime: timeSlotEnd - 0.001,
-        block: swap.block,
-        swaps: [],
-      }
-
-      if (swap.timestamp <= timeSlotStart) {
-        // No swap matches the time frame, so here we will spoof
-        // a swap in order to get the open/close/high/low values to be copied
-        // over (straight line on chart, no gaps on chart) maybe its better
-        // to just leave this out though?
-        if (previousSwap) {
-          prices[timeSlotEnd].swaps.push({
-            open: previousSwap.open,
-            close: previousSwap.close,
-            reserve0: previousSwap.reserve0,
-            reserve1: previousSwap.reserve1,
-            block: 0,
-            timestamp: (timeSlotEnd + timeSlotStart) / 2, // just pick the average if the time interval
-            volume0: 0,
-            volume1: 0,
-          })
-        }
-      }
-    } while (swap.timestamp <= timeSlotStart)
-
-    prices[timeSlotEnd].swaps.push(swap)
   }
 
   return prices
@@ -190,24 +171,10 @@ export function getCandlestickData(
     const high = Math.max(...block.swaps.flatMap((s: any) => [s.open.toNumber(), s.close.toNumber()])) ?? 0
     // lowest price
     const low = Math.min(...block.swaps.flatMap((s: any) => [s.open.toNumber(), s.close.toNumber()])) ?? 0
-    // open price (lowest block number & lowest timestamp from group)
-    const open =
-      (block.swaps as any)
-        .find(
-          (swap: any) =>
-            swap.block === Math.min(...block.swaps.map((s: any) => s.block)) &&
-            swap.timestamp === Math.min(...block.swaps.map((s: any) => s.timestamp)),
-        )
-        ?.open.toNumber() ?? null
-    // close price (highest block number & highest timestamp from group)
-    const close =
-      (block.swaps as any)
-        .find(
-          (swap: any) =>
-            swap.block === Math.max(...block.swaps.map((s: any) => s.block)) &&
-            swap.timestamp === Math.max(...block.swaps.map((s: any) => s.timestamp)),
-        )
-        ?.close.toNumber() ?? null
+    // open price will be the close price of previous candle
+    const open = block.swaps[0]?.close.toNumber() ?? null
+    // close price is the last close
+    const close = block.swaps[block.swaps.length - 1]?.close.toNumber() ?? null
 
     const volume = block.swaps.reduce((acc, cur) => acc + (token0IsNative ? cur.volume0 : cur.volume1), 0) // TODO: check which is native (not token0)
 
@@ -242,36 +209,49 @@ export function calculateReservesAndPrice(
   token0IsNative: boolean,
   isV3: boolean,
 ) {
-  // Get the first swap to calculate the current reserves balance
-  const _firstRaw = swaps.shift()
-  if (!_firstRaw) {
+  if (!swaps.length) {
     return []
   }
 
+  if (isV3) {
+    const formattedSwaps = swaps.map((swap) => {
+      const [token0Price, token1Price] = sqrtPriceX96ToTokenPrices(
+        new Big(swap.sqrtPriceX96),
+        Number(pair.token0.decimals),
+        Number(pair.token1.decimals),
+      )
+      return formatSwap(
+        token0IsNative,
+        token0Price,
+        token1Price,
+        new Big(0),
+        new Big(0),
+        +swap.transaction.blockNumber,
+        +swap.transaction.timestamp,
+        +swap.amount0,
+        +swap.amount1,
+        isV3,
+      )
+    })
+
+    return formattedSwaps.reverse()
+  }
+
+  // Get the first swap to calculate the current reserves balance
+  const _firstRaw = swaps.shift()
   // Format the first swap into ISwapDataset
-  const first = isV3
-    ? formatSwap(
-        token0IsNative,
-        new Big(initialReserves.pair.reserve0).add(new Big(_firstRaw.amount0)), // reverse the swap to get the previous reserves balance
-        new Big(initialReserves.pair.reserve1).add(new Big(_firstRaw.amount1)),
-        new Big(initialReserves.pair.reserve0), // starting point is the current reserves balance
-        new Big(initialReserves.pair.reserve1),
-        +_firstRaw.transaction.blockNumber,
-        +_firstRaw.transaction.timestamp,
-        +_firstRaw.amount0,
-        +_firstRaw.amount1,
-      )
-    : formatSwap(
-        token0IsNative,
-        new Big(initialReserves.pair.reserve0).add(new Big(_firstRaw.amount0In)).sub(new Big(_firstRaw.amount0Out)), // reverse the swap to get the previous reserves balance
-        new Big(initialReserves.pair.reserve1).add(new Big(_firstRaw.amount1In)).sub(new Big(_firstRaw.amount1Out)),
-        new Big(initialReserves.pair.reserve0), // starting point is the current reserves balance
-        new Big(initialReserves.pair.reserve1),
-        +_firstRaw.transaction.blockNumber,
-        +_firstRaw.transaction.timestamp,
-        +_firstRaw.amount0In + +_firstRaw.amount0Out,
-        +_firstRaw.amount1In + +_firstRaw.amount1Out,
-      )
+  const first = formatSwap(
+    token0IsNative,
+    new Big(initialReserves.pair.reserve0).add(new Big(_firstRaw.amount0In)).sub(new Big(_firstRaw.amount0Out)), // reverse the swap to get the previous reserves balance
+    new Big(initialReserves.pair.reserve1).add(new Big(_firstRaw.amount1In)).sub(new Big(_firstRaw.amount1Out)),
+    new Big(initialReserves.pair.reserve0), // starting point is the current reserves balance
+    new Big(initialReserves.pair.reserve1),
+    +_firstRaw.transaction.blockNumber,
+    +_firstRaw.transaction.timestamp,
+    +_firstRaw.amount0In + +_firstRaw.amount0Out,
+    +_firstRaw.amount1In + +_firstRaw.amount1Out,
+    isV3,
+  )
 
   // Begin collecting the swaps, working backwards
   const formattedSwaps = [first]
@@ -280,31 +260,29 @@ export function calculateReservesAndPrice(
   for (const [index, swap] of Object.entries(swaps) as any) {
     const prevEntry = formattedSwaps[index] // always one behind 'swaps' since we used shift earlier & added the first swap manually
     formattedSwaps.push(
-      isV3
-        ? formatSwap(
-            token0IsNative,
-            prevEntry.reserve0,
-            prevEntry.reserve1,
-            prevEntry.reserve0.sub(new Big(swap.amount0)),
-            prevEntry.reserve1.sub(new Big(swap.amount1)),
-            +swap.transaction.blockNumber,
-            +swap.transaction.timestamp,
-            +swap.amount0,
-            +swap.amount1,
-          )
-        : formatSwap(
-            token0IsNative,
-            prevEntry.reserve0,
-            prevEntry.reserve1,
-            prevEntry.reserve0.sub(new Big(swap.amount0In)).add(new Big(swap.amount0Out)),
-            prevEntry.reserve1.sub(new Big(swap.amount1In)).add(new Big(swap.amount1Out)),
-            +swap.transaction.blockNumber,
-            +swap.transaction.timestamp,
-            +swap.amount0In + +swap.amount0Out,
-            +swap.amount1In + +swap.amount1Out,
-          ),
+      formatSwap(
+        token0IsNative,
+        prevEntry.reserve0,
+        prevEntry.reserve1,
+        prevEntry.reserve0.sub(new Big(swap.amount0In)).add(new Big(swap.amount0Out)),
+        prevEntry.reserve1.sub(new Big(swap.amount1In)).add(new Big(swap.amount1Out)),
+        +swap.transaction.blockNumber,
+        +swap.transaction.timestamp,
+        +swap.amount0In + +swap.amount0Out,
+        +swap.amount1In + +swap.amount1Out,
+        isV3,
+      ),
     )
   }
 
-  return formattedSwaps
+  return formattedSwaps.reverse()
+}
+
+const Q192 = new Big(2).pow(192)
+export function sqrtPriceX96ToTokenPrices(sqrtPriceX96: Big, token0Decimals: number, token1Decimals: number): Big[] {
+  const num = sqrtPriceX96.mul(sqrtPriceX96)
+  const price1 = num.div(Q192).times(new Big(10).pow(token0Decimals)).div(new Big(10).pow(token1Decimals))
+
+  const price0 = new Big(1).div(price1)
+  return [price0, price1]
 }

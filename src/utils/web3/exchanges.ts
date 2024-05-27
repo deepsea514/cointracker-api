@@ -1,21 +1,24 @@
+import Big from 'big.js'
+import { gql } from 'graphql-request'
 import Web3 from 'web3'
-import web3Helper from '../../utils/web3/helpers'
-import subgraphHelper from '../subgraph/subgraph'
 import { AbiItem } from 'web3-utils'
-import { getBalanceOf } from './tokens'
+import { CHAINS, SUBGRAPHS } from '../../constants/constants'
 import {
+  BASE_TOKENS,
+  ERC20_ABI,
   FACTORIES,
+  RPC_URL,
   UNISWAP_FACTORY_ABI,
   UNISWAP_FACTORY_ABI_V3,
-  RPC_URL,
-  BASE_TOKENS,
   WEB3_CLIENTS,
-  HERCULES_FACTORY_ABI_V3,
 } from '../../constants/web3_constants'
-import { CHAINS, SUBGRAPHS } from '../../constants/constants'
-import { gql } from 'graphql-request'
-import { compareAddress } from './address'
+import web3Helper from '../../utils/web3/helpers'
 import { BadRequestError } from '../CustomErrors'
+import subgraphHelper from '../subgraph/subgraph'
+import { compareAddress } from './address'
+import { executeBatchRequest } from './batchOperations'
+import { getContract } from './contracts'
+import { getBalanceOf } from './tokens'
 
 export async function findMostLiquidExchange(address: string, chainId: CHAINS) {
   if (!FACTORIES[chainId]) throw new BadRequestError('Invalid configuration error.')
@@ -24,7 +27,8 @@ export async function findMostLiquidExchange(address: string, chainId: CHAINS) {
   const exchanges = await Promise.all(
     FACTORIES[chainId].map(async (exchange) => {
       const isV3 = exchange.name.includes('V3')
-      const contract = web3Helper.getContract(isV3 ? (UNISWAP_FACTORY_ABI_V3 as AbiItem[]) : (UNISWAP_FACTORY_ABI as AbiItem[]),
+      const contract = web3Helper.getContract(
+        isV3 ? (UNISWAP_FACTORY_ABI_V3 as AbiItem[]) : (UNISWAP_FACTORY_ABI as AbiItem[]),
         exchange.address,
         web3,
       )
@@ -51,8 +55,8 @@ export async function findMostLiquidExchange(address: string, chainId: CHAINS) {
 
       const { pair: pairData } = isV3
         ? await subgraphHelper.getDataByQuery({
-          client: subgraph.CLIENT,
-          query: gql`
+            client: subgraph.CLIENT,
+            query: gql`
               query getPairData($pair: ID!) {
                 pair: pool(id: $pair) {
                   liquidity
@@ -65,11 +69,11 @@ export async function findMostLiquidExchange(address: string, chainId: CHAINS) {
                 }
               }
             `,
-          variables: { pair: exchange.pair.toLowerCase() },
-        })
+            variables: { pair: exchange.pair.toLowerCase() },
+          })
         : await subgraphHelper.getDataByQuery({
-          client: subgraph.CLIENT,
-          query: gql`
+            client: subgraph.CLIENT,
+            query: gql`
               query getPairData($pair: ID!) {
                 pair(id: $pair) {
                   reserve0
@@ -83,8 +87,8 @@ export async function findMostLiquidExchange(address: string, chainId: CHAINS) {
                 }
               }
             `,
-          variables: { pair: exchange.pair.toLowerCase() },
-        })
+            variables: { pair: exchange.pair.toLowerCase() },
+          })
       if (!pairData) {
         return {
           name: exchange.name,
@@ -93,19 +97,38 @@ export async function findMostLiquidExchange(address: string, chainId: CHAINS) {
           liquidity: 0,
         }
       }
-
-      const [_reserve0, _reserve1] = await Promise.all([
-        getBalanceOf(pairData.token0.id, exchange.pair.toLowerCase(), web3),
-        getBalanceOf(pairData.token1.id, exchange.pair.toLowerCase(), web3),
-      ])
-
       const token0IsDesired = compareAddress(pairData.token0.id, address, web3)
 
-      return {
-        name: exchange.name,
-        address: exchange.address,
-        pair: exchange.pair,
-        liquidity: token0IsDesired ? (isV3 ? +_reserve0 : +pairData.reserve0) : (isV3 ? +_reserve1 : +pairData.reserve1),
+      if (isV3) {
+        const [_reserve0, _reserve1] = await Promise.all([
+          getBalanceOf(pairData.token0.id, exchange.pair.toLowerCase(), web3),
+          getBalanceOf(pairData.token1.id, exchange.pair.toLowerCase(), web3),
+        ])
+
+        const token0 = getContract(ERC20_ABI as AbiItem[], pairData.token0.id, web3)
+        const token1 = getContract(ERC20_ABI as AbiItem[], pairData.token1.id, web3)
+
+        const decimals = await executeBatchRequest(
+          web3,
+          token0.methods.decimals().call.request(),
+          token1.methods.decimals().call.request(),
+        ).then(([d0, d1]) => ({ token0: Number(d0), token1: Number(d1) }))
+
+        return {
+          name: exchange.name,
+          address: exchange.address,
+          pair: exchange.pair,
+          liquidity: token0IsDesired
+            ? new Big(_reserve0).div(new Big(10).pow(decimals.token0)).toNumber()
+            : new Big(_reserve1).div(new Big(10).pow(decimals.token1)).toNumber(),
+        }
+      } else {
+        return {
+          name: exchange.name,
+          address: exchange.address,
+          pair: exchange.pair,
+          liquidity: token0IsDesired ? +pairData.reserve0 : +pairData.reserve1,
+        }
       }
     }),
   )
