@@ -65,10 +65,10 @@ export const FACTORIES: IChainDetails<FACTORY_DEFINITION[]> = {
       address: '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f', // uniswap v2
       name: 'Uniswap-V2',
     },
-    {
-      address: '0x1F98431c8aD98523631AE4a59f267346ea31F984', // uniswap v3
-      name: 'Uniswap-V3',
-    },
+    // {
+    //   address: '0x1F98431c8aD98523631AE4a59f267346ea31F984', // uniswap v3
+    //   name: 'Uniswap-V3',
+    // },
   ],
   [CHAINS.METIS]: [
     {
