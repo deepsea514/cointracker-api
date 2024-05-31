@@ -47,8 +47,6 @@ services:
       METIS_URL: https://lb.nodies.app/v1/0fdd0b2f9bb84e8c85c3b81a94e2162e
       JWT_SECRET: xTC83d93GmPVkKitxTC83d93GmPVkKitxTC83d93GmPVkKit
       JWT_EXPIRY: 1d
-      SUPABASE_URL=https: //kyqhshdiyozjbozuqyye.supabase.co/
-      SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt5cWhzaGRpeW96amJvenVxeXllIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTQ2NTM2NDUsImV4cCI6MjAzMDIyOTY0NX0.BjPP4wABBv9cbL70tCcE2oc2OXkmqU2Y1n-cabSF5Dk
 volumes:
   db_data:
   cache_data:
