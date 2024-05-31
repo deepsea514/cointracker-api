@@ -1,3 +1,5 @@
+import 'dotenv/config'
+import { createClient } from '@supabase/supabase-js'
 import {
   ERC20_ABI,
   FACTORIES,
@@ -22,7 +24,8 @@ async function fetchNativePrice(chain: IChainConfiguration, exchangeName: string
     throw new BadRequestError('Invalid configuration error.')
   }
 
-  const details = await getPairDetails(isV3 ? (UNISWAP_FACTORY_ABI_V3 as AbiItem[]) : (UNISWAP_FACTORY_ABI as AbiItem[]),
+  const details = await getPairDetails(
+    isV3 ? (UNISWAP_FACTORY_ABI_V3 as AbiItem[]) : (UNISWAP_FACTORY_ABI as AbiItem[]),
     isV3 ? (UNISWAP_PAIR_ABI_V3 as AbiItem[]) : (UNISWAP_PAIR_ABI as AbiItem[]),
     ERC20_ABI as AbiItem[],
     [chain.tokens.NATIVE, chain.tokens.STABLE],
@@ -276,6 +279,14 @@ export const formatToken = async ({
   chain: IChainConfiguration
   exchange: string
 }) => {
+  const supabase = createClient(
+    process.env.SUPABASE_URL ?? 'https://kyqhshdiyozjbozuqyye.supabase.co',
+    process.env.SUPABASE_ANON_KEY ??
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt5cWhzaGRpeW96amJvenVxeXllIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTQ2NTM2NDUsImV4cCI6MjAzMDIyOTY0NX0.BjPP4wABBv9cbL70tCcE2oc2OXkmqU2Y1n-cabSF5Dk',
+  )
+
+  const { data, error } = await supabase.from('info').select().eq('token_address', token.address)
+
   const isV3 = exchange.includes('V3')
   const tokenIsNative = (token: string) => compareAddress(token, chain.tokens.NATIVE, chain.web3)
 
@@ -304,8 +315,8 @@ export const formatToken = async ({
   const priceUSD = nativeIsDesiredToken
     ? nativePrice
     : token0IsNative
-      ? pair?.token0Price * nativePrice ?? null
-      : pair?.token1Price * nativePrice ?? null
+    ? pair?.token0Price * nativePrice ?? null
+    : pair?.token1Price * nativePrice ?? null
 
   const priceETH = priceUSD / nativePrice
   const volume24h = token.dayData[0]?.volume ?? null
@@ -315,39 +326,33 @@ export const formatToken = async ({
   const liquidity = token.dayData[0]?.liquidity ?? null
   const liquidityHistoric = token.dayData[1]?.liquidity ?? null
 
-  const currentNativePrice = isV3 ?
-    (base0IsNative ? nativePairDayDatas[0]?.token0Price : nativePairDayDatas[0]?.token1Price)
-    : getTokenRelativePrice(
-      base0IsNative,
-      nativePairDayDatas[0]?.reserve0,
-      nativePairDayDatas[0]?.reserve1,
-    )
-  const historicNativePrice = isV3 ?
-    (base0IsNative ? nativePairDayDatas[1]?.token0Price : nativePairDayDatas[1]?.token1Price)
-    : getTokenRelativePrice(
-      base0IsNative,
-      nativePairDayDatas[1]?.reserve0,
-      nativePairDayDatas[1]?.reserve1,
-    )
+  const currentNativePrice = isV3
+    ? base0IsNative
+      ? nativePairDayDatas[0]?.token0Price
+      : nativePairDayDatas[0]?.token1Price
+    : getTokenRelativePrice(base0IsNative, nativePairDayDatas[0]?.reserve0, nativePairDayDatas[0]?.reserve1)
+  const historicNativePrice = isV3
+    ? base0IsNative
+      ? nativePairDayDatas[1]?.token0Price
+      : nativePairDayDatas[1]?.token1Price
+    : getTokenRelativePrice(base0IsNative, nativePairDayDatas[1]?.reserve0, nativePairDayDatas[1]?.reserve1)
 
   // Current & Historic token Price in FTM
   const currentTokenPrice = nativeIsDesiredToken
-    ? currentNativePrice : isV3 ?
-      (base0IsNative ? pairDayDatas[0]?.token0Price : pairDayDatas[0]?.token1Price)
-      : getTokenRelativePrice(
-        token0IsNative,
-        pairDayDatas[0]?.reserve0,
-        pairDayDatas[0]?.reserve1,
-      )
+    ? currentNativePrice
+    : isV3
+    ? base0IsNative
+      ? pairDayDatas[0]?.token0Price
+      : pairDayDatas[0]?.token1Price
+    : getTokenRelativePrice(token0IsNative, pairDayDatas[0]?.reserve0, pairDayDatas[0]?.reserve1)
 
   const historicTokenPrice = nativeIsDesiredToken
-    ? historicNativePrice : isV3 ?
-      (base0IsNative ? pairDayDatas[1]?.token0Price : pairDayDatas[1]?.token1Price)
-      : getTokenRelativePrice(
-        token0IsNative,
-        pairDayDatas[1]?.reserve0,
-        pairDayDatas[1]?.reserve1,
-      )
+    ? historicNativePrice
+    : isV3
+    ? base0IsNative
+      ? pairDayDatas[1]?.token0Price
+      : pairDayDatas[1]?.token1Price
+    : getTokenRelativePrice(token0IsNative, pairDayDatas[1]?.reserve0, pairDayDatas[1]?.reserve1)
 
   const currentPriceUSD = nativeIsDesiredToken ? currentNativePrice : currentTokenPrice / currentNativePrice
   const historicPriceUSD = nativeIsDesiredToken ? historicNativePrice : historicTokenPrice / historicNativePrice
@@ -401,5 +406,10 @@ export const formatToken = async ({
     AMM: exchange,
     network: chain.chainId,
     sevenDayData: finalSevenDayData,
+    bio: data && data[0]?.bio,
+    twitter: data && data[0]?.twitter,
+    telegram: data && data[0]?.telegram,
+    discord: data && data[0]?.discord,
+    website: data && data[0]?.website,
   }
 }

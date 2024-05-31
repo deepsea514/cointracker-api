@@ -37,6 +37,7 @@
     "ts-node": "^10.2.1"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.43.4",
     "@uniswap/v3-core": "^1.0.1",
     "@uniswap/v3-periphery": "^1.4.4",
     "@uniswap/v3-sdk": "^3.11.2",
