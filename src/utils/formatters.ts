@@ -384,6 +384,7 @@ export const formatToken = async ({
   })
 
   const tokenSecurity = await getTokenSecurity(chain.chainId, token.address)
+  console.log('tokenSecurity', tokenSecurity)
 
   return {
     address: token?.address ?? null,
