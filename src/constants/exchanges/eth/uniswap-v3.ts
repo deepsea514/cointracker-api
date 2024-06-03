@@ -696,7 +696,7 @@ export const UNISWAP_V3_CONFIG = {
     `,
     FACTORY: gql`
       query Factories {
-        Hercules-V3: factories(first: 1) {
+        Uniswap-V3: factories(first: 1) {
           id
           totalPairs: poolCount
           totalTransactions: txCount

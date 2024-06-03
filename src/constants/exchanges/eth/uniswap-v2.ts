@@ -1,10 +1,13 @@
 import { gql, GraphQLClient } from 'graphql-request'
 
 export const UNISWAP_V2_CONFIG = {
-  URL: 'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2',
-  CLIENT: new GraphQLClient('https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2', {
-    headers: { 'content-type': 'application/graphql' },
-  }),
+  URL: 'https://gateway-arbitrum.network.thegraph.com/api/a9dac4bec1dddd319ef383ee54f06c6c/subgraphs/id/FEtpnfQ1aqF8um2YktEkfzFD11ZKrfurvBLPeQzv9JB1',
+  CLIENT: new GraphQLClient(
+    'https://gateway-arbitrum.network.thegraph.com/api/a9dac4bec1dddd319ef383ee54f06c6c/subgraphs/id/FEtpnfQ1aqF8um2YktEkfzFD11ZKrfurvBLPeQzv9JB1',
+    {
+      headers: { 'content-type': 'application/graphql' },
+    },
+  ),
   QUERIES: {
     PAIRS: gql`
       query Pair($token: String!) {
