@@ -18,7 +18,7 @@ server.listen(PORT, async () => {
     console.log(`${new Date().toISOString()}: Start filling tokens to the DB.`)
     // TODO: add dexes
 
-    for (const exchange of [EXCHANGES.UNISWAP_V3, EXCHANGES.UNISWAP_V2]) {
+    for (const exchange of [EXCHANGES.UNISWAP_V2, EXCHANGES.UNISWAP_V3]) {
       try {
         console.log(`${new Date().toISOString()}: Starting backfill for ${exchange.toUpperCase()}`)
         await fillDbWithTokens(CHAINS.ETH, exchange)

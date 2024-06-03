@@ -27,7 +27,7 @@ export const DEFAULT_BLOCK_TIMES: IChainDetails<number> = {
 }
 
 export const RPC_URL: IChainDetails<string> = {
-  [CHAINS.ETH]: process.env.ETH_URL ?? 'https://mainnet.infura.io/v3/6148ee1d7d4c47ac87b6a2b867b7703b',
+  [CHAINS.ETH]: process.env.ETH_URL ?? 'https://rpc.merkle.io/1/sk_mbs_893a7e28c8bd4927c2111f551475b7ac',
   [CHAINS.METIS]: process.env.METIS_URL ?? 'https://lb.nodies.app/v1/0fdd0b2f9bb84e8c85c3b81a94e2162e',
 }
 
