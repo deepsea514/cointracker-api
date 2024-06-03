@@ -1,5 +1,5 @@
-// import 'dotenv/config'
-// import { createClient } from '@supabase/supabase-js'
+import 'dotenv/config'
+import { createClient } from '@supabase/supabase-js'
 import {
   ERC20_ABI,
   FACTORIES,
@@ -279,13 +279,16 @@ export const formatToken = async ({
   chain: IChainConfiguration
   exchange: string
 }) => {
-  // const supabase = createClient(
-  //   process.env.SUPABASE_URL ?? 'https://kyqhshdiyozjbozuqyye.supabase.co',
-  //   process.env.SUPABASE_ANON_KEY ??
-  //     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt5cWhzaGRpeW96amJvenVxeXllIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTQ2NTM2NDUsImV4cCI6MjAzMDIyOTY0NX0.BjPP4wABBv9cbL70tCcE2oc2OXkmqU2Y1n-cabSF5Dk',
-  // )
+  const supabase = createClient(
+    process.env.SUPABASE_URL ?? 'https://kyqhshdiyozjbozuqyye.supabase.co',
+    process.env.SUPABASE_ANON_KEY ??
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt5cWhzaGRpeW96amJvenVxeXllIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTQ2NTM2NDUsImV4cCI6MjAzMDIyOTY0NX0.BjPP4wABBv9cbL70tCcE2oc2OXkmqU2Y1n-cabSF5Dk',
+  )
 
-  // const { data, error } = await supabase.from('info').select().eq('token_address', token.address)
+  const { data, error } = await supabase
+    .from('info')
+    .select('bio, twitter, telegram, discord, website')
+    .eq('token_address', token.address.toLowerCase())
 
   const isV3 = exchange.includes('V3')
   const tokenIsNative = (token: string) => compareAddress(token, chain.tokens.NATIVE, chain.web3)
@@ -406,10 +409,10 @@ export const formatToken = async ({
     AMM: exchange,
     network: chain.chainId,
     sevenDayData: finalSevenDayData,
-    // bio: data && data[0]?.bio,
-    // twitter: data && data[0]?.twitter,
-    // telegram: data && data[0]?.telegram,
-    // discord: data && data[0]?.discord,
-    // website: data && data[0]?.website,
+    bio: (data && data[0]?.bio) ?? null,
+    twitter: (data && data[0]?.twitter) ?? null,
+    telegram: (data && data[0]?.telegram) ?? null,
+    discord: (data && data[0]?.discord) ?? null,
+    website: (data && data[0]?.website) ?? null,
   }
 }
