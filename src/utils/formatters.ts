@@ -1,20 +1,20 @@
-import 'dotenv/config'
 import { createClient } from '@supabase/supabase-js'
+import axios from 'axios'
+import { AbiItem } from 'web3-utils'
+
+import { CHAINS, EXCHANGES } from '../constants/constants'
 import {
   ERC20_ABI,
   FACTORIES,
-  HERCULES_FACTORY_ABI_V3,
   UNISWAP_FACTORY_ABI,
   UNISWAP_FACTORY_ABI_V3,
   UNISWAP_PAIR_ABI,
   UNISWAP_PAIR_ABI_V3,
 } from '../constants/web3_constants'
+import { BadRequestError } from './CustomErrors'
 import { IChainConfiguration } from './chain/chainConfiguration'
 import { compareAddress } from './web3/address'
 import web3Helper from './web3/helpers'
-import { AbiItem } from 'web3-utils'
-import { CHAINS, EXCHANGES } from '../constants/constants'
-import { BadRequestError } from './CustomErrors'
 import { getPairDetails } from './web3/prices'
 
 async function fetchNativePrice(chain: IChainConfiguration, exchangeName: string) {
@@ -262,6 +262,12 @@ const getNativeSymbol = (chainId: CHAINS) => {
   return chainId == CHAINS.METIS ? 'METIS' : 'ETH' //TODO: update if adding chains
 }
 
+const supabase = createClient(
+  process.env.SUPABASE_URL ?? 'https://kyqhshdiyozjbozuqyye.supabase.co',
+  process.env.SUPABASE_ANON_KEY ??
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt5cWhzaGRpeW96amJvenVxeXllIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTQ2NTM2NDUsImV4cCI6MjAzMDIyOTY0NX0.BjPP4wABBv9cbL70tCcE2oc2OXkmqU2Y1n-cabSF5Dk',
+)
+
 export const formatToken = async ({
   token,
   bundle,
@@ -279,12 +285,6 @@ export const formatToken = async ({
   chain: IChainConfiguration
   exchange: string
 }) => {
-  const supabase = createClient(
-    process.env.SUPABASE_URL ?? 'https://kyqhshdiyozjbozuqyye.supabase.co',
-    process.env.SUPABASE_ANON_KEY ??
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt5cWhzaGRpeW96amJvenVxeXllIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTQ2NTM2NDUsImV4cCI6MjAzMDIyOTY0NX0.BjPP4wABBv9cbL70tCcE2oc2OXkmqU2Y1n-cabSF5Dk',
-  )
-
   const { data, error } = await supabase
     .from('info')
     .select('bio, twitter, telegram, discord, website')
@@ -382,6 +382,9 @@ export const formatToken = async ({
       [`price${native}`]: `${priceNative ?? 0}`,
     }
   })
+
+  const tokenSecurity = await getTokenSecurity(chain.chainId, token.address)
+
   return {
     address: token?.address ?? null,
     symbol: token?.symbol ?? null,
@@ -414,5 +417,22 @@ export const formatToken = async ({
     telegram: (data && data[0]?.telegram) ?? null,
     discord: (data && data[0]?.discord) ?? null,
     website: (data && data[0]?.website) ?? null,
+    heliosprotect: tokenSecurity,
+  }
+}
+
+const getTokenSecurity = async (chainId: CHAINS, address: string) => {
+  try {
+    const { data } = await axios.get(
+      `https://api.gopluslabs.io/api/v1/token_security/${chainId}?contract_addresses=${address}`,
+    )
+
+    if (data.code === 1) {
+      return data[address]
+    }
+
+    return null
+  } catch (error) {
+    return null
   }
 }

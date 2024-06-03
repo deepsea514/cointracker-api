@@ -1,8 +1,8 @@
-import { getTokenHistorical, getTokens } from '../controllers/helpers/tokens'
 import { Document } from 'mongoose'
-import { EXCHANGES, SUBGRAPHS } from '../constants/constants'
-import Token, { IToken } from '../models/tokenSchema'
+import { EXCHANGES } from '../constants/constants'
+import { getTokenHistorical } from '../controllers/helpers/tokens'
 import History, { IHistory } from '../models/historySchema'
+import Token, { IToken } from '../models/tokenSchema'
 
 async function getNewestTokenHistory(dbToken: IToken & Document<any, any>): Promise<IHistory[]> {
   const tokenHistory = await History.find({ tokenId: dbToken.tokenId }).sort({ timestamp: 'desc' }).limit(1)
