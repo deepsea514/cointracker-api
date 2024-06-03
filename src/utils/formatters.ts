@@ -384,7 +384,6 @@ export const formatToken = async ({
   })
 
   const tokenSecurity = await getTokenSecurity(chain.chainId, token.address)
-  console.log('tokenSecurity', tokenSecurity)
 
   return {
     address: token?.address ?? null,
@@ -418,7 +417,7 @@ export const formatToken = async ({
     telegram: (data && data[0]?.telegram) ?? null,
     discord: (data && data[0]?.discord) ?? null,
     website: (data && data[0]?.website) ?? null,
-    heliosprotect: tokenSecurity,
+    heliosprotect: tokenSecurity ?? null,
   }
 }
 
@@ -429,7 +428,7 @@ const getTokenSecurity = async (chainId: CHAINS, address: string) => {
     )
 
     if (data.code === 1) {
-      return data[address]
+      return data.result[address]
     }
 
     return null
