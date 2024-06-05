@@ -333,7 +333,7 @@ export const formatToken = async ({
   const priceETH = priceUSD / nativePrice
   // const volume24h = pairDayDatas[0]?.volumeUSD ?? null
   // const volume24hHistoric = pairDayDatas[1]?.volumeUSD ?? null
-  const volume24h = pairHourDatas.slice(0, 24).reduce((prev, cur) => prev + cur?.volumeUSD ?? 0, 0)
+  const volume24h = pairHourDatas.slice(0, 24).reduce((prev, cur) => prev + Number(cur?.volumeUSD || 0) ?? 0, 0)
 
   const volume1h = pairHourDatas[1]?.volumeUSD ?? null
   const volume2hHistoric = pairHourDatas[2]?.volumeUSD ?? null
@@ -413,14 +413,14 @@ export const formatToken = async ({
     volume24h: volume24h ?? null,
     volume24hUSD: volume24h ? volume24h * priceUSD : 0,
     [`volume24h${native}`]: volume24h ? (volume24h * priceETH).toString() : null,
-    volumeChange1h: volume1h && volume2hHistoric ? volume1h / volume2hHistoric - 1 : 0,
-    volumeChange6h: volume1h && volume6hHistoric ? volume1h / volume6hHistoric - 1 : 0,
-    volumeChange24h: volume1h && volume24hHistoric ? volume1h / volume24hHistoric - 1 : 0,
-    volumeChange7d: volume1d && volume7dHistoric ? volume1d / volume7dHistoric - 1 : 0,
-    volumeChange1m: volume1d && volume1mHistoric ? volume1d / volume1mHistoric - 1 : 0,
-    volumeChange3m: volume1d && volume3mHistoric ? volume1d / volume3mHistoric - 1 : 0,
+    volumeChange1h: volume1h && volume2hHistoric ? Number(volume1h) / Number(volume2hHistoric) - 1 : 0,
+    volumeChange6h: volume1h && volume6hHistoric ? Number(volume1h) / Number(volume6hHistoric) - 1 : 0,
+    volumeChange24h: volume1h && volume24hHistoric ? Number(volume1h) / Number(volume24hHistoric) - 1 : 0,
+    volumeChange7d: volume1d && volume7dHistoric ? Number(volume1d) / Number(volume7dHistoric) - 1 : 0,
+    volumeChange1m: volume1d && volume1mHistoric ? Number(volume1d) / Number(volume1mHistoric) - 1 : 0,
+    volumeChange3m: volume1d && volume3mHistoric ? Number(volume1d) / Number(volume3mHistoric) - 1 : 0,
     transactions24h: txCount ? txCount : null,
-    transactions24hChange: txCount && txCountHistoric ? txCount / txCountHistoric - 1 : 0,
+    transactions24hChange: txCount && txCountHistoric ? Number(txCount) / Number(txCountHistoric) - 1 : 0,
     //   verified, // TODO: we need to get a list of verified tokens from each exchange
     liquidityUSD: liquidity ? liquidity * priceUSD : 0,
     [`liquidity${native}`]: liquidity ? (liquidity * priceETH).toString() : null,

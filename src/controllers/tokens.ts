@@ -25,9 +25,11 @@ export const getTokens = asyncHandler(async (req: Request, res: Response, next: 
     .sort({ liquidityETH: 'desc' })
     .limit(limit || 30)
 
-  const formattedTokens = await Promise.all(
-    tokens.map((token) => tokensHelper.getTokenByAddress(chainId, token.AMM as EXCHANGES, token.address, true)),
-  )
+  const formattedTokens = (
+    await Promise.all(
+      tokens.map((token) => tokensHelper.getTokenByAddress(chainId, token.AMM as EXCHANGES, token.address, true)),
+    )
+  ).filter((token) => token != null)
 
   res.status(200).json(JsonResponse({ tokens: formattedTokens }))
 })
