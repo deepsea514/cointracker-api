@@ -122,9 +122,18 @@ export const UNISWAP_V3_CONFIG = {
           token1Price
         }
 
-        pairDayDatas: poolDayDatas(orderBy: date, orderDirection: desc, where: { pool: $pair }, first: 2) {
+        pairDayDatas: poolDayDatas(orderBy: date, orderDirection: desc, where: { pool: $pair }, first: 90) {
           token0Price
           token1Price
+          txCount
+          tvlUSD
+          volumeUSD
+        }
+
+        pairHourDatas: poolHourDatas(orderBy: date, orderDirection: desc, where: { pool: $pair }, first: 25) {
+          txCount
+          tvlUSD
+          volumeUSD
         }
 
         pair: pool(id: $pair) {

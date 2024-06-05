@@ -117,9 +117,18 @@ export const UNISWAP_V2_CONFIG = {
           reserve1
         }
 
-        pairDayDatas(orderBy: date, orderDirection: desc, where: { pairAddress: $pair }, first: 2) {
+        pairDayDatas(orderBy: date, orderDirection: desc, where: { pairAddress: $pair }, first: 90) {
           reserve0
           reserve1
+          txCount: dailyTxns
+          tvlUSD: reserveUSD
+          volumeUSD: dailyVolumeUSD
+        }
+
+        pairHourDatas(orderBy: date, orderDirection: desc, where: { pairAddress: $pair }, first: 25) {
+          txCount: hourlyTxns
+          tvlUSD: reserveUSD
+          volumeUSD: hourlyVolumeUSD
         }
 
         pair(id: $pair) {

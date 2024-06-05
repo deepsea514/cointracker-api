@@ -1,8 +1,9 @@
 import { Document } from 'mongoose'
 import { EXCHANGES } from '../constants/constants'
-import { getTokenHistorical } from '../controllers/helpers/tokens'
+import { getTokenByAddress, getTokenHistorical } from '../controllers/helpers/tokens'
 import History, { IHistory } from '../models/historySchema'
 import Token, { IToken } from '../models/tokenSchema'
+import { ChainId } from './chain/chainConfiguration'
 
 async function getNewestTokenHistory(dbToken: IToken & Document<any, any>): Promise<IHistory[]> {
   const tokenHistory = await History.find({ tokenId: dbToken.tokenId }).sort({ timestamp: 'desc' }).limit(1)
@@ -50,28 +51,58 @@ export const CronJob = async (): Promise<void> => {
   const tokens = await Token.find()
   console.log(`Found ${tokens.length} tokens in the db.`)
 
-  for (let i = 0; i < tokens.length; i++) {
-    let retries = 0
-    const MAX_RETRIES = 5
-    let shouldRetry = false
+  await Promise.all(
+    tokens.map(async (token) => {
+      let retries = 0
+      const MAX_RETRIES = 5
+      let shouldRetry = false
 
-    do {
-      try {
-        let history = await getNewestTokenHistory(tokens[i])
-        console.log(history?.length)
-      } catch (err: any) {
-        shouldRetry =
-          err.name !== 'InsufficientDataError' && err.name !== 'PairUnavailableError' ? ++retries < MAX_RETRIES : false
+      do {
+        try {
+          await getNewestTokenHistory(token)
+        } catch (err: any) {
+          shouldRetry =
+            err.name !== 'InsufficientDataError' && err.name !== 'PairUnavailableError'
+              ? ++retries < MAX_RETRIES
+              : false
 
-        if (shouldRetry) {
-          console.log(`Retrying to update ${tokens[i].id}: ${retries}/${MAX_RETRIES}`)
-        } else {
-          console.log(`Could not update ${tokens[i].id} because of ${err.name}\n${err.message}.`)
-          break
+          if (shouldRetry) {
+            console.log(`Retrying to update ${token.id}: ${retries}/${MAX_RETRIES}`)
+          } else {
+            console.log(`Could not update ${token.id} because of ${err.name}\n${err.message}.`)
+            break
+          }
         }
-      }
-    } while (shouldRetry)
-  }
+      } while (shouldRetry)
+
+      retries = 0
+      shouldRetry = false
+      do {
+        try {
+          const upatedtokenInfo = await getTokenByAddress(
+            Number(token.network) as ChainId,
+            token.AMM as EXCHANGES,
+            token.address,
+            true,
+          )
+
+          if (upatedtokenInfo) await token.update(upatedtokenInfo)
+        } catch (err: any) {
+          shouldRetry =
+            err.name !== 'InsufficientDataError' && err.name !== 'PairUnavailableError'
+              ? ++retries < MAX_RETRIES
+              : false
+
+          if (shouldRetry) {
+            console.log(`Retrying to update ${token.id}: ${retries}/${MAX_RETRIES}`)
+          } else {
+            console.log(`Could not update ${token.id} because of ${err.name}\n${err.message}.`)
+            break
+          }
+        }
+      } while (shouldRetry)
+    }),
+  )
 
   console.log(`Update Time Elapsed: ${(new Date().getTime() - start) / 1000}s`)
 }

@@ -11,6 +11,7 @@ import {
   UNISWAP_PAIR_ABI,
   UNISWAP_PAIR_ABI_V3,
 } from '../constants/web3_constants'
+import { IToken } from '../models/tokenSchema'
 import { BadRequestError } from './CustomErrors'
 import { IChainConfiguration } from './chain/chainConfiguration'
 import { compareAddress } from './web3/address'
@@ -268,11 +269,18 @@ const supabase = createClient(
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt5cWhzaGRpeW96amJvenVxeXllIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTQ2NTM2NDUsImV4cCI6MjAzMDIyOTY0NX0.BjPP4wABBv9cbL70tCcE2oc2OXkmqU2Y1n-cabSF5Dk',
 )
 
+type FormattedToken = Omit<
+  IToken,
+  'tokenId' | 'history' | 'description' | 'verified' | 'timestamp' | 'blockNumber' | 'history_length' | 'last_history'
+> & {
+  [key: string]: string | null
+}
 export const formatToken = async ({
   token,
   bundle,
   pair,
   pairDayDatas,
+  pairHourDatas,
   nativePairDayDatas,
   chain,
   exchange,
@@ -281,10 +289,11 @@ export const formatToken = async ({
   bundle: any
   pair: any
   pairDayDatas: any[]
+  pairHourDatas: any[]
   nativePairDayDatas: any[]
   chain: IChainConfiguration
   exchange: string
-}) => {
+}): Promise<FormattedToken> => {
   const { data, error } = await supabase
     .from('info')
     .select('bio, twitter, telegram, discord, website')
@@ -322,12 +331,23 @@ export const formatToken = async ({
     : pair?.token1Price * nativePrice ?? null
 
   const priceETH = priceUSD / nativePrice
-  const volume24h = token.dayData[0]?.volume ?? null
-  const volume24hHistoric = token.dayData[1]?.volume ?? null
-  const txCount = token.dayData[0]?.txCount ?? null
-  const txCountHistoric = token.dayData[1]?.txCount ?? null
-  const liquidity = token.dayData[0]?.liquidity ?? null
-  const liquidityHistoric = token.dayData[1]?.liquidity ?? null
+  // const volume24h = pairDayDatas[0]?.volumeUSD ?? null
+  // const volume24hHistoric = pairDayDatas[1]?.volumeUSD ?? null
+  const volume24h = pairHourDatas.slice(0, 24).reduce((prev, cur) => prev + cur?.volumeUSD ?? 0, 0)
+
+  const volume1h = pairHourDatas[1]?.volumeUSD ?? null
+  const volume2hHistoric = pairHourDatas[2]?.volumeUSD ?? null
+  const volume6hHistoric = pairHourDatas[6]?.volumeUSD ?? null
+  const volume24hHistoric = pairHourDatas[24]?.volumeUSD ?? null
+  const volume1d = volume24h
+  const volume7dHistoric = pairDayDatas[6]?.volumeUSD ?? null
+  const volume1mHistoric = pairDayDatas[29]?.volumeUSD ?? null
+  const volume3mHistoric = pairDayDatas[89]?.volumeUSD ?? null
+
+  const txCount = pairDayDatas[0]?.txCount ?? null
+  const txCountHistoric = pairDayDatas[1]?.txCount ?? null
+  const liquidity = pairDayDatas[0]?.tvlUSD ?? null
+  const liquidityHistoric = pairDayDatas[1]?.tvlUSD ?? null
 
   const currentNativePrice = isV3
     ? base0IsNative
@@ -360,12 +380,9 @@ export const formatToken = async ({
   const currentPriceUSD = nativeIsDesiredToken ? currentNativePrice : currentTokenPrice / currentNativePrice
   const historicPriceUSD = nativeIsDesiredToken ? historicNativePrice : historicTokenPrice / historicNativePrice
 
-  const priceChange24h =
-    currentTokenPrice && historicTokenPrice ? (currentTokenPrice / historicTokenPrice - 1).toString() : '0'
-  const priceUSDChange24h =
-    currentPriceUSD && historicPriceUSD ? (currentPriceUSD / historicPriceUSD - 1).toString() : '0'
-  const priceETHChange24h =
-    currentTokenPrice && historicTokenPrice ? (currentTokenPrice / historicTokenPrice - 1).toString() : '0'
+  const priceChange24h = currentTokenPrice && historicTokenPrice ? currentTokenPrice / historicTokenPrice - 1 : 0
+  const priceUSDChange24h = currentPriceUSD && historicPriceUSD ? currentPriceUSD / historicPriceUSD - 1 : 0
+  const priceETHChange24h = currentTokenPrice && historicTokenPrice ? currentTokenPrice / historicTokenPrice - 1 : 0
 
   const totalSupply = (await web3Helper.getTotalSupply(token.address, chain.web3)) / 10 ** Number(token.decimals)
 
@@ -394,15 +411,20 @@ export const formatToken = async ({
     marketCapUSD: priceUSD ? (totalSupply * priceUSD).toString() : null,
     [`marketCap${native}`]: priceETH ? (totalSupply * priceETH).toString() : null,
     volume24h: volume24h ?? null,
-    volume24hUSD: volume24h ? (volume24h * priceUSD).toString() : null,
+    volume24hUSD: volume24h ? volume24h * priceUSD : 0,
     [`volume24h${native}`]: volume24h ? (volume24h * priceETH).toString() : null,
-    volumeChange24h: volume24h && volume24hHistoric ? (volume24h / volume24hHistoric - 1).toString() : null,
+    volumeChange1h: volume1h && volume2hHistoric ? volume1h / volume2hHistoric - 1 : 0,
+    volumeChange6h: volume1h && volume6hHistoric ? volume1h / volume6hHistoric - 1 : 0,
+    volumeChange24h: volume1h && volume24hHistoric ? volume1h / volume24hHistoric - 1 : 0,
+    volumeChange7d: volume1d && volume7dHistoric ? volume1d / volume7dHistoric - 1 : 0,
+    volumeChange1m: volume1d && volume1mHistoric ? volume1d / volume1mHistoric - 1 : 0,
+    volumeChange3m: volume1d && volume3mHistoric ? volume1d / volume3mHistoric - 1 : 0,
     transactions24h: txCount ? txCount : null,
-    transactions24hChange: txCount && txCountHistoric ? (txCount / txCountHistoric - 1).toString() : null,
+    transactions24hChange: txCount && txCountHistoric ? txCount / txCountHistoric - 1 : 0,
     //   verified, // TODO: we need to get a list of verified tokens from each exchange
-    liquidityUSD: liquidity ? (liquidity * priceUSD).toString() : null,
+    liquidityUSD: liquidity ? liquidity * priceUSD : 0,
     [`liquidity${native}`]: liquidity ? (liquidity * priceETH).toString() : null,
-    liquidityChange24h: liquidity && liquidityHistoric ? (liquidity / liquidityHistoric - 1).toString() : null,
+    liquidityChange24h: liquidity && liquidityHistoric ? liquidity / liquidityHistoric - 1 : 0,
     logoURI: `https://kyqhshdiyozjbozuqyye.supabase.co/storage/v1/object/public/token-icons/${token?.address}.png`, // TODO: we need images still, maybe we can get the from FTMscan or covalent
     priceUSD: priceUSD.toString() ?? null,
     [`price${native}`]: priceETH.toString() ?? null,
@@ -410,7 +432,7 @@ export const formatToken = async ({
     priceUSDChange24h,
     [`price${native}Change24h`]: priceETHChange24h,
     AMM: exchange,
-    network: chain.chainId,
+    network: chain.chainId.toString(),
     sevenDayData: finalSevenDayData,
     bio: (data && data[0]?.bio) ?? null,
     twitter: (data && data[0]?.twitter) ?? null,
