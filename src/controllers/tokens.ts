@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 import { CHAINS, EXCHANGES } from '../constants/constants'
 import asyncHandler from '../middleware/asyncHandler'
+import Token from '../models/tokenSchema'
 import JsonResponse from '../utils/JsonResponse'
 import { getChainConfiguration } from '../utils/chain/chainConfiguration'
 import burnsHelper from './helpers/burns'
@@ -12,7 +13,15 @@ export const getTokens = asyncHandler(async (req: Request, res: Response, next: 
   const chainId = req.query.chainId as unknown as CHAINS
   const exchange = req.query.exchange as unknown as EXCHANGES
   const limit = req.query.limit ? parseInt(req.query.limit as string) : 15
-  const tokens = await tokensHelper.getTokens(chainId, exchange, limit)
+  // const tokens = await tokensHelper.getTokens(chainId, exchange, limit)
+  const searchObject: { network?: number; exchange?: string } = {}
+  if (chainId) {
+    searchObject.network = chainId as number
+  }
+  if (exchange) {
+    searchObject.exchange = exchange
+  }
+  const tokens = await Token.find(searchObject).limit(limit || 30)
 
   res.status(200).json(JsonResponse({ tokens }))
 })
