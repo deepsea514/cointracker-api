@@ -130,7 +130,12 @@ export const UNISWAP_V3_CONFIG = {
           volumeUSD
         }
 
-        pairHourDatas: poolHourDatas(orderBy: date, orderDirection: desc, where: { pool: $pair }, first: 25) {
+        pairHourDatas: poolHourDatas(
+          orderBy: periodStartUnix
+          orderDirection: desc
+          where: { pool: $pair }
+          first: 25
+        ) {
           txCount
           tvlUSD
           volumeUSD

@@ -125,7 +125,7 @@ export const UNISWAP_V2_CONFIG = {
           volumeUSD: dailyVolumeUSD
         }
 
-        pairHourDatas(orderBy: date, orderDirection: desc, where: { pairAddress: $pair }, first: 25) {
+        pairHourDatas(orderBy: hourStartUnix, orderDirection: desc, where: { pairAddress: $pair }, first: 25) {
           txCount: hourlyTxns
           tvlUSD: reserveUSD
           volumeUSD: hourlyVolumeUSD
