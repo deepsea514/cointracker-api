@@ -21,9 +21,15 @@ export const getTokens = asyncHandler(async (req: Request, res: Response, next: 
   if (exchange) {
     searchObject.exchange = exchange
   }
-  const tokens = await Token.find(searchObject).limit(limit || 30)
+  const tokens = await Token.find(searchObject)
+    .sort({ liquidityETH: 'desc' })
+    .limit(limit || 30)
 
-  res.status(200).json(JsonResponse({ tokens }))
+  const formattedTokens = await Promise.all(
+    tokens.map((token) => tokensHelper.getTokenByAddress(chainId, token.AMM as EXCHANGES, token.address, true)),
+  )
+
+  res.status(200).json(JsonResponse({ tokens: formattedTokens }))
 })
 
 export const getTokenSwaps = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {

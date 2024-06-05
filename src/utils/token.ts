@@ -18,7 +18,9 @@ export const getTokenById = async (
             $gte: from !== undefined ? from / 1000 : (new Date().getTime() / 1000 - months * 30 * 24 * 60 * 60) >> 0,
           },
         },
-        options: { sort: { timestamp: 1 } },
+        options: {
+          sort: { timestamp: -1 },
+        },
       })
     },
     true,
