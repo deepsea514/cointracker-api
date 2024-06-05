@@ -335,19 +335,19 @@ export const formatToken = async ({
   // const volume24hHistoric = pairDayDatas[1]?.volumeUSD ?? null
   const volume24h = pairHourDatas.slice(0, 24).reduce((prev, cur) => prev + Number(cur?.volumeUSD || 0) ?? 0, 0)
 
-  const volume1h = pairHourDatas[1]?.volumeUSD ?? null
-  const volume2hHistoric = pairHourDatas[2]?.volumeUSD ?? null
-  const volume6hHistoric = pairHourDatas[6]?.volumeUSD ?? null
-  const volume24hHistoric = pairHourDatas[24]?.volumeUSD ?? null
+  const volume1h = Number(pairHourDatas[1]?.volumeUSD ?? 0)
+  const volume2hHistoric = Number(pairHourDatas[2]?.volumeUSD ?? 0)
+  const volume6hHistoric = Number(pairHourDatas[6]?.volumeUSD ?? 0)
+  const volume24hHistoric = Number(pairHourDatas[24]?.volumeUSD ?? 0)
   const volume1d = volume24h
-  const volume7dHistoric = pairDayDatas[6]?.volumeUSD ?? null
-  const volume1mHistoric = pairDayDatas[29]?.volumeUSD ?? null
-  const volume3mHistoric = pairDayDatas[89]?.volumeUSD ?? null
+  const volume7dHistoric = Number(pairDayDatas[6]?.volumeUSD ?? 0)
+  const volume1mHistoric = Number(pairDayDatas[29]?.volumeUSD ?? 0)
+  const volume3mHistoric = Number(pairDayDatas[89]?.volumeUSD ?? 0)
 
-  const txCount = pairDayDatas[0]?.txCount ?? null
-  const txCountHistoric = pairDayDatas[1]?.txCount ?? null
-  const liquidity = pairDayDatas[0]?.tvlUSD ?? null
-  const liquidityHistoric = pairDayDatas[1]?.tvlUSD ?? null
+  const txCount = Number(pairDayDatas[0]?.txCount ?? 0)
+  const txCountHistoric = Number(pairDayDatas[1]?.txCount ?? 0)
+  const liquidity = Number(pairDayDatas[0]?.tvlUSD ?? 0)
+  const liquidityHistoric = Number(pairDayDatas[1]?.tvlUSD ?? 0)
 
   const currentNativePrice = isV3
     ? base0IsNative
@@ -410,20 +410,20 @@ export const formatToken = async ({
     totalSupply: totalSupply.toString(),
     marketCapUSD: priceUSD ? (totalSupply * priceUSD).toString() : null,
     [`marketCap${native}`]: priceETH ? (totalSupply * priceETH).toString() : null,
-    volume24h: volume24h ?? null,
+    volume24h: volume24h ?? 0,
     volume24hUSD: volume24h ? volume24h * priceUSD : 0,
-    [`volume24h${native}`]: volume24h ? (volume24h * priceETH).toString() : null,
-    volumeChange1h: volume1h && volume2hHistoric ? Number(volume1h) / Number(volume2hHistoric) - 1 : 0,
-    volumeChange6h: volume1h && volume6hHistoric ? Number(volume1h) / Number(volume6hHistoric) - 1 : 0,
-    volumeChange24h: volume1h && volume24hHistoric ? Number(volume1h) / Number(volume24hHistoric) - 1 : 0,
-    volumeChange7d: volume1d && volume7dHistoric ? Number(volume1d) / Number(volume7dHistoric) - 1 : 0,
-    volumeChange1m: volume1d && volume1mHistoric ? Number(volume1d) / Number(volume1mHistoric) - 1 : 0,
-    volumeChange3m: volume1d && volume3mHistoric ? Number(volume1d) / Number(volume3mHistoric) - 1 : 0,
-    transactions24h: txCount ? txCount : null,
-    transactions24hChange: txCount && txCountHistoric ? Number(txCount) / Number(txCountHistoric) - 1 : 0,
+    [`volume24h${native}`]: volume24h ? (volume24h * priceETH).toString() : 0,
+    volumeChange1h: volume1h && volume2hHistoric ? volume1h / volume2hHistoric - 1 : 0,
+    volumeChange6h: volume1h && volume6hHistoric ? volume1h / volume6hHistoric - 1 : 0,
+    volumeChange24h: volume1h && volume24hHistoric ? volume1h / volume24hHistoric - 1 : 0,
+    volumeChange7d: volume1d && volume7dHistoric ? volume1d / volume7dHistoric - 1 : 0,
+    volumeChange1m: volume1d && volume1mHistoric ? volume1d / volume1mHistoric - 1 : 0,
+    volumeChange3m: volume1d && volume3mHistoric ? volume1d / volume3mHistoric - 1 : 0,
+    transactions24h: txCount ? txCount : 0,
+    transactions24hChange: txCount && txCountHistoric ? txCount / txCountHistoric - 1 : 0,
     //   verified, // TODO: we need to get a list of verified tokens from each exchange
     liquidityUSD: liquidity ? liquidity * priceUSD : 0,
-    [`liquidity${native}`]: liquidity ? (liquidity * priceETH).toString() : null,
+    [`liquidity${native}`]: liquidity ? (liquidity * priceETH).toString() : 0,
     liquidityChange24h: liquidity && liquidityHistoric ? liquidity / liquidityHistoric - 1 : 0,
     logoURI: `https://kyqhshdiyozjbozuqyye.supabase.co/storage/v1/object/public/token-icons/${token?.address}.png`, // TODO: we need images still, maybe we can get the from FTMscan or covalent
     priceUSD: priceUSD.toString() ?? null,

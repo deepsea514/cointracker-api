@@ -40,13 +40,11 @@ export interface IToken {
   network: string
   history_length: number
   last_history: IHistory
-  sevenDayData: any[]
   bio: string
   twitter: string
   telegram: string
   discord: string
   website: string
-  heliosprotect: object
 }
 
 const TokenSchema = new mongoose.Schema<IToken>(
@@ -126,13 +124,11 @@ const TokenSchema = new mongoose.Schema<IToken>(
     blockNumber: Number,
     AMM: String,
     network: String,
-    sevenDayData: Array,
     bio: String,
     twitter: String,
     telegram: String,
     discord: String,
     website: String,
-    heliosprotect: Object,
   },
   { toJSON: { virtuals: true }, toObject: { virtuals: true }, autoIndex: false },
 )
