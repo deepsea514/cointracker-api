@@ -145,11 +145,11 @@ const storeTokenHistory = async (token: IToken, tokenHistory: IHistory[], ch: CH
   console.log(`${ch}/${ex}: History (${tokenHistory.length}) found for ${token.symbol} on ${ch} @ ${ex}.`)
 
   // Sort history by timestamp
-  const sortedHistory = tokenHistory.sort(function (x, y) {
-    return y.timestamp - x.timestamp
-  })
-  const firstHistory = sortedHistory[0] ?? null
-  const lastHistory = sortedHistory[sortedHistory.length - 1] ?? null
+  // const sortedHistory = tokenHistory.sort(function (x, y) {
+  //   return y.timestamp - x.timestamp
+  // })
+  const firstHistory = tokenHistory[0] ?? null
+  const lastHistory = tokenHistory[tokenHistory.length - 1] ?? null
 
   if (!firstHistory || !lastHistory) console.log(`First and last history not found.`)
   else {
@@ -161,7 +161,7 @@ const storeTokenHistory = async (token: IToken, tokenHistory: IHistory[], ch: CH
       ).toLocaleString()}\n`,
     )
 
-    let result = await History.insertMany(sortedHistory)
+    let result = await History.insertMany(tokenHistory)
     console.log(`Added: ${result.length} documents`)
   }
 

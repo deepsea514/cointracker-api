@@ -1,5 +1,6 @@
 import Big from 'big.js'
 import { CHAINS, EXCHANGES } from '../constants/constants'
+import History from '../models/historySchema'
 
 export interface ISwapDataset {
   open: Big
@@ -158,39 +159,60 @@ export function chunkIntervalSwapData(
   return prices
 }
 
-export function getCandlestickData(
+export async function getCandlestickData(
   prices: IIntervalSwapData,
   token0IsNative: boolean,
   chain: CHAINS,
   exchange: EXCHANGES,
   tokenId: string,
-): ICandleStickData[] {
-  return Object.entries(prices).map(([timeSlotName, block]: [string, ISwapData]): ICandleStickData => {
-    // console.log(block.swaps)
-    // highest price
-    const high = Math.max(...block.swaps.flatMap((s: any) => [s.open.toNumber(), s.close.toNumber()])) ?? 0
-    // lowest price
-    const low = Math.min(...block.swaps.flatMap((s: any) => [s.open.toNumber(), s.close.toNumber()])) ?? 0
-    // open price will be the close price of previous candle
-    const open = block.swaps[0]?.close.toNumber() ?? null
-    // close price is the last close
-    const close = block.swaps[block.swaps.length - 1]?.close.toNumber() ?? null
+): Promise<ICandleStickData[]> {
+  return await Promise.all(
+    Object.entries(prices).map(async ([timeSlotName, block]: [string, ISwapData]): Promise<ICandleStickData> => {
+      let high = 0,
+        low = 0,
+        close = 0,
+        open = 0,
+        volume = 0
 
-    const volume = block.swaps.reduce((acc, cur) => acc + (token0IsNative ? cur.volume0 : cur.volume1), 0) // TODO: check which is native (not token0)
+      if (block.swaps.length === 0) {
+        const previousBlockSwaps = prices[Number(timeSlotName) - 60].swaps
+        if (previousBlockSwaps && previousBlockSwaps.length !== 0) {
+          high = low = open = close = previousBlockSwaps[previousBlockSwaps.length - 1].close.toNumber()
+        } else {
+          try {
+            const historical = await History.find({ tokenId }).sort({ timestamp: 'desc' }).limit(1)
+            if (historical.length) {
+              high = low = open = close = historical[0].close
+            }
+          } catch (error) {}
+        }
+      } else {
+        // highest price
+        high = Math.max(...block.swaps.flatMap((s: any) => [s.open.toNumber(), s.close.toNumber()])) ?? 0
+        // lowest price
+        low = Math.min(...block.swaps.flatMap((s: any) => [s.open.toNumber(), s.close.toNumber()])) ?? 0
+        // open price will be the close price of previous candle
+        open = block.swaps[0]?.close.toNumber() ?? null
+        // close price is the last close
+        close = block.swaps[block.swaps.length - 1]?.close.toNumber() ?? null
+        // Volumn
+        volume = block.swaps.reduce((acc, cur) => acc + (token0IsNative ? cur.volume0 : cur.volume1), 0) // TODO: check which is native (not token0)
+      }
 
-    return {
-      AMM: exchange,
-      network: chain.toString(),
-      tokenId,
-      high,
-      low,
-      open,
-      close,
-      volume, // TODO: use volume of non-native asset
-      start: new Date(block.startTime * 1000),
-      end: new Date(block.endTime * 1000),
-    }
-  })
+      return {
+        AMM: exchange,
+        network: chain.toString(),
+        tokenId,
+        high,
+        low,
+        open,
+        close,
+        volume, // TODO: use volume of non-native asset
+        start: new Date(block.startTime * 1000),
+        end: new Date(block.endTime * 1000),
+      }
+    }),
+  )
 }
 
 type PairReserves = {

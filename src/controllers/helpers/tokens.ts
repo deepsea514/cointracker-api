@@ -3,7 +3,7 @@ import { AbiItem } from 'web3-utils'
 import { getOrSetCache } from '../../cache/redis'
 import { CHAINS, EXCHANGES, SUBGRAPHS } from '../../constants/constants'
 import { UNISWAP_FACTORY_ABI, UNISWAP_FACTORY_ABI_V3 } from '../../constants/web3_constants'
-import History, { IHistory } from '../../models/historySchema'
+import { IHistory } from '../../models/historySchema'
 import Pair from '../../models/pairSchema'
 import { BadRequestError, InsufficientDataError, ResourceNotFoundError } from '../../utils/CustomErrors'
 import {
@@ -206,7 +206,7 @@ function reduceCandlestickToTradingViewStable(tv: IHistory[], block: ICandleStic
   return tv
 }
 
-function getCandlestickFromSwaps(
+async function getCandlestickFromSwaps(
   pair: IRawPairData,
   swaps: any[],
   initialReserves: any,
@@ -225,7 +225,7 @@ function getCandlestickFromSwaps(
     timeFrameSeconds,
   )
   const prices = chunkIntervalSwapData(start, end, formattedSwaps, timeFrameSeconds)
-  return getCandlestickData(prices, token0IsNative, chain, exchange, tokenId)
+  return await getCandlestickData(prices, token0IsNative, chain, exchange, tokenId)
 }
 
 function mergeCandles(candles: ICandleStickData[], base: ICandleStickData[]): ICandleStickData[] {
@@ -361,7 +361,7 @@ async function getRecentCandles(
         },
       })
 
-  return getCandlestickFromSwaps(
+  return await getCandlestickFromSwaps(
     data.pair,
     data.swaps,
     initialReserves,
@@ -501,8 +501,6 @@ export const getTokenHistorical = async (
 
   const final = mergeCandles(candleRecent, baseCandles) // convert to usd
   const history = final.reduce(reduceCandlestickToTradingView, [])
-
-  await History.insertMany(history)
 
   return history
 }
