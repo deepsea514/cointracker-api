@@ -1,8 +1,10 @@
 import { gql, GraphQLClient } from 'graphql-request'
 
+const SUBGRAPH_URL =
+  'https://gateway-arbitrum.network.thegraph.com/api/7898ec5afdfe0d2ace39eb666975a2c7/subgraphs/id/HUZDsRpEVP2AvzDCyzDHtdc64dyDxx8FQjzsmqSg4H3B'
 export const UNISWAP_V3_CONFIG = {
-  URL: 'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v3',
-  CLIENT: new GraphQLClient('https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v3', {
+  URL: SUBGRAPH_URL,
+  CLIENT: new GraphQLClient(SUBGRAPH_URL, {
     headers: { 'content-type': 'application/graphql' },
   }),
   QUERIES: {
@@ -126,7 +128,7 @@ export const UNISWAP_V3_CONFIG = {
           token0Price
           token1Price
           txCount
-          tvlUSD
+          tvlUSD: totalValueLockedUSD
           volumeUSD
         }
 
@@ -137,7 +139,7 @@ export const UNISWAP_V3_CONFIG = {
           first: 25
         ) {
           txCount
-          tvlUSD
+          tvlUSD: totalValueLockedUSD
           volumeUSD
         }
 

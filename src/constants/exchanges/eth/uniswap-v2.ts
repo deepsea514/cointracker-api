@@ -1,13 +1,12 @@
 import { gql, GraphQLClient } from 'graphql-request'
 
+const SUBGRAPH_URL =
+  'https://gateway-arbitrum.network.thegraph.com/api/7898ec5afdfe0d2ace39eb666975a2c7/subgraphs/id/FEtpnfQ1aqF8um2YktEkfzFD11ZKrfurvBLPeQzv9JB1'
 export const UNISWAP_V2_CONFIG = {
-  URL: 'https://gateway-arbitrum.network.thegraph.com/api/a9dac4bec1dddd319ef383ee54f06c6c/subgraphs/id/FEtpnfQ1aqF8um2YktEkfzFD11ZKrfurvBLPeQzv9JB1',
-  CLIENT: new GraphQLClient(
-    'https://gateway-arbitrum.network.thegraph.com/api/a9dac4bec1dddd319ef383ee54f06c6c/subgraphs/id/FEtpnfQ1aqF8um2YktEkfzFD11ZKrfurvBLPeQzv9JB1',
-    {
-      headers: { 'content-type': 'application/graphql' },
-    },
-  ),
+  URL: SUBGRAPH_URL,
+  CLIENT: new GraphQLClient(SUBGRAPH_URL, {
+    headers: { 'content-type': 'application/graphql' },
+  }),
   QUERIES: {
     PAIRS: gql`
       query Pair($token: String!) {
