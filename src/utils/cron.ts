@@ -88,10 +88,7 @@ export const CronJob = async (): Promise<void> => {
 
           if (upatedtokenInfo) await token.update(upatedtokenInfo)
         } catch (err: any) {
-          shouldRetry =
-            err.name !== 'InsufficientDataError' && err.name !== 'PairUnavailableError'
-              ? ++retries < MAX_RETRIES
-              : false
+          shouldRetry = ++retries < MAX_RETRIES
 
           if (shouldRetry) {
             console.log(`Retrying to update ${token.id}: ${retries}/${MAX_RETRIES}`)

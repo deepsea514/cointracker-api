@@ -191,20 +191,20 @@ function reduceCandlestickToTradingView(tv: IHistory[], block: ICandleStickData)
   return tv
 }
 
-function reduceCandlestickToTradingViewStable(tv: IHistory[], block: ICandleStickData): IHistory[] {
-  tv.push({
-    AMM: block.AMM,
-    network: block.network,
-    tokenId: block.tokenId,
-    high: 1,
-    low: 1,
-    close: 1,
-    open: 1,
-    timestamp: (new Date(block.start).getTime() / 1000) >> 0,
-    volume: 0,
-  })
-  return tv
-}
+// function reduceCandlestickToTradingViewStable(tv: IHistory[], block: ICandleStickData): IHistory[] {
+//   tv.push({
+//     AMM: block.AMM,
+//     network: block.network,
+//     tokenId: block.tokenId,
+//     high: 1,
+//     low: 1,
+//     close: 1,
+//     open: 1,
+//     timestamp: (new Date(block.start).getTime() / 1000) >> 0,
+//     volume: 0,
+//   })
+//   return tv
+// }
 
 async function getCandlestickFromSwaps(
   pair: IRawPairData,
@@ -374,7 +374,7 @@ async function getRecentCandles(
 }
 
 async function nativeStableCandles(
-  isNativeToken: boolean,
+  // isNativeToken: boolean,
   exchangeDetails: any,
   chain: IChainConfiguration,
   subgraph: any,
@@ -383,7 +383,8 @@ async function nativeStableCandles(
   timeFrameSeconds: number,
   tokenId: string,
 ) {
-  console.log(`${chain.chainId}/${exchangeDetails.name}: Fetching ${isNativeToken ? 'Native' : 'Stable'} history`)
+  // console.log(`${chain.chainId}/${exchangeDetails.name}: Fetching ${isNativeToken ? 'Native' : 'Stable'} history`)
+  console.log(`${chain.chainId}/${exchangeDetails.name}: Fetching Native history`)
   // Normalize from to dates to blockchain format
   const baseCandles = await getRecentCandles(
     chain.chainId,
@@ -401,11 +402,11 @@ async function nativeStableCandles(
     tokenId,
   )
   const emptyHLOC: IHistory[] = []
-  if (isNativeToken) {
-    return baseCandles.reduce(reduceCandlestickToTradingView, emptyHLOC)
-  }
+  // if (isNativeToken) {
+  return baseCandles.reduce(reduceCandlestickToTradingView, emptyHLOC)
+  // }
 
-  return baseCandles.reduce(reduceCandlestickToTradingViewStable, emptyHLOC)
+  // return baseCandles.reduce(reduceCandlestickToTradingViewStable, emptyHLOC)
 }
 
 export const getTokenHistorical = async (
@@ -438,11 +439,11 @@ export const getTokenHistorical = async (
 
   if (!subgraph) throw new BadRequestError('Invalid configuration error.')
 
-  if (isNativeToken || isStableToken) {
-    console.log(`isNativeToken: ${isNativeToken} || isStableToken: ${isStableToken}`)
+  if (isNativeToken) {
+    console.log(`isNativeToken: ${isNativeToken}`)
 
     return nativeStableCandles(
-      isNativeToken,
+      // isNativeToken,
       exchangeDetails,
       chain,
       subgraph,
@@ -452,6 +453,8 @@ export const getTokenHistorical = async (
       `${address}_${getExchange(exchangeDetails.name, chainId)}`,
     )
   }
+
+  console.log(`isStableToken: ${isStableToken}`)
 
   const candleStartTimeRecent = ((from / 1000) >> 0) * 1000
   const candleEndTimeRecent = ((to / 1000) >> 0) * 1000
@@ -493,7 +496,7 @@ export const getTokenHistorical = async (
     baseEndTimeRecent,
     timeFrameSeconds,
     chain.tokens.NATIVE,
-    chain.tokens.STABLE,
+    isStableToken ? chain.tokens.STABLE_SECONDARY : chain.tokens.STABLE,
     true, // enable caching
     36000, // Cache this data for 10 hours
     `${address}_${getExchange(exchangeDetails.name, chainId)}`,

@@ -2,23 +2,24 @@ import Web3 from 'web3'
 import { CHAINS } from '../../constants/constants'
 import {
   BASE_TOKENS,
+  DEFAULT_BLOCK_TIMES,
   FACTORIES,
   NETWORKS,
   RPC_URL,
-  DEFAULT_BLOCK_TIMES,
   WEB3_CLIENTS,
 } from '../../constants/web3_constants'
 
 export type ChainId = 1088 | 1 //TODO: add network
 
-interface IFactoryConfiguration {
+export interface IFactoryConfiguration {
   name: string
   address: string
 }
 
-interface ITokenConfiguration {
+export interface ITokenConfiguration {
   NATIVE: string
   STABLE: string
+  STABLE_SECONDARY: string
   FALLBACK: string
 }
 

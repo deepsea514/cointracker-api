@@ -1,5 +1,6 @@
 import Web3 from 'web3'
 import { AbiItem } from 'web3-utils'
+import { IFactoryConfiguration, ITokenConfiguration } from '../utils/chain/chainConfiguration'
 import { CHAINS } from './constants'
 
 type IChainDetails<T> = {
@@ -36,30 +37,22 @@ export const WEB3_CLIENTS: IChainDetails<Web3> = {
   [CHAINS.METIS]: new Web3(new Web3.providers.HttpProvider(RPC_URL[CHAINS.METIS])),
 }
 
-interface DEFAULT_CHAIN_TOKENS {
-  NATIVE: string
-  STABLE: string
-  FALLBACK: string
-}
-export const BASE_TOKENS: IChainDetails<DEFAULT_CHAIN_TOKENS> = {
+export const BASE_TOKENS: IChainDetails<ITokenConfiguration> = {
   [CHAINS.ETH]: {
     NATIVE: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2', // weth
     STABLE: '0xdac17f958d2ee523a2206206994597c13d831ec7', // usdt
+    STABLE_SECONDARY: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48', // usdc
     FALLBACK: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2', // weth
   },
   [CHAINS.METIS]: {
     NATIVE: '0x75cb093e4d61d2a2e65d8e0bbb01de8d89b53481', // wMetis
     STABLE: '0xea32a96608495e54156ae48931a7c20f0dcc1a21', // m.usdc
+    STABLE_SECONDARY: '',
     FALLBACK: '0x75cb093e4d61d2a2e65d8e0bbb01de8d89b53481', // torch
   },
 }
 
-interface FACTORY_DEFINITION {
-  address: string
-  name: string
-}
-
-export const FACTORIES: IChainDetails<FACTORY_DEFINITION[]> = {
+export const FACTORIES: IChainDetails<IFactoryConfiguration[]> = {
   [CHAINS.ETH]: [
     {
       address: '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f', // uniswap v2
