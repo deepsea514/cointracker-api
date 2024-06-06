@@ -408,7 +408,7 @@ export const formatToken = async ({
     name: token?.name ?? null,
     decimals: token.decimals,
     totalSupply: totalSupply.toString(),
-    marketCapUSD: priceUSD ? (totalSupply * priceUSD).toString() : null,
+    marketCapUSD: priceUSD ? (totalSupply * priceUSD) : 0,
     [`marketCap${native}`]: priceETH ? (totalSupply * priceETH).toString() : null,
     volume24h: volume24h ?? 0,
     volume24hUSD: volume24h ? volume24h * priceUSD : 0,

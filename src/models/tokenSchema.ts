@@ -12,6 +12,7 @@ export interface IToken {
   transactions24hChange: number
   verified: boolean
   decimals: number
+  marketCapUSD: number
   volume24h: number
   volume24hUSD: number
   volume24hETH?: number
@@ -58,6 +59,7 @@ const TokenSchema = new mongoose.Schema<IToken>(
     transactions24hChange: Number,
     verified: Boolean,
     decimals: Number,
+    marketCapUSD: Number,
     volume24h: Number,
     volume24hUSD: Number,
     volume24hETH: {
