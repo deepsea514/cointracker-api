@@ -14,12 +14,12 @@ export const getTokens = asyncHandler(async (req: Request, res: Response, next: 
   const exchange = req.query.exchange as unknown as EXCHANGES
   const limit = req.query.limit ? parseInt(req.query.limit as string) : 15
   // const tokens = await tokensHelper.getTokens(chainId, exchange, limit)
-  const searchObject: { network?: number; exchange?: string } = {}
+  const searchObject: { network?: number; AMM?: string } = {}
   if (chainId) {
     searchObject.network = chainId as number
   }
   if (exchange) {
-    searchObject.exchange = exchange
+    searchObject.AMM = exchange
   }
   const tokens = await Token.find(searchObject)
     .sort({ liquidityETH: 'desc' })
