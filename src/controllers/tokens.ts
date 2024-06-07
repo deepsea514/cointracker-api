@@ -11,13 +11,13 @@ import swapsHelper from './helpers/swaps'
 import tokensHelper from './helpers/tokens'
 
 export const getTokens = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-  const chainId = req.query.chainId as unknown as CHAINS
-  const exchange = req.query.exchange as unknown as EXCHANGES
-  const limit = req.query.limit ? parseInt(req.query.limit as string) : 15
-  const orderBy = req.query.orderBy as string
+  const chainId = (req.query.chainId as unknown as CHAINS) || CHAINS.ETH
+  const exchange = (req.query.exchange as unknown as EXCHANGES) || undefined
+  const limit = req.query.limit ? parseInt(req.query.limit as string) : 30
+  const orderBy = (req.query.orderBy as string) || undefined
   const orderDirection = req.query.orderDirection === 'asc' ? 'asc' : 'desc'
-  const marketcapHigher = req.query.marketcapHigher as string
-  const marketcapLower = req.query.marketcapLower as string
+  const marketcapHigher = (req.query.marketcapHigher as string) || undefined
+  const marketcapLower = (req.query.marketcapLower as string) || undefined
 
   const searchObject: { network?: number; AMM?: string; marketCapUSD?: { $gte?: number; $lte?: number } } = {}
   if (chainId) {
@@ -42,9 +42,7 @@ export const getTokens = asyncHandler(async (req: Request, res: Response, next: 
   }
   sortObject.push(['liquidityETH', 'desc'])
 
-  const tokens = await Token.find(searchObject)
-    .sort(sortObject)
-    .limit(limit || 30)
+  const tokens = await Token.find(searchObject).sort(sortObject).limit(limit)
 
   res.status(200).json(JsonResponse({ tokens }))
 })
