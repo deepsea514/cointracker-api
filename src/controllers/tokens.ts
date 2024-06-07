@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
+import { SortOrder } from 'mongoose'
 import { CHAINS, EXCHANGES } from '../constants/constants'
 import asyncHandler from '../middleware/asyncHandler'
 import Token from '../models/tokenSchema'
@@ -13,7 +14,9 @@ export const getTokens = asyncHandler(async (req: Request, res: Response, next: 
   const chainId = req.query.chainId as unknown as CHAINS
   const exchange = req.query.exchange as unknown as EXCHANGES
   const limit = req.query.limit ? parseInt(req.query.limit as string) : 15
-  // const tokens = await tokensHelper.getTokens(chainId, exchange, limit)
+  const orderBy = req.query.orderBy as string
+  const orderDirection = req.query.orderDirection === 'asc' ? 'asc' : 'desc'
+
   const searchObject: { network?: number; AMM?: string } = {}
   if (chainId) {
     searchObject.network = chainId as number
@@ -21,8 +24,15 @@ export const getTokens = asyncHandler(async (req: Request, res: Response, next: 
   if (exchange) {
     searchObject.AMM = exchange
   }
+
+  const sortObject: [string, SortOrder][] = []
+  if (orderBy) {
+    sortObject.push([orderBy, orderDirection])
+  }
+  sortObject.push(['liquidityETH', 'desc'])
+
   const tokens = await Token.find(searchObject)
-    .sort({ liquidityETH: 'desc' })
+    .sort(sortObject)
     .limit(limit || 30)
 
   const formattedTokens = (
