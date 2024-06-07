@@ -16,13 +16,24 @@ export const getTokens = asyncHandler(async (req: Request, res: Response, next: 
   const limit = req.query.limit ? parseInt(req.query.limit as string) : 15
   const orderBy = req.query.orderBy as string
   const orderDirection = req.query.orderDirection === 'asc' ? 'asc' : 'desc'
+  const marketcapHigher = req.query.marketcapHigher as string
+  const marketcapLower = req.query.marketcapLower as string
 
-  const searchObject: { network?: number; AMM?: string } = {}
+  const searchObject: { network?: number; AMM?: string; marketCapUSD?: { $gte?: number; $lte?: number } } = {}
   if (chainId) {
     searchObject.network = chainId as number
   }
   if (exchange) {
     searchObject.AMM = exchange
+  }
+  if (marketcapHigher || marketcapLower) {
+    searchObject.marketCapUSD = {}
+    if (marketcapHigher) {
+      searchObject.marketCapUSD.$gte = Number(marketcapHigher)
+    }
+    if (marketcapLower) {
+      searchObject.marketCapUSD.$lte = Number(marketcapLower)
+    }
   }
 
   const sortObject: [string, SortOrder][] = []
@@ -35,13 +46,7 @@ export const getTokens = asyncHandler(async (req: Request, res: Response, next: 
     .sort(sortObject)
     .limit(limit || 30)
 
-  const formattedTokens = (
-    await Promise.all(
-      tokens.map((token) => tokensHelper.getTokenByAddress(chainId, token.AMM as EXCHANGES, token.address, true)),
-    )
-  ).filter((token) => token != null)
-
-  res.status(200).json(JsonResponse({ tokens: formattedTokens }))
+  res.status(200).json(JsonResponse({ tokens }))
 })
 
 export const getTokenSwaps = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
