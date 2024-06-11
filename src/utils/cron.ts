@@ -51,53 +51,50 @@ export const CronJob = async (): Promise<void> => {
   const tokens = await Token.find()
   console.log(`Found ${tokens.length} tokens in the db.`)
 
+  const MAX_RETRIES = 5
   await Promise.all(
     tokens.map(async (token) => {
-      let retries = 0
-      const MAX_RETRIES = 5
-      let shouldRetry = false
+      await Promise.all([
+        async () => {
+          let retries = 0
+          let shouldRetry = false
+          do {
+            try {
+              const upatedtokenInfo = await getTokenByAddress(
+                Number(token.network) as ChainId,
+                token.AMM as EXCHANGES,
+                token.address,
+                true,
+              )
 
-      do {
-        try {
-          await getNewestTokenHistory(token)
-        } catch (err: any) {
-          shouldRetry =
-            err.name !== 'InsufficientDataError' && err.name !== 'PairUnavailableError'
-              ? ++retries < MAX_RETRIES
-              : false
+              if (upatedtokenInfo) await token.update(upatedtokenInfo)
+            } catch (err: any) {
+              shouldRetry = ++retries < MAX_RETRIES
+            }
+          } while (shouldRetry)
+        },
+        async () => {
+          let retries = 0
+          let shouldRetry = false
+          do {
+            try {
+              await getNewestTokenHistory(token)
+            } catch (err: any) {
+              shouldRetry =
+                err.name !== 'InsufficientDataError' && err.name !== 'PairUnavailableError'
+                  ? ++retries < MAX_RETRIES
+                  : false
 
-          if (shouldRetry) {
-            console.log(`Retrying to update ${token.id}: ${retries}/${MAX_RETRIES}`)
-          } else {
-            console.log(`Could not update ${token.id} because of ${err.name}\n${err.message}.`)
-            break
-          }
-        }
-      } while (shouldRetry)
-
-      retries = 0
-      shouldRetry = false
-      do {
-        try {
-          const upatedtokenInfo = await getTokenByAddress(
-            Number(token.network) as ChainId,
-            token.AMM as EXCHANGES,
-            token.address,
-            true,
-          )
-
-          if (upatedtokenInfo) await token.update(upatedtokenInfo)
-        } catch (err: any) {
-          shouldRetry = ++retries < MAX_RETRIES
-
-          if (shouldRetry) {
-            console.log(`Retrying to update ${token.id}: ${retries}/${MAX_RETRIES}`)
-          } else {
-            console.log(`Could not update ${token.id} because of ${err.name}\n${err.message}.`)
-            break
-          }
-        }
-      } while (shouldRetry)
+              if (shouldRetry) {
+                console.log(`Retrying to update ${token.id}: ${retries}/${MAX_RETRIES}`)
+              } else {
+                console.log(`Could not update ${token.id} because of ${err.name}\n${err.message}.`)
+                break
+              }
+            }
+          } while (shouldRetry)
+        },
+      ])
     }),
   )
 

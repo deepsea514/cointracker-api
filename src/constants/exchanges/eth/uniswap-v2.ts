@@ -1,6 +1,8 @@
 import { gql, GraphQLClient } from 'graphql-request'
 
-const SUBGRAPH_URL = 'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2'
+const SUBGRAPH_URL =
+  'https://gateway-arbitrum.network.thegraph.com/api/d009148c36fd4c43d8f4e4335ad7a048/subgraphs/id/FEtpnfQ1aqF8um2YktEkfzFD11ZKrfurvBLPeQzv9JB1'
+// const SUBGRAPH_URL = 'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2'
 export const UNISWAP_V2_CONFIG = {
   URL: SUBGRAPH_URL,
   CLIENT: new GraphQLClient(SUBGRAPH_URL, {

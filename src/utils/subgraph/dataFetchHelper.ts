@@ -1,11 +1,11 @@
-import { HERCULES_FACTORY_ABI_V3, TOKENS, UNISWAP_FACTORY_ABI, UNISWAP_FACTORY_ABI_V3 } from '../../constants/web3_constants'
-import { AbiItem } from 'web3-utils'
-import subgraphHelper from './subgraph'
-import web3Helper from '../web3/helpers'
-import { PairUnavailableError, SubgraphError } from '../CustomErrors'
-import { compareAddress } from '../web3/address'
 import { GraphQLClient } from 'graphql-request'
+import { AbiItem } from 'web3-utils'
+import { TOKENS, UNISWAP_FACTORY_ABI, UNISWAP_FACTORY_ABI_V3 } from '../../constants/web3_constants'
+import { PairUnavailableError, SubgraphError } from '../CustomErrors'
 import { IChainConfiguration } from '../chain/chainConfiguration'
+import { compareAddress } from '../web3/address'
+import web3Helper from '../web3/helpers'
+import subgraphHelper from './subgraph'
 
 async function fetchPaginatedDataFromGraphQL_ALT({ first, subgraph, pair, to, from }: any) {
   // This should be a do-while. Get the initial page of data from graphql
@@ -95,11 +95,14 @@ export async function fetchTokenHistoricalDataBetweenTimeStamps(
   // Use Web3 to get the chains NATIVE-STABLE pair address & contract
   // Pair is used in the graphql query, but the contract isn't used unless
   // we need to fetch further data with web3
-  const factoryContract = web3Helper.getContract(isV3 ? (UNISWAP_FACTORY_ABI_V3 as AbiItem[]) : (UNISWAP_FACTORY_ABI as AbiItem[]),
+  const factoryContract = web3Helper.getContract(
+    isV3 ? (UNISWAP_FACTORY_ABI_V3 as AbiItem[]) : (UNISWAP_FACTORY_ABI as AbiItem[]),
     factory,
     chain.web3,
   )
-  const tokenNativePair = (await web3Helper.getPairAddress(token0, token1, factoryContract, isV3, chain.chainId)).toLowerCase()
+  const tokenNativePair = (
+    await web3Helper.getPairAddress(token0, token1, factoryContract, isV3, chain.chainId)
+  ).toLowerCase()
   // can only get a maximum of 1000 from the subgraph at a time (may return less)
   // we need to get the full 1000 since we can't know how many tx took place per block/time-frame
   const limit = 1000
