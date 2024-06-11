@@ -105,7 +105,6 @@ export const fillDbWithTokens = async (ch: CHAINS, ex: EXCHANGES) => {
             break
           }
           const token = await storeTokenHistory(newTokens[i], tokenHistory, ch, ex)
-          console.log(token.symbol, token.history_length)
           shouldRetry = false
         } catch (err: any) {
           shouldRetry =

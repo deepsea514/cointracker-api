@@ -18,7 +18,7 @@ export const getOrSetCache = (
     redisClient.get(key, async (err, data) => {
       if (err) return reject(err)
       if (data != null) {
-        console.log(`Cache hit. cacheTime: ${cacheTime}`)
+        // console.log(`Cache hit. cacheTime: ${cacheTime}`)
         return resolve(JSON.parse(data))
       }
       // console.log(`Cache miss.`)

@@ -134,7 +134,7 @@ const TokenSchema = new mongoose.Schema<IToken>(
     website: String,
     heliosprotect: Object
   },
-  { toJSON: { virtuals: true }, toObject: { virtuals: true }, autoIndex: false },
+  { toJSON: { virtuals: true }, toObject: { virtuals: true }, autoIndex: false, timestamps: true },
 )
 
 TokenSchema.on('index', function (err) {
