@@ -66,7 +66,11 @@ export const CronJob = async (): Promise<void> => {
             true,
           )
 
-          if (upatedtokenInfo) await token.update(upatedtokenInfo)
+          if (upatedtokenInfo)
+            await token.update({
+              ...upatedtokenInfo,
+              heliosprotect: upatedtokenInfo.heliosprotect ?? token.heliosprotect,
+            })
         } catch (err: any) {
           shouldRetry = ++retries < MAX_RETRIES
         }
