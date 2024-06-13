@@ -13,7 +13,7 @@ async function getNewestTokenHistory(dbToken: IToken & Document<any, any>): Prom
   console.log(
     `Newest history: ${Math.floor(
       (new Date().getTime() - new Date(newest * 1000).getTime()) / 60000,
-    )} minutes old for ${dbToken.symbol}`,
+    )} minutes old for ${dbToken.symbol} - ${dbToken.AMM}`,
   )
 
   const history = await getTokenHistorical(
@@ -52,52 +52,52 @@ export const CronJob = async (): Promise<void> => {
   console.log(`Found ${tokens.length} tokens in the db.`)
 
   const MAX_RETRIES = 5
-  await Promise.all(
-    tokens.map(async (token): Promise<void> => {
-      console.log(`Updating Token Info: ${token.name}: ${token.address}`)
-      let retries = 0
-      let shouldRetry = false
-      do {
-        try {
-          const upatedtokenInfo = await getTokenByAddress(
-            Number(token.network) as ChainId,
-            token.AMM as EXCHANGES,
-            token.address,
-            true,
-          )
+  for (const token of tokens) {
+    console.log(`Updating Token Info: ${token.name}: ${token.address}`)
+    let retries = 0
+    let shouldRetry = false
+    do {
+      try {
+        const upatedtokenInfo = await getTokenByAddress(
+          Number(token.network) as ChainId,
+          token.AMM as EXCHANGES,
+          token.address,
+          true,
+        )
 
-          if (upatedtokenInfo)
-            await token.update({
-              ...upatedtokenInfo,
-              heliosprotect: upatedtokenInfo.heliosprotect ?? token.heliosprotect,
-            })
-        } catch (err: any) {
+        if (upatedtokenInfo)
+          await token.update({
+            ...upatedtokenInfo,
+            heliosprotect: upatedtokenInfo.heliosprotect ?? token.heliosprotect,
+          })
+      } catch (err: any) {
+        shouldRetry = ++retries < MAX_RETRIES
+      }
+    } while (shouldRetry)
+
+    console.log(`Updating Token History: ${token.name}: ${token.address}`)
+    retries = 0
+    shouldRetry = false
+    do {
+      try {
+        const histories = await getNewestTokenHistory(token)
+        shouldRetry = false
+      } catch (err: any) {
+        if (['InsufficientDataError', 'PairUnavailableError'].includes(err.name)) {
+          shouldRetry = true
+        } else {
           shouldRetry = ++retries < MAX_RETRIES
         }
-      } while (shouldRetry)
 
-      console.log(`Updating Token History: ${token.name}: ${token.address}`)
-      retries = 0
-      shouldRetry = false
-      do {
-        try {
-          await getNewestTokenHistory(token)
-        } catch (err: any) {
-          shouldRetry =
-            err.name !== 'InsufficientDataError' && err.name !== 'PairUnavailableError'
-              ? ++retries < MAX_RETRIES
-              : false
-
-          if (shouldRetry) {
-            console.log(`Retrying to update ${token.id}: ${retries}/${MAX_RETRIES}`)
-          } else {
-            console.log(`Could not update ${token.id} because of ${err.name}\n${err.message}.`)
-            break
-          }
+        if (shouldRetry) {
+          console.log(`Retrying to update ${token.id}: ${retries}/${MAX_RETRIES}`)
+        } else {
+          console.log(`Could not update ${token.id} because of ${err.name}\n${err.message}.`)
+          break
         }
-      } while (shouldRetry)
-    }),
-  )
+      }
+    } while (shouldRetry)
+  }
 
   console.log(`Update Time Elapsed: ${(new Date().getTime() - start) / 1000}s`)
 }

@@ -305,14 +305,14 @@ async function getRecentCandles(
         })
       }
 
-      const endIndexBase = baseData.swaps.findIndex(
-        (swap: any) => new Date(swap.transaction.timestamp * 1000) < new Date(endTime),
-      )
-      const startIndexBase = baseData.swaps.findIndex(
-        (swap: any) => new Date(swap.transaction.timestamp * 1000) < new Date(startTime),
-      )
+      // const endIndexBase = baseData.swaps.findIndex(
+      //   (swap: any) => new Date(swap.transaction.timestamp * 1000) < new Date(endTime),
+      // )
+      // const startIndexBase = baseData.swaps.findIndex(
+      //   (swap: any) => new Date(swap.transaction.timestamp * 1000) < new Date(startTime),
+      // )
       // remove any swaps outside of the requested time frame
-      baseData.swaps = baseData.swaps.slice(endIndexBase, startIndexBase)
+      // baseData.swaps = baseData.swaps.slice(endIndexBase, startIndexBase)
 
       if (!baseData.swaps.length) {
         console.log(`No swap data from pair: ${token0} - ${token1} between ${startTime} and ${endTime}`)
