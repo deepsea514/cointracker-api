@@ -52,7 +52,7 @@ export interface IToken {
 const TokenSchema = new mongoose.Schema<IToken>(
   {
     tokenId: { type: String, index: true },
-    address: String,
+    address: { type: String, required: true },
     symbol: String,
     name: String,
     description: String,
@@ -132,7 +132,7 @@ const TokenSchema = new mongoose.Schema<IToken>(
     telegram: String,
     discord: String,
     website: String,
-    heliosprotect: Object
+    heliosprotect: Object,
   },
   { toJSON: { virtuals: true }, toObject: { virtuals: true }, autoIndex: false, timestamps: true },
 )

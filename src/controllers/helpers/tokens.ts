@@ -431,7 +431,8 @@ export const getTokenHistorical = async (
   const subgraph = SUBGRAPHS[`${chainId}`]?.[exchangeDetails.name]
 
   if (!address) {
-    address = chain.tokens.FALLBACK
+    console.log('INVALID TOKEN ADDRESS >> ABORTING EARLY')
+    throw new InsufficientDataError('INVALID TOKEN ADDRESS')
   }
 
   const isNativeToken = compareAddress(address, chain.tokens.NATIVE, chain.web3)
